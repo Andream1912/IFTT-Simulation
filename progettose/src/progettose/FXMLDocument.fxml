@@ -8,17 +8,23 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="522.0" prefWidth="657.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="progettose.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="522.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentController">
     <children>
-        <Button fx:id="addButton" layoutX="32.0" layoutY="94.0" prefHeight="36.0" prefWidth="77.0" text="Add Rule" />
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
+        <Button fx:id="addButton" layoutX="32.0" layoutY="94.0" prefHeight="36.0" prefWidth="77.0" text="Add Rule" />
       <Button fx:id="removeButton" layoutX="32.0" layoutY="137.0" prefHeight="36.0" prefWidth="100.0" text="Remove Rule" />
+      <Button fx:id="toggleButton" layoutX="32.0" layoutY="185.0" prefHeight="36.0" prefWidth="124.0" text="Deactivate Rule" />
       <Text layoutX="42.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IFTTT" wrappingWidth="135.0">
          <font>
             <Font size="42.0" />
          </font>
       </Text>
-      <TableView layoutX="237.0" layoutY="77.0" prefHeight="403.0" prefWidth="402.0">
+      <Text layoutX="371.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rules" textAlignment="CENTER" wrappingWidth="135.0">
+         <font>
+            <Font size="42.0" />
+         </font>
+      </Text>
+      <TableView layoutX="238.0" layoutY="78.0" prefHeight="403.0" prefWidth="402.0">
         <columns>
           <TableColumn prefWidth="75.0" text="Nome" />
             <TableColumn prefWidth="75.0" text="Action" />
@@ -28,11 +34,5 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Text layoutX="371.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rules" textAlignment="CENTER" wrappingWidth="135.0">
-         <font>
-            <Font size="42.0" />
-         </font>
-      </Text>
-      <Button fx:id="toggleButton" layoutX="32.0" layoutY="185.0" prefHeight="36.0" prefWidth="124.0" text="Deactivate Rule" />
     </children>
 </AnchorPane>

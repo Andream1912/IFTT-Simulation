@@ -4,7 +4,10 @@
  */
 package progettose;
 
+import progettose.triggerPackage.Trigger;
+import progettose.triggerPackage.TimeTriggerCreator;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,7 +37,13 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        //
+        
+        System.out.println("prova");
+        LocalTime triggerTime = LocalTime.of(12, 30);
+        TimeTriggerCreator timeTriggerCreator = new TimeTriggerCreator(triggerTime);
+        Trigger trigger = timeTriggerCreator.createTrigger();
+        trigger.evaluate();
     }    
     
 }
