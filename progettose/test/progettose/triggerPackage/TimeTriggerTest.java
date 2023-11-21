@@ -1,12 +1,10 @@
+package progettose.triggerPackage;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-
 import java.time.LocalTime;
-import progettose.triggerPackage.TimeTrigger;
-import progettose.triggerPackage.TimeTriggerCreator;
-import progettose.triggerPackage.Trigger;
 
-public class TriggerTest {
+public class TimeTriggerTest {
 
     @Test
     public void testTimeTriggerExecution() {
