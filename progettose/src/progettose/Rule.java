@@ -4,6 +4,7 @@
  */
 package progettose;
 
+import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 
 

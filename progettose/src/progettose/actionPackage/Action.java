@@ -1,4 +1,4 @@
-package progettose;
+package progettose.actionPackage;
 
 public interface Action {
 

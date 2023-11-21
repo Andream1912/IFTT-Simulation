@@ -1,9 +1,9 @@
-package RuleTesting;
+package progettose.rulePackage;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
-import progettose.Action;
 import progettose.Rule;
+import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 
 public class RuleTest {
@@ -14,7 +14,7 @@ public class RuleTest {
         Action action = null;
         Rule rule = new Rule("Rule1", action, trigger);
         
-        //Testing creation
+        //Testing creation with extandable code 
         assertEquals("Rule1", rule.getName());
         assertEquals(action, rule.getAction());
         assertEquals(trigger, rule.getTrigger());
@@ -24,12 +24,12 @@ public class RuleTest {
     public void testSettersAndGetters() {
         Rule rule = new Rule("Rule2", null, null);
         
-        //Testing getters
+        //Testing getters with extendable code
         assertEquals("Rule2", rule.getName());
         assertEquals(null, rule.getAction());
         assertEquals(null, rule.getTrigger());
 
-        // Testing setters
+        // Testing setters with extendable code
         rule.setName("NewRule");
         assertEquals("NewRule", rule.getName());
         
