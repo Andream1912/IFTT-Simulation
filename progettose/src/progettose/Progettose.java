@@ -21,7 +21,7 @@ public class Progettose extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
         Scene scene = new Scene(root);
-        
+        stage.setTitle("MyIFTTT");
         stage.setScene(scene);
         stage.show();
     }

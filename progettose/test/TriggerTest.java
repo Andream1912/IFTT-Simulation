@@ -4,8 +4,8 @@
  */
 
 import java.time.LocalTime;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import progettose.triggerPackage.TimeTrigger;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;

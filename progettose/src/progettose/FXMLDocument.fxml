@@ -6,29 +6,27 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="522.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="625.0" prefWidth="912.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentController">
     <children>
-        <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-        <Button fx:id="addButton" layoutX="32.0" layoutY="94.0" prefHeight="36.0" prefWidth="77.0" text="Add Rule" />
-      <Button fx:id="removeButton" layoutX="32.0" layoutY="137.0" prefHeight="36.0" prefWidth="100.0" text="Remove Rule" />
-      <Button fx:id="toggleButton" layoutX="32.0" layoutY="185.0" prefHeight="36.0" prefWidth="124.0" text="Deactivate Rule" />
-      <Text layoutX="42.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IFTTT" wrappingWidth="135.0">
+        <Button fx:id="addRuleButton" layoutX="66.0" layoutY="118.0" onAction="#onAddRule" text="Add Rule" />
+      <Label layoutX="35.0" layoutY="21.0" text="IFTTT">
          <font>
-            <Font size="42.0" />
+            <Font name="System Bold" size="41.0" />
          </font>
-      </Text>
-      <Text layoutX="371.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rules" textAlignment="CENTER" wrappingWidth="135.0">
+      </Label>
+      <Button fx:id="removeRuleButton" layoutX="56.0" layoutY="167.0" mnemonicParsing="false" onAction="#onRemoveRule" text="Remove Rule" />
+      <Label layoutX="559.0" layoutY="61.0" text="Rules">
          <font>
-            <Font size="42.0" />
+            <Font size="27.0" />
          </font>
-      </Text>
-      <TableView layoutX="238.0" layoutY="78.0" prefHeight="403.0" prefWidth="402.0">
+      </Label>
+      <Button fx:id="toggleStateButton" layoutX="50.0" layoutY="213.0" mnemonicParsing="false" onAction="#onToggleState" text="Deactivate Rule" />
+      <TableView fx:id="tableView" layoutX="324.0" layoutY="100.0" prefHeight="400.0" prefWidth="533.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Nome" />
-            <TableColumn prefWidth="75.0" text="Action" />
-          <TableColumn prefWidth="75.0" text="Trigger" />
+          <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+          <TableColumn fx:id="actionColumn" prefWidth="75.0" text="Action" />
+            <TableColumn fx:id="triggerColumn" prefWidth="75.0" text="Trigger" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
