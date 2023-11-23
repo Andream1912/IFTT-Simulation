@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
+import progettose.actionPackage.ShowMessageActionCreator;
+import javafx.scene.control.TextFormatter;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -221,7 +223,10 @@ public class FXMLDocumentTwoController implements Initializable {
         deleteLabel2.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Delete File"));
         execProgLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
         execArgumentsLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
-
+        
+        //Limit the number of characters in showMessageTextArea to 1000
+        showMessageTextArea.setTextFormatter(new TextFormatter<String>(change -> 
+            change.getControlNewText().length() <= 1000 ? change : null));
     }
 
     @FXML
@@ -238,6 +243,12 @@ public class FXMLDocumentTwoController implements Initializable {
             case "PlayAudioButton": //* Da cambiare con il rispettivo nome
                 ActionCreator playAudioAC = new PlayAudioActionCreator(selectedFilePath);
                 Action playAudioA = playAudioAC.createAction();
+                break;
+            
+            //When showMessageAction is selected, onSave the action is created with text from textArea
+            case "ShowMessageAction": 
+                ActionCreator showMessageAC = new ShowMessageActionCreator(showMessageTextArea.getText());
+                Action showMessage = showMessageAC.createAction();
                 break;
 
         }
