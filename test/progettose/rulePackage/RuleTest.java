@@ -1,5 +1,6 @@
 package progettose.rulePackage;
 
+import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import progettose.Rule;
@@ -42,5 +43,71 @@ public class RuleTest {
         assertEquals(newTrigger, rule.getTrigger());
     }
 
+     @Test
+    public void testFireRuleWhenTriggerIsFired() {
+        ActionMock actionMock = new ActionMock();
+        TriggerMock triggerMock = new TriggerMock();
+        Rule rule = new Rule("TestRule", actionMock, triggerMock);
+
+        triggerMock.setEvaluateResult(true);
+
+        // Attesa per 5 secondi per consentire al task periodico di eseguire il controllo
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(actionMock.isExecuted());
+        Rule.shutdownScheduler();
+    }
+
+    @Test
+    public void testFireRuleWhenTriggerIsNotFired() {
+        ActionMock actionMock = new ActionMock();
+        TriggerMock triggerMock = new TriggerMock();
+        Rule rule = new Rule("TestRule", actionMock, triggerMock);
+
+        triggerMock.setEvaluateResult(false);
+
+        // Attesa per 5 secondi per consentire al task periodico di eseguire il controllo
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertFalse(actionMock.isExecuted());
+        Rule.shutdownScheduler();
+    }
+
+
+     // Mock class per Action
+    private static class ActionMock implements Action {
+        private boolean executed = true;
+
+        @Override
+        public void execute() {
+            executed = true;
+        }
+
+        public boolean isExecuted() {
+            return executed;
+        }
+    }
+
+    // Mock class per Trigger
+    private static class TriggerMock implements Trigger {
+        private boolean evaluateResult = true;
+
+        @Override
+        public boolean evaluate() {
+            return evaluateResult;
+        }
+
+        public void setEvaluateResult(boolean result) {
+            evaluateResult = result;
+        }
+    }
     // Add tests for every needs
 }

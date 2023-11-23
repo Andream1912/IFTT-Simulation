@@ -4,6 +4,9 @@
  */
 package progettose;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 
@@ -16,11 +19,16 @@ public class Rule {
     private String name;
     private Trigger trigger;
     private Action action;
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     
     public Rule(String n, Action a, Trigger t){
         this.name=n;
         this.action=a;
         this.trigger=t;
+        //constructor of the single rule scheduler
+        if (!scheduler.isShutdown() && scheduler.isTerminated()) {
+            periodicCheck();
+        }
     }
     
     public Action getAction(){
@@ -45,6 +53,24 @@ public class Rule {
     
     public void setName(String n){
         this.name=n;
+    }
+    
+        private void periodicCheck(){
+        //Scheduler for check the rule firing
+        scheduler.scheduleAtFixedRate(() -> {
+            if (this.trigger.evaluate()) {
+                fireRule();
+            } 
+        }, 0, 3, TimeUnit.SECONDS);
+    }
+    
+    public void fireRule(){
+        action.execute();
+    }
+    
+    public static void shutdownScheduler() {
+        //Remember to use it everytime a scheduler is created
+        scheduler.shutdown();
     }
     
 }

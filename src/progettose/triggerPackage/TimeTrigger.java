@@ -19,9 +19,10 @@ public class TimeTrigger implements Trigger {
     }
 
     @Override
-    public void evaluate() {
+    public boolean evaluate() {
+        boolean x=true;
         System.out.println("Evaluate not yet available");
-
+        return x;
     }
 
 }
