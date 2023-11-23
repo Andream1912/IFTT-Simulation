@@ -1,6 +1,8 @@
 package progettose;
 
+import java.io.File;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +15,14 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import progettose.actionPackage.Action;
+import progettose.actionPackage.ActionCreator;
+import progettose.actionPackage.PlayAudioActionCreator;
+import progettose.triggerPackage.TimeTriggerCreator;
+import progettose.triggerPackage.Trigger;
+import progettose.triggerPackage.TriggerCreator;
 
 public class FXMLDocumentTwoController implements Initializable {
 
@@ -102,6 +112,10 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label execArgumentsLabel;
     @FXML
     private Label appendToFileLabel1;
+    /**
+     * ************** Global Variable ***********
+     */
+    private String selectedFilePath;
 
     /**
      * Initializes the controller class.
@@ -212,10 +226,40 @@ public class FXMLDocumentTwoController implements Initializable {
 
     @FXML
     private void onSave(ActionEvent event) {
+        switch (triggerComboBox.getValue()) {
+            case "Time":
+                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(hourComboBox.getValue(), minuteComboBox.getValue()));
+                Trigger timeT = timeTC.createTrigger();
+                break;
+            default:
+                System.out.println("Trigger non valido");
+        }
+        switch (actionComboBox.getValue()) {
+            case "PlayAudioButton": //* Da cambiare con il rispettivo nome
+                ActionCreator playAudioAC = new PlayAudioActionCreator(selectedFilePath);
+                Action playAudioA = playAudioAC.createAction();
+                break;
+
+        }
     }
 
     @FXML
     private void onPlayAudioButton(ActionEvent event) {
+        Stage primaryStage = (Stage) playAudioButton.getScene().getWindow();
+
+        // Create a FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Audio File");
+
+        // Set the filter for audio files
+        FileChooser.ExtensionFilter audioFilter = new FileChooser.ExtensionFilter("Audio Files", "*.mav");
+        fileChooser.getExtensionFilters().add(audioFilter);
+
+        // Show the FileChooser and get the selected file
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+        if (selectedFile != null) {
+            selectedFilePath = selectedFile.getAbsolutePath();
+        }
     }
 
     @FXML
