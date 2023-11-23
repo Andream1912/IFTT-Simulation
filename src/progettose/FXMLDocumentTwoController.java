@@ -123,6 +123,9 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private TextField ruleNameTextField;
     @FXML
+    private SplitPane newRuleSplitPane;
+    @FXML
+    private Label fileAudioNameLabel;
 
     /**
      * Initializes the controller class.
@@ -181,7 +184,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 .or
                     (
                 (showMessageTextArea.textProperty().isEmpty())
-                        //.and()
+                        .and(fileAudioNameLabel.visibleProperty().not())
                         //.and((appendToFileTextArea.textProperty().isEmpty()).or())
                         //.and((moveCopyTextField.textProperty().isEmpty()).or().or())
                         //.and((deleteTextField.textProperty().isEmpty()).or())
@@ -189,7 +192,7 @@ public class FXMLDocumentTwoController implements Initializable {
                         .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty()));
         
-
+        fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
         
         hourComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
         minuteComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
@@ -277,7 +280,7 @@ public class FXMLDocumentTwoController implements Initializable {
         fileChooser.setTitle("Choose Audio File");
 
         // Set the filter for audio files
-        FileChooser.ExtensionFilter audioFilter = new FileChooser.ExtensionFilter("Audio Files", "*.mav");
+        FileChooser.ExtensionFilter audioFilter = new FileChooser.ExtensionFilter("Audio Files", "*.wav");
         fileChooser.getExtensionFilters().add(audioFilter);
 
         // Show the FileChooser and get the selected file
@@ -285,6 +288,8 @@ public class FXMLDocumentTwoController implements Initializable {
         if (selectedFile != null) {
             selectedFilePath = selectedFile.getAbsolutePath();
         }
+        fileAudioNameLabel.textProperty().setValue(selectedFile.getName());
+        fileAudioNameLabel.visibleProperty().setValue(Boolean.TRUE);
     }
 
     @FXML

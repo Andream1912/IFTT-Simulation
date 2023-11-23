@@ -77,5 +77,10 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
+      <Label fx:id="fileAudioNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="353.0" layoutY="394.0" prefHeight="20.0" prefWidth="440.0" text="Label" textAlignment="CENTER" visible="false">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

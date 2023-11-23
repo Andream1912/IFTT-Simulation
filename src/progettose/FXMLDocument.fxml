@@ -46,9 +46,9 @@
                <children>
                   <TableView fx:id="tableView" layoutX="72.0" layoutY="90.0" prefHeight="400.0" prefWidth="533.0">
                     <columns>
-                      <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
-                      <TableColumn fx:id="actionColumn" prefWidth="75.0" text="Action" />
-                        <TableColumn fx:id="triggerColumn" prefWidth="75.0" text="Trigger" />
+                      <TableColumn fx:id="nameColumn" editable="false" prefWidth="75.0" sortable="false" text="Name" />
+                      <TableColumn fx:id="actionColumn" editable="false" prefWidth="75.0" sortable="false" text="Action" />
+                        <TableColumn fx:id="triggerColumn" editable="false" prefWidth="75.0" sortable="false" text="Trigger" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
