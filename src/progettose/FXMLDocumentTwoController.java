@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -43,9 +44,9 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private ComboBox<String> dayOfWeekComboBox;
     @FXML
-    private ComboBox<Integer> hourComboBox;
+    private ComboBox<String> hourComboBox;
     @FXML
-    private ComboBox<Integer> minuteComboBox;
+    private ComboBox<String> minuteComboBox;
     @FXML
     private ComboBox<String> triggerComboBox;
     @FXML
@@ -114,10 +115,14 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label execArgumentsLabel;
     @FXML
     private Label appendToFileLabel1;
+    
     /**
      * ************** Global Variable ***********
      */
     private String selectedFilePath;
+    @FXML
+    private TextField ruleNameTextField;
+    @FXML
 
     /**
      * Initializes the controller class.
@@ -127,17 +132,17 @@ public class FXMLDocumentTwoController implements Initializable {
         // TODO
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
-        triggerList.addAll("Time", "Day of Week",
+        triggerList.addAll("Time"/*, "Day of Week",
                 "Day of Month", "Date",
                 "File Existance Verification", "File Dimension Verification",
-                "Program Exit Status Verification");
+                "Program Exit Status Verification"*/);
 
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
-        actionList.addAll("Show Message", "Play Audio",
+        actionList.addAll("Show Message", "Play Audio"/*,
                 "Append String to Textfile", "Move File",
                 "Copy File", "Delete File",
-                "Execute Program");
+                "Execute Program"*/);
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
         dayOfWeekComboBox.setItems(dayOfWeekList);
@@ -151,16 +156,16 @@ public class FXMLDocumentTwoController implements Initializable {
             dayOfMonthList.add(i);
         }
 
-        ObservableList<Integer> hourList = FXCollections.observableArrayList();
+        ObservableList<String> hourList = FXCollections.observableArrayList();
         hourComboBox.setItems(hourList);
         for (int i = 0; i <= 23; i++) {
-            hourList.add(i);
+            hourList.add(String.format("%02d", i));
         }
 
-        ObservableList<Integer> minuteList = FXCollections.observableArrayList();
+        ObservableList<String> minuteList = FXCollections.observableArrayList();
         minuteComboBox.setItems(minuteList);
         for (int i = 0; i <= 59; i++) {
-            minuteList.add(i);
+            minuteList.add(String.format("%02d", i));
         }
 
         //saveButton.disableProperty().bind(actionComboBox.valueProperty().isNull());
@@ -171,17 +176,21 @@ public class FXMLDocumentTwoController implements Initializable {
                 //.and((exFileTextField.textProperty().isEmpty()).or())
                 //.and((fileDimensionTextField.textProperty().isEmpty()).or())
                 //.and((execProgramTextField.textProperty().isEmpty()).or())
-                .or(triggerComboBox.valueProperty().isNull())));
-
-        saveButton.disableProperty().bind(
+                .or(triggerComboBox.valueProperty().isNull()))
+        
+                .or
+                    (
                 (showMessageTextArea.textProperty().isEmpty())
                         //.and()
                         //.and((appendToFileTextArea.textProperty().isEmpty()).or())
                         //.and((moveCopyTextField.textProperty().isEmpty()).or().or())
                         //.and((deleteTextField.textProperty().isEmpty()).or())
                         //.and((execArgumentsTextField.textProperty().isEmpty()).or())
-                        .or(actionComboBox.valueProperty().isNull()));
+                        .or(actionComboBox.valueProperty().isNull()))
+                .or(ruleNameTextField.textProperty().isEmpty()));
+        
 
+        
         hourComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
         minuteComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
         dayOfWeekComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Day of Week"));
@@ -231,27 +240,32 @@ public class FXMLDocumentTwoController implements Initializable {
 
     @FXML
     private void onSave(ActionEvent event) {
+        Trigger trigger = null;
+        Action action = null;
         switch (triggerComboBox.getValue()) {
             case "Time":
-                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(hourComboBox.getValue(), minuteComboBox.getValue()));
-                Trigger timeT = timeTC.createTrigger();
+                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue())));
+                trigger = timeTC.createTrigger();
                 break;
             default:
-                System.out.println("Trigger non valido");
+                System.out.println("Not valid Trigger");
         }
         switch (actionComboBox.getValue()) {
-            case "PlayAudioButton": //* Da cambiare con il rispettivo nome
+            case "Play Audio": //* Da cambiare con il rispettivo nome
                 ActionCreator playAudioAC = new PlayAudioActionCreator(selectedFilePath);
-                Action playAudioA = playAudioAC.createAction();
+                action = playAudioAC.createAction();
                 break;
             
             //When showMessageAction is selected, onSave the action is created with text from textArea
-            case "ShowMessageAction": 
+            case "Show Message": 
                 ActionCreator showMessageAC = new ShowMessageActionCreator(showMessageTextArea.getText());
-                Action showMessage = showMessageAC.createAction();
+                action = showMessageAC.createAction();
                 break;
-
+            default:
+                System.out.println("Not valid Action");
         }
+        Rule rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
+        System.out.println(rule);
     }
 
     @FXML

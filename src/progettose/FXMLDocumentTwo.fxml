@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,61 +14,68 @@
    <children>
       <Label layoutX="24.0" layoutY="28.0" text="Create new rule">
          <font>
-            <Font name="System Bold" size="22.0" />
+            <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <DatePicker fx:id="datePicker" layoutX="464.0" layoutY="151.0" />
-      <TextField fx:id="exFileTextField" layoutX="381.0" layoutY="151.0" />
-      <Button fx:id="exFileButton" layoutX="601.0" layoutY="151.0" mnemonicParsing="false" text="Choose directory" />
-      <TextField fx:id="fileDimensionTextField" layoutX="580.0" layoutY="151.0" />
-      <Button fx:id="fileDimensionButton" layoutX="418.0" layoutY="151.0" mnemonicParsing="false" text="Choose file" />
-      <Button fx:id="execProgramButton" layoutX="418.0" layoutY="151.0" mnemonicParsing="false" text="Choose file" />
-      <TextField fx:id="execProgramTextField" layoutX="580.0" layoutY="151.0" />
-      <ComboBox fx:id="dayOfMonthComboBox" layoutX="479.0" layoutY="151.0" prefWidth="150.0" />
-      <ComboBox fx:id="dayOfWeekComboBox" layoutX="479.0" layoutY="151.0" prefWidth="150.0" />
-      <ComboBox fx:id="hourComboBox" layoutX="380.0" layoutY="151.0" prefWidth="150.0" promptText="Hour" />
-      <ComboBox fx:id="minuteComboBox" layoutX="579.0" layoutY="151.0" prefWidth="150.0" promptText="Minute" />
-      <Button fx:id="saveButton" layoutX="712.0" layoutY="496.0" mnemonicParsing="false" onAction="#onSave" text="Save" />
-      <Label fx:id="dateLabel" layoutX="525.0" layoutY="131.0" text="Pick a date" />
-      <Label fx:id="timeLabel" layoutX="516.0" layoutY="131.0" text="Choose a time" />
-      <Label fx:id="dayOfWeekLabel" layoutX="496.0" layoutY="131.0" text="Choose a day of week" />
-      <Label fx:id="dayOfMonthLabel" layoutX="492.0" layoutY="131.0" text="Choose a day of month" />
-      <Label fx:id="exFileLabel" layoutX="411.0" layoutY="131.0" text="Insert a filename" />
-      <Label fx:id="fileDimensionLabel" layoutX="572.0" layoutY="131.0" text="Insert a file dimension (in byte)" />
-      <Label fx:id="execProgramLabel" layoutX="593.0" layoutY="131.0" text="Insert a program name" />
-      <ComboBox fx:id="triggerComboBox" layoutX="41.0" layoutY="151.0" onAction="#onChangeTrigger" prefHeight="25.0" prefWidth="216.0" />
-      <Label layoutX="41.0" layoutY="121.0" text="Select the Trigger">
+      <TextField fx:id="ruleNameTextField" layoutX="631.0" layoutY="90.0" />
+      <Label layoutX="666.0" layoutY="69.0" text="Rule name:">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <SplitPane fx:id="newRuleSplitPane" layoutY="134.0" orientation="VERTICAL" />
+      <Button fx:id="saveButton" layoutX="789.0" layoutY="560.0" mnemonicParsing="false" onAction="#onSave" text="Save" />
+      <Label layoutX="59.0" layoutY="332.0" text="Select the Action">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="41.0" layoutY="281.0" text="Select the Action">
+      <ComboBox fx:id="actionComboBox" layoutX="59.0" layoutY="362.0" onAction="#onChangeAction" prefHeight="25.0" prefWidth="216.0" />
+      <TextArea fx:id="showMessageTextArea" layoutX="485.0" layoutY="362.0" prefHeight="64.0" prefWidth="174.0" />
+      <TextArea fx:id="appendToFileTextArea" layoutX="586.0" layoutY="362.0" prefHeight="64.0" prefWidth="174.0" />
+      <Button fx:id="sourceDirectoryButton" layoutX="545.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <TextField fx:id="moveCopyTextField" layoutX="320.0" layoutY="362.0" />
+      <TextField fx:id="execArgumentsTextField" layoutX="598.0" layoutY="362.0" />
+      <Button fx:id="deleteButton" layoutX="643.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <TextField fx:id="deleteTextField" layoutX="399.0" layoutY="362.0" />
+      <Label fx:id="playAudioLabel" layoutX="521.0" layoutY="342.0" text="Choose a file audio" />
+      <Label fx:id="appendToFileLabel1" layoutX="431.0" layoutY="342.0" text="Select a text file" />
+      <Label fx:id="moveCopyLabel" layoutX="356.0" layoutY="342.0" text="Write a filename" />
+      <Label fx:id="destinationDirectoryLabel" layoutX="678.0" layoutY="342.0" text="Destination directory" />
+      <Label fx:id="showMessageLabel" layoutX="528.0" layoutY="342.0" text="Write a message" />
+      <Label fx:id="appendToFileLabel2" layoutX="639.0" layoutY="342.0" text="Write a string" />
+      <Label fx:id="sourceDirectoryLabel" layoutX="529.0" layoutY="342.0" text="Source directory" />
+      <Label fx:id="deleteLabel1" layoutX="430.0" layoutY="342.0" text="Write a filename" />
+      <Label fx:id="deleteLabel2" layoutX="623.0" layoutY="342.0" text="Choose a directory" />
+      <Label fx:id="execProgLabel" layoutX="424.0" layoutY="342.0" text="Choose a file (.exe)" />
+      <Label fx:id="execArgumentsLabel" layoutX="587.0" layoutY="342.0" text="Write command-line arguments" />
+      <Button fx:id="appendToFileButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <Button fx:id="playAudioButton" layoutX="545.0" layoutY="362.0" mnemonicParsing="false" onAction="#onPlayAudioButton" text="Choose" />
+      <Button fx:id="destinationDirectoryButton" layoutX="706.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <Button fx:id="execProgButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <DatePicker fx:id="datePicker" layoutX="482.0" layoutY="212.0" />
+      <TextField fx:id="exFileTextField" layoutX="399.0" layoutY="212.0" />
+      <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" text="Choose directory" />
+      <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" />
+      <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
+      <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
+      <TextField fx:id="execProgramTextField" layoutX="598.0" layoutY="212.0" />
+      <ComboBox fx:id="dayOfMonthComboBox" layoutX="497.0" layoutY="212.0" prefWidth="150.0" />
+      <ComboBox fx:id="dayOfWeekComboBox" layoutX="497.0" layoutY="212.0" prefWidth="150.0" />
+      <ComboBox fx:id="hourComboBox" layoutX="398.0" layoutY="212.0" prefWidth="150.0" promptText="Hour" />
+      <ComboBox fx:id="minuteComboBox" layoutX="597.0" layoutY="212.0" prefWidth="150.0" promptText="Minute" />
+      <Label fx:id="dateLabel" layoutX="543.0" layoutY="192.0" text="Pick a date" />
+      <Label fx:id="timeLabel" layoutX="534.0" layoutY="192.0" text="Choose a time" />
+      <Label fx:id="dayOfWeekLabel" layoutX="514.0" layoutY="192.0" text="Choose a day of week" />
+      <Label fx:id="dayOfMonthLabel" layoutX="510.0" layoutY="192.0" text="Choose a day of month" />
+      <Label fx:id="exFileLabel" layoutX="429.0" layoutY="192.0" text="Insert a filename" />
+      <Label fx:id="fileDimensionLabel" layoutX="590.0" layoutY="192.0" text="Insert a file dimension (in byte)" />
+      <Label fx:id="execProgramLabel" layoutX="611.0" layoutY="192.0" text="Insert a program name" />
+      <ComboBox fx:id="triggerComboBox" layoutX="59.0" layoutY="212.0" onAction="#onChangeTrigger" prefHeight="25.0" prefWidth="216.0" />
+      <Label layoutX="59.0" layoutY="182.0" text="Select the Trigger">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <ComboBox fx:id="actionComboBox" layoutX="41.0" layoutY="311.0" onAction="#onChangeAction" prefHeight="25.0" prefWidth="216.0" />
-      <TextArea fx:id="showMessageTextArea" layoutX="467.0" layoutY="311.0" prefHeight="64.0" prefWidth="174.0" />
-      <TextArea fx:id="appendToFileTextArea" layoutX="568.0" layoutY="311.0" prefHeight="64.0" prefWidth="174.0" />
-      <Button fx:id="sourceDirectoryButton" layoutX="527.0" layoutY="311.0" mnemonicParsing="false" text="Choose" />
-      <TextField fx:id="moveCopyTextField" layoutX="302.0" layoutY="311.0" />
-      <TextField fx:id="execArgumentsTextField" layoutX="580.0" layoutY="311.0" />
-      <Button fx:id="deleteButton" layoutX="625.0" layoutY="311.0" mnemonicParsing="false" text="Choose" />
-      <TextField fx:id="deleteTextField" layoutX="381.0" layoutY="311.0" />
-      <Label fx:id="playAudioLabel" layoutX="503.0" layoutY="291.0" text="Choose a file audio" />
-      <Label fx:id="appendToFileLabel1" layoutX="413.0" layoutY="291.0" text="Select a text file" />
-      <Label fx:id="moveCopyLabel" layoutX="338.0" layoutY="291.0" text="Write a filename" />
-      <Label fx:id="destinationDirectoryLabel" layoutX="660.0" layoutY="291.0" text="Destination directory" />
-      <Label fx:id="showMessageLabel" layoutX="510.0" layoutY="291.0" text="Write a message" />
-      <Label fx:id="appendToFileLabel2" layoutX="621.0" layoutY="291.0" text="Write a string" />
-      <Label fx:id="sourceDirectoryLabel" layoutX="511.0" layoutY="291.0" text="Source directory" />
-      <Label fx:id="deleteLabel1" layoutX="412.0" layoutY="291.0" text="Write a filename" />
-      <Label fx:id="deleteLabel2" layoutX="605.0" layoutY="291.0" text="Choose a directory" />
-      <Label fx:id="execProgLabel" layoutX="406.0" layoutY="291.0" text="Choose a file (.exe)" />
-      <Label fx:id="execArgumentsLabel" layoutX="569.0" layoutY="291.0" text="Write command-line arguments" />
-      <Button fx:id="appendToFileButton" layoutX="426.0" layoutY="311.0" mnemonicParsing="false" text="Choose" />
-      <Button fx:id="playAudioButton" layoutX="527.0" layoutY="311.0" mnemonicParsing="false" onAction="#onPlayAudioButton" text="Choose" />
-      <Button fx:id="destinationDirectoryButton" layoutX="688.0" layoutY="311.0" mnemonicParsing="false" text="Choose" />
-      <Button fx:id="execProgButton" layoutX="426.0" layoutY="311.0" mnemonicParsing="false" text="Choose" />
    </children>
 </AnchorPane>
