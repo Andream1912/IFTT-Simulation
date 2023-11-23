@@ -5,6 +5,7 @@
 package progettose.actionPackage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 /**
  *
@@ -39,8 +40,14 @@ public class ShowMessageAction implements Action{
     @Override
     public void execute(){
         
-        //Definition of alert for showing user message
+         //Definition of alert for showing user message
         Alert messageBox = new Alert(AlertType.NONE);
+        
+        ButtonType confButton = new ButtonType("Close");
+        
+        messageBox.getButtonTypes().setAll(confButton);
+        
+        messageBox.setTitle("Message");
         
         messageBox.setContentText(this.message);
         
