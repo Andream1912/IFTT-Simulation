@@ -3,7 +3,6 @@ package progettose.triggerPackage;
 import java.time.LocalTime;
 
 public class TimeTrigger implements Trigger {
-
     private LocalTime time;
 
     public TimeTrigger(LocalTime time) {
@@ -20,9 +19,8 @@ public class TimeTrigger implements Trigger {
 
     @Override
     public boolean evaluate() {
-        boolean x=true;
-        System.out.println("Evaluate not yet available");
-        return x;
+        LocalTime now = LocalTime.now();
+        return time == now;
     }
 
 }
