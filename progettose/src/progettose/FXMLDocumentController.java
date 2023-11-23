@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
- */
 package progettose;
 
 import java.io.IOException;
@@ -25,7 +21,7 @@ import javafx.stage.Stage;
  * @author ciro3
  */
 public class FXMLDocumentController implements Initializable {
-    
+
     @FXML
     private Button addRuleButton;
     @FXML
@@ -42,13 +38,11 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<?, ?> triggerColumn;
     @FXML
     private AnchorPane anchorPane;
-    
-    
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void onAddRule(ActionEvent event) throws IOException {
@@ -57,9 +51,9 @@ public class FXMLDocumentController implements Initializable {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Rule Creator");
-        stage.setScene(new Scene(root1));  
+        stage.setScene(new Scene(root1));
         stage.show();
-        
+
     }
 
     @FXML
@@ -69,5 +63,5 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onToggleState(ActionEvent event) {
     }
-    
+
 }

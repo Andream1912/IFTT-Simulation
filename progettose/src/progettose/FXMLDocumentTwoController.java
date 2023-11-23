@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package progettose;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,11 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-/**
- * FXML Controller class
- *
- * @author ciro3
- */
 public class FXMLDocumentTwoController implements Initializable {
 
     @FXML
@@ -115,7 +102,6 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label execArgumentsLabel;
     @FXML
     private Label appendToFileLabel1;
-    
 
     /**
      * Initializes the controller class.
@@ -126,42 +112,43 @@ public class FXMLDocumentTwoController implements Initializable {
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
         triggerList.addAll("Time", "Day of Week",
-                           "Day of Month", "Date",
-                           "File Existance Verification", "File Dimension Verification",
-                           "Program Exit Status Verification");
-        
+                "Day of Month", "Date",
+                "File Existance Verification", "File Dimension Verification",
+                "Program Exit Status Verification");
+
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio",
-                           "Append String to Textfile", "Move File",
-                           "Copy File", "Delete File",
-                           "Execute Program");
-        
+                "Append String to Textfile", "Move File",
+                "Copy File", "Delete File",
+                "Execute Program");
+
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
         dayOfWeekComboBox.setItems(dayOfWeekList);
         dayOfWeekList.addAll("Monday", "Tuesday",
-                           "Wednesday", "Thursday",
-                           "Friday", "Saturday", "Sunday");
-        
+                "Wednesday", "Thursday",
+                "Friday", "Saturday", "Sunday");
+
         ObservableList<Integer> dayOfMonthList = FXCollections.observableArrayList();
         dayOfMonthComboBox.setItems(dayOfMonthList);
-        for (int i= 1; i<=31; i++)
+        for (int i = 1; i <= 31; i++) {
             dayOfMonthList.add(i);
-        
+        }
+
         ObservableList<Integer> hourList = FXCollections.observableArrayList();
         hourComboBox.setItems(hourList);
-        for (int i= 0; i<=23; i++)
+        for (int i = 0; i <= 23; i++) {
             hourList.add(i);
-        
+        }
+
         ObservableList<Integer> minuteList = FXCollections.observableArrayList();
         minuteComboBox.setItems(minuteList);
-        for (int i= 0; i<=59; i++)
+        for (int i = 0; i <= 59; i++) {
             minuteList.add(i);
-        
-        
+        }
+
         //saveButton.disableProperty().bind(actionComboBox.valueProperty().isNull());
-        saveButton.disableProperty().bind((
-               (hourComboBox.valueProperty().isNull().or(minuteComboBox.valueProperty().isNull()))
+        saveButton.disableProperty().bind(((hourComboBox.valueProperty().isNull().or(minuteComboBox.valueProperty().isNull()))
                 .and(dayOfWeekComboBox.valueProperty().isNull())
                 .and(dayOfMonthComboBox.valueProperty().isNull())
                 .and(datePicker.valueProperty().isNull())
@@ -169,17 +156,16 @@ public class FXMLDocumentTwoController implements Initializable {
                 //.and((fileDimensionTextField.textProperty().isEmpty()).or())
                 //.and((execProgramTextField.textProperty().isEmpty()).or())
                 .or(triggerComboBox.valueProperty().isNull())));
-        
+
         saveButton.disableProperty().bind(
-               (showMessageTextArea.textProperty().isEmpty())
-                //.and()
-                //.and((appendToFileTextArea.textProperty().isEmpty()).or())
-                //.and((moveCopyTextField.textProperty().isEmpty()).or().or())
-                //.and((deleteTextField.textProperty().isEmpty()).or())
-                //.and((execArgumentsTextField.textProperty().isEmpty()).or())
-                .or(actionComboBox.valueProperty().isNull()));
-        
-        
+                (showMessageTextArea.textProperty().isEmpty())
+                        //.and()
+                        //.and((appendToFileTextArea.textProperty().isEmpty()).or())
+                        //.and((moveCopyTextField.textProperty().isEmpty()).or().or())
+                        //.and((deleteTextField.textProperty().isEmpty()).or())
+                        //.and((execArgumentsTextField.textProperty().isEmpty()).or())
+                        .or(actionComboBox.valueProperty().isNull()));
+
         hourComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
         minuteComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
         dayOfWeekComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Day of Week"));
@@ -198,7 +184,7 @@ public class FXMLDocumentTwoController implements Initializable {
         exFileLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Existance Verification"));
         fileDimensionLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
         execProgramLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
-        
+
         showMessageTextArea.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Show Message"));
         playAudioButton.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Play Audio"));
         appendToFileButton.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Append String to Textfile"));
@@ -221,9 +207,8 @@ public class FXMLDocumentTwoController implements Initializable {
         deleteLabel2.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Delete File"));
         execProgLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
         execArgumentsLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
-        
-        
-    }    
+
+    }
 
     @FXML
     private void onSave(ActionEvent event) {
@@ -251,5 +236,5 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private void onChangeAction(ActionEvent event) {
     }
-    
+
 }
