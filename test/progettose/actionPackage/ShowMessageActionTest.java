@@ -1,22 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
 package progettose.actionPackage;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author smuel
- */
 public class ShowMessageActionTest {
     
     //ShowMessageAction testing
     
     private ShowMessageAction action;
 
+    //Test for the get and set methods
     @Test
     public void testGetMessage() {
         String message = "Test message";
@@ -36,6 +29,24 @@ public class ShowMessageActionTest {
         assertEquals(newMessage, action.getMessage());
     }
 
-    //execute() tested via UI application
+    //Test for the initialization of ShowMessageAction
+    @Test
+    public void testShowMessageActionInitialization(){
+        String message = "test";
+        ShowMessageAction showMessageAction = new ShowMessageAction(message);
+        assertNotNull(showMessageAction);
+        assertEquals(message, showMessageAction.getMessage());
+        
+    }
     
+    //Test for the initialization of ShowMessageAction with ShowMessageAtionCreator
+    @Test
+    public void testShowMessageActionCreator(){
+        String message = "test";
+        ShowMessageActionCreator showMessageActionCreator = new ShowMessageActionCreator(message);
+        Action showMessageAction = showMessageActionCreator.createAction();
+        assertNotNull(showMessageAction);
+        assertTrue(showMessageAction instanceof ShowMessageAction);
+        assertEquals(message, ((ShowMessageAction)showMessageAction).getMessage());
+    }
 }
