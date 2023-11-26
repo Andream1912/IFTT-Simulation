@@ -4,6 +4,7 @@ import java.time.LocalTime;
 
 public class TimeTrigger implements Trigger {
 
+
     // The specific time at which this trigger should activate
     private LocalTime time;
 
