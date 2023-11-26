@@ -2,6 +2,7 @@ package progettose;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -29,6 +30,7 @@ import progettose.triggerPackage.TriggerCreator;
 
 public class FXMLDocumentTwoController implements Initializable {
 
+    // Injected JavaFX elements
     @FXML
     private DatePicker datePicker;
     @FXML
@@ -115,24 +117,23 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label execArgumentsLabel;
     @FXML
     private Label appendToFileLabel1;
-    
-    /**
-     * ************** Global Variable ***********
-     */
-    private String selectedFilePath;
     @FXML
     private TextField ruleNameTextField;
     @FXML
     private SplitPane newRuleSplitPane;
     @FXML
     private Label fileAudioNameLabel;
-
+    
+    private FXMLDocumentController controllerOne;
+    private Path selectedFilePath;
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        // Initialize ComboBox options
+        // ... (initialize triggerList, actionList, dayOfWeekList, dayOfMonthList, hourList, minuteList)
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
         triggerList.addAll("Time"/*, "Day of Week",
@@ -171,7 +172,8 @@ public class FXMLDocumentTwoController implements Initializable {
             minuteList.add(String.format("%02d", i));
         }
 
-        //saveButton.disableProperty().bind(actionComboBox.valueProperty().isNull());
+        // Bind disable properties for the saveButton
+        // ... (binding saveButton disable property based on various conditions)
         saveButton.disableProperty().bind(((hourComboBox.valueProperty().isNull().or(minuteComboBox.valueProperty().isNull()))
                 .and(dayOfWeekComboBox.valueProperty().isNull())
                 .and(dayOfMonthComboBox.valueProperty().isNull())
@@ -193,7 +195,9 @@ public class FXMLDocumentTwoController implements Initializable {
                 .or(ruleNameTextField.textProperty().isEmpty()));
         
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
-        
+
+        // Set initial visibility properties for UI elements based on trigger and action selection
+        // ... (set visibility properties based on triggerComboBox and actionComboBox values)
         hourComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
         minuteComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Time"));
         dayOfWeekComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Day of Week"));
@@ -243,6 +247,8 @@ public class FXMLDocumentTwoController implements Initializable {
 
     @FXML
     private void onSave(ActionEvent event) {
+        // Create Trigger and Action based on selected options
+        // ... (create Trigger and Action based on triggerComboBox and actionComboBox values)
         Trigger trigger = null;
         Action action = null;
         switch (triggerComboBox.getValue()) {
@@ -267,8 +273,16 @@ public class FXMLDocumentTwoController implements Initializable {
             default:
                 System.out.println("Not valid Action");
         }
+        
+        // Create a Rule using the created Trigger and Action
         Rule rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
-        System.out.println(rule);
+        
+        // Add the created rule to the ObservableList in the first controller
+        controllerOne.addRuleToObsList(rule);
+        
+        // Close the current stage (window)
+        Stage currentStage = (Stage) saveButton.getScene().getWindow();
+        currentStage.close();
     }
 
     @FXML
@@ -286,14 +300,17 @@ public class FXMLDocumentTwoController implements Initializable {
         // Show the FileChooser and get the selected file
         File selectedFile = fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
-            selectedFilePath = selectedFile.getAbsolutePath();
+            selectedFilePath = selectedFile.toPath();
+            fileAudioNameLabel.textProperty().setValue(selectedFile.getName());
+            fileAudioNameLabel.visibleProperty().setValue(Boolean.TRUE);
         }
-        fileAudioNameLabel.textProperty().setValue(selectedFile.getName());
-        fileAudioNameLabel.visibleProperty().setValue(Boolean.TRUE);
+        
     }
 
     @FXML
     private void onChangeTrigger(ActionEvent event) {
+        // Reset UI elements based on trigger selection
+        // ... (reset UI elements based on triggerComboBox selection)
         hourComboBox.valueProperty().setValue(null);
         minuteComboBox.valueProperty().setValue(null);
         dayOfWeekComboBox.valueProperty().setValue(null);
@@ -309,6 +326,12 @@ public class FXMLDocumentTwoController implements Initializable {
 
     @FXML
     private void onChangeAction(ActionEvent event) {
+        // Reset UI elements based on action selection
+        // ... (reset UI elements based on actionComboBox selection)
     }
-
+    
+    public void setControllerOne(FXMLDocumentController controllerOne){
+        //Sets the reference to the first controller
+        this.controllerOne = controllerOne;
+    }
 }

@@ -1,58 +1,45 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package progettose.actionPackage;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
-/**
- *
- * @author smuel
- */
-public class ShowMessageAction implements Action{
-    
-    //Defining String attribute for message action
+public class ShowMessageAction implements Action {
+
+    // The message to be displayed
     private String message;
-    
-    //Constructor
-    public ShowMessageAction(String message){
-        
-        this.message=message;
-        
+
+    // Constructor to initialize ShowMessageAction with the specified message.
+    public ShowMessageAction(String message) {
+        this.message = message;
     }
-    
-    //Method for getting message
-    public String getMessage(){
-        
+
+    // Method for getting message
+    public String getMessage() {
         return this.message;
-        
     }
-    
-    //Method for setting message
-    public void setMessage(String temp){
-        
-        this.message=temp;
-        
+
+    // Method for setting message
+    public void setMessage(String temp) {
+        this.message = temp;
     }
-    
+
+    // Executes the action by displaying the configured message in a JavaFX Alert.
     @Override
-    public void execute(){
-        
-         //Definition of alert for showing user message
+    public void execute() {
+        // Create an Alert with a single "Close" button
         Alert messageBox = new Alert(AlertType.NONE);
-        
         ButtonType confButton = new ButtonType("Close");
-        
         messageBox.getButtonTypes().setAll(confButton);
-        
         messageBox.setTitle("Message");
-        
         messageBox.setContentText(this.message);
         
-        //Box will remain until user presses OK button
+        // Display the Alert and wait for user interaction
         messageBox.showAndWait();
     }
-    
+
+    @Override
+    public String toString() {
+        return "A message will be shown, it says: " + message;
+    }
 }
