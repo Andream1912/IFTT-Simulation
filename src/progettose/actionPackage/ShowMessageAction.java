@@ -1,9 +1,10 @@
 package progettose.actionPackage;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-    
+
 public class ShowMessageAction implements Action {
 
     // The message to be displayed
@@ -28,14 +29,16 @@ public class ShowMessageAction implements Action {
     @Override
     public void execute() {
         // Create an Alert with a single "Close" button
-        Alert messageBox = new Alert(AlertType.NONE);
-        ButtonType confButton = new ButtonType("Close");
-        messageBox.getButtonTypes().setAll(confButton);
-        messageBox.setTitle("Message");
-        messageBox.setContentText(this.message);
-        
-        // Display the Alert and wait for user interaction
-        messageBox.showAndWait();
+        Platform.runLater(() -> {
+            Alert messageBox = new Alert(AlertType.NONE);
+            ButtonType confButton = new ButtonType("Close");
+            messageBox.getButtonTypes().setAll(confButton);
+            messageBox.setTitle("Message");
+            messageBox.setContentText(this.message);
+
+            // Display the Alert and wait for user interaction
+            messageBox.showAndWait();
+        });
     }
 
     @Override

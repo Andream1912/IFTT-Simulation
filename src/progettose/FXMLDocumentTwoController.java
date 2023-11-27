@@ -243,6 +243,10 @@ public class FXMLDocumentTwoController implements Initializable {
         //Limit the number of characters in showMessageTextArea to 1000
         showMessageTextArea.setTextFormatter(new TextFormatter<String>(change -> 
             change.getControlNewText().length() <= 1000 ? change : null));
+        
+        //Placeholder text for showMessageTextArea
+        showMessageTextArea.setPromptText("Max 1000 characters...");
+        
     }
 
     @FXML
@@ -253,7 +257,7 @@ public class FXMLDocumentTwoController implements Initializable {
         Action action = null;
         switch (triggerComboBox.getValue()) {
             case "Time":
-                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue())));
+                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()),0));
                 trigger = timeTC.createTrigger();
                 break;
             default:

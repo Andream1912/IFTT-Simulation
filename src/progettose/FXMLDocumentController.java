@@ -6,12 +6,15 @@ import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageAction;
 import progettose.triggerPackage.TimeTrigger;
@@ -71,7 +75,7 @@ public class FXMLDocumentController implements Initializable {
         tableView.setItems(rm.getRules());
 
         // Adding a sample rule to the TableView
-        rm.addRule(new Rule("Promemoria 1", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(10, 15))));
+        rm.addRule(new Rule("Promemoria 1", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(00, 59))));
         rm.addRule(new Rule("Promemoria 2", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(10, 15))));
 
         // Disabling removeRuleButton when no row is selected
@@ -80,8 +84,8 @@ public class FXMLDocumentController implements Initializable {
         // Setting a position for the SplitPane divider
         splitPane.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
             splitPane.setDividerPosition(0, 0.3);
-
         });
+        rm.periodicCheck();
     }
 
     @FXML
@@ -103,8 +107,23 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onRemoveRule(ActionEvent event) {
         // Handling the 'Remove Rule' button click
-        rm.removeRule(tableView.getSelectionModel().selectedItemProperty().getValue());
-        tableView.getSelectionModel().clearSelection();
+        
+        //Display warning message for removing rule
+        Alert messageBox = new Alert(Alert.AlertType.NONE);
+        ButtonType confButton = new ButtonType("Remove");
+        ButtonType cancelButton = new ButtonType("Cancel");
+        messageBox.getButtonTypes().setAll(cancelButton, confButton);
+        messageBox.setTitle("Warning");
+        messageBox.setContentText("Do you want to permanently remove the rule?");
+        // Display the Alert and wait for user to decide if removing the rule or not
+        messageBox.showAndWait().ifPresent(buttonType -> {
+            if(buttonType == confButton){
+                rm.removeRule(tableView.getSelectionModel().selectedItemProperty().getValue());
+                tableView.getSelectionModel().clearSelection();
+            }
+        });
+    
+        
     }
 
     @FXML
@@ -113,6 +132,10 @@ public class FXMLDocumentController implements Initializable {
 
     public void addRuleToObsList(Rule r) {
         rm.addRule(r);
+    }
+    
+    public void endThread(){
+        RuleManager.shutdownScheduler();
     }
 
     @FXML

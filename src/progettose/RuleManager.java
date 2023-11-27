@@ -15,11 +15,7 @@ public class RuleManager {
     
     //invisible constructor
     private RuleManager(){
-        this.rules =FXCollections.observableArrayList();
-        //constructor of the single rule scheduler
-        if (!scheduler.isShutdown() && scheduler.isTerminated()) {
-            periodicCheck();
-        }
+        this.rules =FXCollections.observableArrayList();     
     }
     
     public static RuleManager getInstance(){
@@ -45,12 +41,12 @@ public class RuleManager {
         this.rules.remove(r);
     }
     
-    private void periodicCheck(){
+    public void periodicCheck(){
         //Scheduler for check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
             for (Rule r : rules) {
                 if (r.getTrigger().evaluate()) {
-                    fireRule(r);
+                    this.fireRule(r);
                 }
             }
         }, 0, 3, TimeUnit.SECONDS);
