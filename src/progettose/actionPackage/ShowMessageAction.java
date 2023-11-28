@@ -31,7 +31,7 @@ public class ShowMessageAction implements Action {
         // Create an Alert with a single "Close" button
         Platform.runLater(() -> {
             Alert messageBox = new Alert(AlertType.NONE);
-            ButtonType confButton = new ButtonType("Close");
+            ButtonType confButton = new ButtonType("Ok");
             messageBox.getButtonTypes().setAll(confButton);
             messageBox.setTitle("Message");
             messageBox.setContentText(this.message);
