@@ -6,7 +6,6 @@ import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,7 +22,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageAction;
 import progettose.triggerPackage.TimeTrigger;
@@ -54,12 +52,14 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private SplitPane splitPane;
 
-    private RuleManager rm;
+    private ConcreteRuleManager rm;
+    private RuleManagerProxy rmp;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Creating RuleManager object
-        rm = RuleManager.getInstance();
+        rm = ConcreteRuleManager.getInstance();
+        rmp = new RuleManagerProxy(rm);
 
         // Initializing TableView and its columns
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
@@ -107,7 +107,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onRemoveRule(ActionEvent event) {
         // Handling the 'Remove Rule' button click
-        
+
         //Display warning message for removing rule
         Alert messageBox = new Alert(Alert.AlertType.NONE);
         ButtonType confButton = new ButtonType("Yes");
@@ -117,13 +117,12 @@ public class FXMLDocumentController implements Initializable {
         messageBox.setContentText("Do you want to permanently remove the rule?");
         // Display the Alert and wait for user to decide if removing the rule or not
         messageBox.showAndWait().ifPresent(buttonType -> {
-            if(buttonType == confButton){
+            if (buttonType == confButton) {
                 rm.removeRule(tableView.getSelectionModel().selectedItemProperty().getValue());
                 tableView.getSelectionModel().clearSelection();
             }
         });
-    
-        
+
     }
 
     @FXML
@@ -133,9 +132,9 @@ public class FXMLDocumentController implements Initializable {
     public void addRuleToObsList(Rule r) {
         rm.addRule(r);
     }
-    
-    public void endThread(){
-        RuleManager.shutdownScheduler();
+
+    public void endThread() {
+        ConcreteRuleManager.shutdownScheduler();
     }
 
     @FXML

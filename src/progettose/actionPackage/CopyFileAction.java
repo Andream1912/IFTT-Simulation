@@ -102,4 +102,14 @@ public class CopyFileAction implements Action{
             }
         });
     }
+
+    @Override
+    public String getType() {
+        return "Copy File";
+    }
+
+    @Override
+    public String getToCSV() {
+        return this.filePath.toString()+";"+this.copyPath.toString();
+    }
 }

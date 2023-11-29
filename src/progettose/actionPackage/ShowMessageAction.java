@@ -9,10 +9,12 @@ public class ShowMessageAction implements Action {
 
     // The message to be displayed
     private String message;
+    private final String type;
 
     // Constructor to initialize ShowMessageAction with the specified message.
     public ShowMessageAction(String message) {
         this.message = message;
+        this.type = "Show Message";
     }
 
     // Method for getting message
@@ -23,6 +25,11 @@ public class ShowMessageAction implements Action {
     // Method for setting message
     public void setMessage(String temp) {
         this.message = temp;
+    }
+
+    @Override
+    public String getType() {
+        return this.type;
     }
 
     // Executes the action by displaying the configured message in a JavaFX Alert.
@@ -44,5 +51,10 @@ public class ShowMessageAction implements Action {
     @Override
     public String toString() {
         return "A message will be shown, it says: " + message;
+    }
+
+    @Override
+    public String getToCSV() {
+        return this.message;
     }
 }

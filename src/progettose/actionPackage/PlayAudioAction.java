@@ -14,9 +14,11 @@ public class PlayAudioAction implements Action {
 
     // The path to the audio file
     public Path path;
+    private final String type;
 
     public PlayAudioAction(Path path) {
         this.path = path;
+        this.type = "Play Audio";
     }
 
     public Path getPath() {
@@ -25,6 +27,11 @@ public class PlayAudioAction implements Action {
 
     public void setPath(Path path) {
         this.path = path;
+    }
+
+    @Override
+    public String getType() {
+        return this.type;
     }
 
     //Executes the action, playing the audio file
@@ -73,5 +80,10 @@ public class PlayAudioAction implements Action {
     @Override
     public String toString() {
         return "Play the audio file: " + path.getFileName();
+    }
+
+    @Override
+    public String getToCSV() {
+        return this.getPath().toString();
     }
 }

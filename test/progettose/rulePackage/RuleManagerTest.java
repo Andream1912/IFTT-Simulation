@@ -8,19 +8,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.After;
 import progettose.Rule;
-import progettose.RuleManager;
+import progettose.ConcreteRuleManager;
 import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 
 public class RuleManagerTest {
 
-    private RuleManager ruleManager;
+    private ConcreteRuleManager ruleManager;
     ActionMock actionMock = new ActionMock();
     TriggerMock triggerMock = new TriggerMock();
 
     @Before
     public void setUp() {
-        ruleManager = RuleManager.getInstance();
+        ruleManager = ConcreteRuleManager.getInstance();
         //Cleare possible values in the instance
         ruleManager.getRules().clear();
         //initialize mocks
@@ -83,7 +83,7 @@ public class RuleManagerTest {
     @After
     public void tearDown() {
         // Close of resources
-        RuleManager.shutdownScheduler();
+        ConcreteRuleManager.shutdownScheduler();
     }
 
     // Mock class Action
@@ -98,6 +98,16 @@ public class RuleManagerTest {
 
         public boolean isExecuted() {
             return executed;
+        }
+
+        @Override
+        public String getType() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+
+        @Override
+        public String getToCSV() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
     }
 
@@ -114,5 +124,16 @@ public class RuleManagerTest {
         public void setEvaluateResult(boolean result) {
             evaluateResult = result;
         }
+
+        @Override
+        public String getType() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+
+        @Override
+        public String getToCSV() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+
     }
 }
