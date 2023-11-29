@@ -145,8 +145,8 @@ public class FXMLDocumentTwoController implements Initializable {
         // ... (initialize triggerList, actionList, dayOfWeekList, dayOfMonthList, hourList, minuteList)
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
-        triggerList.addAll("Time"/*, "Day of Week",
-                "Day of Month", "Date",
+        triggerList.addAll("Time","Day of Month","Day of Week"/*, ,
+                , "Date",
                 "File Existance Verification", "File Dimension Verification",
                 "Program Exit Status Verification"*/);
 
