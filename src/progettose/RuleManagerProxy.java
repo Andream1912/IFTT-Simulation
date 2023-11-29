@@ -110,7 +110,6 @@ public class RuleManagerProxy implements RuleManager {
     }
 
     private void loadFromFile() throws IOException {
-
         // Reads rules from a CSV file and adds them to the ConcreteRuleManager.
         try (BufferedReader reader = new BufferedReader(new FileReader(directoryProject))) {
             String s;

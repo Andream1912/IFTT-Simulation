@@ -72,11 +72,7 @@ public class FXMLDocumentController implements Initializable {
         triggerColumn.resizableProperty().setValue(Boolean.FALSE);
 
         // Binding TableView to the ObservableList        
-        tableView.setItems(rm.getRules());
-
-        // Adding a sample rule to the TableView
-        rm.addRule(new Rule("Promemoria 1", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(00, 59))));
-        rm.addRule(new Rule("Promemoria 2", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(10, 15))));
+        tableView.setItems(rmp.getRules());
 
         // Disabling removeRuleButton when no row is selected
         removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
@@ -118,7 +114,7 @@ public class FXMLDocumentController implements Initializable {
         // Display the Alert and wait for user to decide if removing the rule or not
         messageBox.showAndWait().ifPresent(buttonType -> {
             if (buttonType == confButton) {
-                rm.removeRule(tableView.getSelectionModel().selectedItemProperty().getValue());
+                rmp.removeRule(tableView.getSelectionModel().selectedItemProperty().getValue());
                 tableView.getSelectionModel().clearSelection();
             }
         });
@@ -130,7 +126,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void addRuleToObsList(Rule r) {
-        rm.addRule(r);
+        rmp.addRule(r);
     }
 
     public void endThread() {
