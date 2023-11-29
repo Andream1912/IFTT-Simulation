@@ -3,6 +3,7 @@ package progettose;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -24,6 +25,8 @@ import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
 import javafx.scene.control.TextFormatter;
+import javafx.stage.DirectoryChooser;
+import progettose.actionPackage.CopyFileActionCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -126,6 +129,12 @@ public class FXMLDocumentTwoController implements Initializable {
     
     private FXMLDocumentController controllerOne;
     private Path selectedFilePath;
+    private Path selectedSourcePath;
+    private Path selectedDestinationPath;
+    @FXML
+    private Label selectedDestinationDirectoryLabel;
+    @FXML
+    private Label selectedSourceDirectoryLabel;
     
     /**
      * Initializes the controller class.
@@ -145,7 +154,7 @@ public class FXMLDocumentTwoController implements Initializable {
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio"/*,
                 "Append String to Textfile", "Move File",
-                "Copy File", "Delete File",
+                */,"Copy File"/*, "Delete File",
                 "Execute Program"*/);
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
@@ -188,7 +197,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 (showMessageTextArea.textProperty().isEmpty())
                         .and(fileAudioNameLabel.visibleProperty().not())
                         //.and((appendToFileTextArea.textProperty().isEmpty()).or())
-                        //.and((moveCopyTextField.textProperty().isEmpty()).or().or())
+                        .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
                         //.and((deleteTextField.textProperty().isEmpty()).or())
                         //.and((execArgumentsTextField.textProperty().isEmpty()).or())
                         .or(actionComboBox.valueProperty().isNull()))
@@ -271,9 +280,17 @@ public class FXMLDocumentTwoController implements Initializable {
             
             //When showMessageAction is selected, onSave the action is created with text from textArea
             case "Show Message": 
+                
                 ActionCreator showMessageAC = new ShowMessageActionCreator(showMessageTextArea.getText());
                 action = showMessageAC.createAction();
                 break;
+            
+            //When copyFileAction is selected, onSave the action is created from the different input fields
+            case "Copy File":
+                ActionCreator copyFileAC = new CopyFileActionCreator(Paths.get(selectedSourcePath.toString()+"/"+moveCopyTextField.getText()), selectedDestinationPath);
+                action = copyFileAC.createAction();
+                break;
+            
             default:
                 System.out.println("Not valid Action");
         }
@@ -311,6 +328,40 @@ public class FXMLDocumentTwoController implements Initializable {
         
     }
 
+    @FXML
+    private void onSourceDirectoryButton(ActionEvent event) {
+        Stage primaryStage = (Stage) sourceDirectoryButton.getScene().getWindow();
+        
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the source directory of the file to copy");
+        
+        //Get source directory if it's not null
+        Path checkPath = directoryChooser.showDialog(primaryStage).toPath();
+        if(checkPath != null){
+            selectedSourcePath = checkPath;
+            selectedSourceDirectoryLabel.textProperty().setValue(selectedSourcePath.getFileName().toString());
+            selectedSourceDirectoryLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+    }
+
+    @FXML
+    private void onDestinationDirectoryButton(ActionEvent event) {
+        Stage primaryStage = (Stage) destinationDirectoryButton.getScene().getWindow();
+        
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the destination directory of the file to copy");
+        
+        //Get source directory if it's not null
+        Path checkPath = directoryChooser.showDialog(primaryStage).toPath();
+        if(checkPath != null){
+            selectedDestinationPath = checkPath;
+            selectedDestinationDirectoryLabel.textProperty().setValue(selectedDestinationPath.getFileName().toString());
+            selectedDestinationDirectoryLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+    }
+    
     @FXML
     private void onChangeTrigger(ActionEvent event) {
         // Reset UI elements based on trigger selection

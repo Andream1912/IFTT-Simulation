@@ -112,7 +112,7 @@ public class FXMLDocumentController implements Initializable {
         Alert messageBox = new Alert(Alert.AlertType.NONE);
         ButtonType confButton = new ButtonType("Yes");
         ButtonType cancelButton = new ButtonType("No");
-        messageBox.getButtonTypes().setAll(cancelButton, confButton);
+        messageBox.getButtonTypes().setAll(confButton, cancelButton);
         messageBox.setTitle("Warning");
         messageBox.setContentText("Do you want to permanently remove the rule?");
         // Display the Alert and wait for user to decide if removing the rule or not
