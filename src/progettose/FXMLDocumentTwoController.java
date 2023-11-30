@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
@@ -27,6 +29,7 @@ import progettose.actionPackage.ShowMessageActionCreator;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.DirectoryChooser;
 import progettose.actionPackage.CopyFileActionCreator;
+import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
@@ -147,8 +150,8 @@ public class FXMLDocumentTwoController implements Initializable {
         // ... (initialize triggerList, actionList, dayOfWeekList, dayOfMonthList, hourList, minuteList)
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
-        triggerList.addAll("Time","Day of Week","Day of Month"/*, ,
-                , "Date",
+        triggerList.addAll("Time","Day of Week","Day of Month",
+                 "Date"/*,
                 "File Existance Verification", "File Dimension Verification",
                 "Program Exit Status Verification"*/);
 
@@ -255,7 +258,16 @@ public class FXMLDocumentTwoController implements Initializable {
 
         //Placeholder text for showMessageTextArea
         showMessageTextArea.setPromptText("Max 1000 characters...");
+        
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
 
+                // Disabilita le date precedenti a oggi
+                setDisable(date.isBefore(LocalDate.now()));
+            }
+        });
     }
 
     private Trigger checkTrigger(String s) {
@@ -269,6 +281,9 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Day of Month":
                 TriggerCreator dayOfMonthTC = new DayOfMonthTriggerCreator(dayOfMonthComboBox.getValue());
                 return dayOfMonthTC.createTrigger();
+            case "Date":
+                TriggerCreator dateTC = new DateTriggerCreator(datePicker.getValue());
+                return dateTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;

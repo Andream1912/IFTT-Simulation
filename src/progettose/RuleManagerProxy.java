@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +16,7 @@ import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
+import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
@@ -123,6 +125,9 @@ public class RuleManagerProxy implements RuleManager {
             case "Day of Month":
                 TriggerCreator dayOfMonthTC = new DayOfMonthTriggerCreator(Integer.parseInt(column[i++]));
                 return dayOfMonthTC.createTrigger();
+            case "Date":
+                TriggerCreator dateTC = new DateTriggerCreator(LocalDate.parse(column[i++]));
+                return dateTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;
