@@ -6,6 +6,7 @@ package progettose.triggerPackage;
 
 import java.time.LocalDate;
 import java.time.DayOfWeek;
+import java.util.Locale;
 
 /**
  *
@@ -17,7 +18,7 @@ public class DayOfWeekTrigger implements Trigger{
     
     public DayOfWeekTrigger(String day) {
         this.day=day; 
-        this.type="Day Of Week";
+        this.type="Day of Week";
     }
 
     public String getDay() {
@@ -31,9 +32,10 @@ public class DayOfWeekTrigger implements Trigger{
     @Override
     public boolean evaluate() {
         DayOfWeek currentDay = LocalDate.now().getDayOfWeek();
-        return DayOfWeek.valueOf(day)==currentDay;
+        return day.toUpperCase(Locale.ITALY).equals(currentDay.toString());
     }
     
+   
     @Override
     public String toString() {
         return "On " + day;

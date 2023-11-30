@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +18,9 @@ import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
+import progettose.triggerPackage.DateTriggerCreator;
+import progettose.triggerPackage.DayOfMonthTriggerCreator;
+import progettose.triggerPackage.DayOfWeekTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -28,9 +32,9 @@ public class RuleManagerProxy implements RuleManager {
     private final String directoryProject = System.getProperty("user.dir") + "/rules.csv";
     private int i = 0;
 
-    public RuleManagerProxy(ConcreteRuleManager concrRM) {
+    private RuleManagerProxy() {
         // Constructor that initializes the ConcreteRuleManager and loads rules from a file.
-        this.concrRM = concrRM;
+        this.concrRM = new ConcreteRuleManager();
         try {
             File file = new File(directoryProject);
             if (!file.exists()) {
@@ -41,6 +45,14 @@ public class RuleManagerProxy implements RuleManager {
         } catch (IOException ex) {
             Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static RuleManagerProxy getInstance() {
+        //Singleton pattern to Rulemanager
+        if (uniqueInstance == null) {
+            uniqueInstance = new RuleManagerProxy();
+        }
+        return uniqueInstance;
     }
 
     @Override
@@ -71,12 +83,32 @@ public class RuleManagerProxy implements RuleManager {
         return this.concrRM.getRules();
     }
 
+    @Override
+    public void activateRule(Rule r){
+        this.concrRM.activateRule(r);
+        try {
+            this.storeToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void deactivateRule(Rule r){
+        this.concrRM.deactivateRule(r);
+        try {
+            this.storeToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void storeToFile() throws IOException {
 
         // Writes rules from the ConcreteRuleManager to a CSV file.
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(directoryProject, false))) {
             for (Rule r : this.concrRM.getRules()) {
-                writer.write(r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV() + ";true");
+                writer.write(r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV() + ";"+r.isActive());
                 writer.newLine();
             }
             writer.close();
@@ -87,8 +119,17 @@ public class RuleManagerProxy implements RuleManager {
         // Creates a Trigger based on the provided trigger type and data.
         switch (s) {
             case "Time":
-                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.parse(column[i++] + ":00"));
+                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.parse(column[i++]));
                 return timeTC.createTrigger();
+            case "Day of Week":
+                TriggerCreator dayOfWeekTC = new DayOfWeekTriggerCreator(column[i++]);
+                return dayOfWeekTC.createTrigger();
+            case "Day of Month":
+                TriggerCreator dayOfMonthTC = new DayOfMonthTriggerCreator(Integer.parseInt(column[i++]));
+                return dayOfMonthTC.createTrigger();
+            case "Date":
+                TriggerCreator dateTC = new DateTriggerCreator(LocalDate.parse(column[i++]));
+                return dateTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;
@@ -132,7 +173,10 @@ public class RuleManagerProxy implements RuleManager {
                     Trigger trigger = checkTrigger(nameTrigger, column);
                     String nameAction = column[i++];
                     Action action = checkAction(nameAction, column);
-                    this.concrRM.addRule(new Rule(ruleName, action, trigger));
+                    Rule r =new Rule(ruleName, action, trigger);
+                    r.setState(Boolean.parseBoolean(column[i++]));
+                    this.concrRM.addRule(r);
+                    
                 } else {
                     System.out.println("Error in reading the line");
                 }
@@ -140,5 +184,7 @@ public class RuleManagerProxy implements RuleManager {
             reader.close();
         }
     }
-
+    public void periodicCheck(){
+        this.concrRM.periodicCheck();
+    }
 }

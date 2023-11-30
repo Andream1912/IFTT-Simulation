@@ -79,7 +79,7 @@ public class PlayAudioAction implements Action {
 
     @Override
     public String toString() {
-        return "Play the audio file: " + path.getFileName();
+        return "Play audio:\n" + path.getFileName();
     }
 
     @Override

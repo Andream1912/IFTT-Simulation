@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +18,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import progettose.actionPackage.Action;
@@ -45,43 +43,47 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Rule, Trigger> triggerColumn;
     @FXML
-    private AnchorPane anchorPane;
-
-    // ObservableList to store data for TableView
-    private ObservableList<Rule> tableViewObs;
+    private TableColumn<Rule, RuleState> statusColumn;
     @FXML
     private SplitPane splitPane;
-
-    private ConcreteRuleManager rm;
     private RuleManagerProxy rmp;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Creating RuleManager object
-        rm = ConcreteRuleManager.getInstance();
-        rmp = new RuleManagerProxy(rm);
+        rmp =RuleManagerProxy.getInstance();
 
         // Initializing TableView and its columns
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
         actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
-
+        statusColumn.setCellValueFactory(new PropertyValueFactory("state"));
+       
+        
+        
         // Making columns non-resizable
         nameColumn.resizableProperty().setValue(Boolean.FALSE);
         actionColumn.resizableProperty().setValue(Boolean.FALSE);
         triggerColumn.resizableProperty().setValue(Boolean.FALSE);
+        statusColumn.resizableProperty().setValue(Boolean.FALSE);
 
         // Binding TableView to the ObservableList        
+
         tableView.setItems(rmp.getRules());
 
-        // Disabling removeRuleButton when no row is selected
-        removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
 
+        // Disabling removeRuleButton and toggleStateButton when no row is selected
+        removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+        toggleStateButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+        
+        
         // Setting a position for the SplitPane divider
         splitPane.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
             splitPane.setDividerPosition(0, 0.3);
         });
-        rm.periodicCheck();
+        rmp.periodicCheck();
+        
+        
     }
 
     @FXML
@@ -123,8 +125,18 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void onToggleState(ActionEvent event) {
+        Rule r = tableView.getSelectionModel().selectedItemProperty().getValue();
+        if(r.isActive()){
+            rmp.deactivateRule(r);
+            toggleStateButton.textProperty().setValue("Activate Rule");
+            
+        }else{
+            rmp.activateRule(r);
+            toggleStateButton.textProperty().setValue("Deactivate Rule");
+        }
+        tableView.refresh();
     }
-
+    
     public void addRuleToObsList(Rule r) {
         rmp.addRule(r);
     }
@@ -139,4 +151,17 @@ public class FXMLDocumentController implements Initializable {
         tableView.getSelectionModel().clearSelection();
     }
 
+    @FXML
+    private void onSelectRule(MouseEvent event) {
+        Rule r = tableView.getSelectionModel().selectedItemProperty().getValue();
+        if(r.isActive())
+            toggleStateButton.textProperty().setValue("Deactivate Rule");
+        else
+            toggleStateButton.textProperty().setValue("Activate Rule");
+
+        
+    }
+
 }
+
+

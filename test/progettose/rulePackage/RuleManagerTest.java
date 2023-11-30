@@ -1,5 +1,6 @@
 package progettose.rulePackage;
 
+import java.time.LocalTime;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +10,10 @@ import javafx.collections.ObservableList;
 import org.junit.After;
 import progettose.Rule;
 import progettose.ConcreteRuleManager;
+import progettose.RuleManagerProxy;
 import progettose.actionPackage.Action;
+import progettose.actionPackage.ShowMessageActionCreator;
+import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 
 public class RuleManagerTest {
@@ -20,7 +24,7 @@ public class RuleManagerTest {
 
     @Before
     public void setUp() {
-        ruleManager = ConcreteRuleManager.getInstance();
+        ruleManager = new ConcreteRuleManager();
         //Cleare possible values in the instance
         ruleManager.getRules().clear();
         //initialize mocks
@@ -135,5 +139,20 @@ public class RuleManagerTest {
             throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
 
+    }
+    
+    @Test
+    public void ruleManagerActivateAndDeactivateRule() {
+        RuleManagerProxy ruleManager = RuleManagerProxy.getInstance();
+        Rule rule = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now()).createTrigger());
+
+        ruleManager.addRule(rule);
+        assertTrue(rule.isActive());
+
+        ruleManager.deactivateRule(rule);
+        assertFalse(rule.isActive());
+
+        ruleManager.activateRule(rule);
+        assertTrue(rule.isActive());
     }
 }

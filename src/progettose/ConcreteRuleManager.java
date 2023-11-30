@@ -9,19 +9,10 @@ import javafx.collections.ObservableList;
 public class ConcreteRuleManager implements RuleManager {
 
     private ObservableList<Rule> rules;
-    private static ConcreteRuleManager UniqueInstance = null;
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-    private ConcreteRuleManager() {
+    public ConcreteRuleManager() {
         this.rules = FXCollections.observableArrayList();
-    }
-
-    public static ConcreteRuleManager getInstance() {
-        //Singleton pattern to Rulemanager
-        if (UniqueInstance == null) {
-            UniqueInstance = new ConcreteRuleManager();
-        }
-        return UniqueInstance;
     }
 
     public void setRules(ObservableList<Rule> r) {
@@ -32,7 +23,7 @@ public class ConcreteRuleManager implements RuleManager {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
             for (Rule r : rules) {
-                if (r.getTrigger().evaluate()) {
+                if (r.evaluateTrigger()) {
                     this.fireRule(r);
                 }
             }
@@ -61,6 +52,14 @@ public class ConcreteRuleManager implements RuleManager {
     @Override
     public ObservableList<Rule> getRules() {
         return this.rules;
+    }
+    
+    public void activateRule(Rule r) {
+        r.setState(true);
+    }
+    
+    public void deactivateRule(Rule r) {
+        r.setState(false);
     }
 
 }
