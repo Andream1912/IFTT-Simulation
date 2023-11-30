@@ -9,10 +9,12 @@ public class ShowMessageAction implements Action {
 
     // The message to be displayed
     private String message;
+    private final String type;
 
     // Constructor to initialize ShowMessageAction with the specified message.
     public ShowMessageAction(String message) {
         this.message = message;
+        this.type = "Show Message";
     }
 
     // Method for getting message
@@ -25,13 +27,18 @@ public class ShowMessageAction implements Action {
         this.message = temp;
     }
 
+    @Override
+    public String getType() {
+        return this.type;
+    }
+
     // Executes the action by displaying the configured message in a JavaFX Alert.
     @Override
     public void execute() {
         // Create an Alert with a single "Close" button
         Platform.runLater(() -> {
             Alert messageBox = new Alert(AlertType.NONE);
-            ButtonType confButton = new ButtonType("Close");
+            ButtonType confButton = new ButtonType("Ok");
             messageBox.getButtonTypes().setAll(confButton);
             messageBox.setTitle("Message");
             messageBox.setContentText(this.message);
@@ -44,5 +51,10 @@ public class ShowMessageAction implements Action {
     @Override
     public String toString() {
         return "Message: \n" + message;
+    }
+
+    @Override
+    public String getToCSV() {
+        return this.message;
     }
 }

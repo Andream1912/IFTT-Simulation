@@ -3,6 +3,7 @@ package progettose;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -24,6 +25,10 @@ import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
 import javafx.scene.control.TextFormatter;
+import javafx.stage.DirectoryChooser;
+import progettose.actionPackage.CopyFileActionCreator;
+import progettose.triggerPackage.DayOfMonthTriggerCreator;
+import progettose.triggerPackage.DayOfWeekTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -123,10 +128,16 @@ public class FXMLDocumentTwoController implements Initializable {
     private SplitPane newRuleSplitPane;
     @FXML
     private Label fileAudioNameLabel;
-    
+
     private FXMLDocumentController controllerOne;
     private Path selectedFilePath;
-    
+    private Path selectedSourcePath;
+    private Path selectedDestinationPath;
+    @FXML
+    private Label selectedDestinationDirectoryLabel;
+    @FXML
+    private Label selectedSourceDirectoryLabel;
+
     /**
      * Initializes the controller class.
      */
@@ -136,16 +147,16 @@ public class FXMLDocumentTwoController implements Initializable {
         // ... (initialize triggerList, actionList, dayOfWeekList, dayOfMonthList, hourList, minuteList)
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
-        triggerList.addAll("Time"/*, "Day of Week",
-                "Day of Month", "Date",
+        triggerList.addAll("Time","Day of Week","Day of Month"/*, ,
+                , "Date",
                 "File Existance Verification", "File Dimension Verification",
                 "Program Exit Status Verification"*/);
 
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio"/*,
-                "Append String to Textfile", "Move File"*/,
-                "Copy File"/*, "Delete File",
+                "Append String to Textfile", "Move File",
+                 */, "Copy File"/*, "Delete File",
                 "Execute Program"*/);
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
@@ -182,18 +193,16 @@ public class FXMLDocumentTwoController implements Initializable {
                 //.and((fileDimensionTextField.textProperty().isEmpty()).or())
                 //.and((execProgramTextField.textProperty().isEmpty()).or())
                 .or(triggerComboBox.valueProperty().isNull()))
-        
-                .or
-                    (
-                (showMessageTextArea.textProperty().isEmpty())
-                        .and(fileAudioNameLabel.visibleProperty().not())
-                        //.and((appendToFileTextArea.textProperty().isEmpty()).or())
-                        //.and((moveCopyTextField.textProperty().isEmpty()).or().or())
-                        //.and((deleteTextField.textProperty().isEmpty()).or())
-                        //.and((execArgumentsTextField.textProperty().isEmpty()).or())
-                        .or(actionComboBox.valueProperty().isNull()))
+                .or(
+                        (showMessageTextArea.textProperty().isEmpty())
+                                .and(fileAudioNameLabel.visibleProperty().not())
+                                //.and((appendToFileTextArea.textProperty().isEmpty()).or())
+                                .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
+                                //.and((deleteTextField.textProperty().isEmpty()).or())
+                                //.and((execArgumentsTextField.textProperty().isEmpty()).or())
+                                .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty()));
-        
+
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
 
         // Set initial visibility properties for UI elements based on trigger and action selection
@@ -239,53 +248,69 @@ public class FXMLDocumentTwoController implements Initializable {
         deleteLabel2.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Delete File"));
         execProgLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
         execArgumentsLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
-        
+
         //Limit the number of characters in showMessageTextArea to 1000
-        showMessageTextArea.setTextFormatter(new TextFormatter<String>(change -> 
-            change.getControlNewText().length() <= 1000 ? change : null));
-        
+        showMessageTextArea.setTextFormatter(new TextFormatter<String>(change
+                -> change.getControlNewText().length() <= 1000 ? change : null));
+
         //Placeholder text for showMessageTextArea
         showMessageTextArea.setPromptText("Max 1000 characters...");
-        
+
+    }
+
+    private Trigger checkTrigger(String s) {
+        switch (s) {
+            case "Time":
+                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()), 0));
+                return timeTC.createTrigger();
+            case "Day of Week":
+                TriggerCreator dayOfWeekTC = new DayOfWeekTriggerCreator(dayOfWeekComboBox.getValue());
+                return dayOfWeekTC.createTrigger();
+            case "Day of Month":
+                TriggerCreator dayOfMonthTC = new DayOfMonthTriggerCreator(dayOfMonthComboBox.getValue());
+                return dayOfMonthTC.createTrigger();
+            default:
+                System.out.println("Not valid Trigger");
+                return null;
+        }
+    }
+
+    private Action checkAction(String s) {
+        switch (s) {
+            case "Play Audio": //* Da cambiare con il rispettivo nome
+                ActionCreator playAudioAC = new PlayAudioActionCreator(selectedFilePath);
+                return playAudioAC.createAction();
+
+            //When showMessageAction is selected, onSave the action is created with text from textArea
+            case "Show Message":
+                ActionCreator showMessageAC = new ShowMessageActionCreator(showMessageTextArea.getText());
+                return showMessageAC.createAction();
+            case "Copy File":
+                ActionCreator copyFileAC = new CopyFileActionCreator(Paths.get(selectedSourcePath.toString() + "/" + moveCopyTextField.getText()), selectedDestinationPath);
+                return copyFileAC.createAction();
+            default:
+                System.out.println("Not valid Action");
+                return null;
+        }
     }
 
     @FXML
     private void onSave(ActionEvent event) {
         // Create Trigger and Action based on selected options
         // ... (create Trigger and Action based on triggerComboBox and actionComboBox values)
-        Trigger trigger = null;
-        Action action = null;
-        switch (triggerComboBox.getValue()) {
-            case "Time":
-                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()),0));
-                trigger = timeTC.createTrigger();
-                break;
-            default:
-                System.out.println("Not valid Trigger");
-        }
-        switch (actionComboBox.getValue()) {
-            case "Play Audio": //* Da cambiare con il rispettivo nome
-                ActionCreator playAudioAC = new PlayAudioActionCreator(selectedFilePath);
-                action = playAudioAC.createAction();
-                break;
-            
-            //When showMessageAction is selected, onSave the action is created with text from textArea
-            case "Show Message": 
-                ActionCreator showMessageAC = new ShowMessageActionCreator(showMessageTextArea.getText());
-                action = showMessageAC.createAction();
-                break;
-            default:
-                System.out.println("Not valid Action");
-        }
-        
+        Trigger trigger = checkTrigger(triggerComboBox.getValue());
+        Action action = checkAction(actionComboBox.getValue());
+
+        //When copyFileAction is selected, onSave the action is created from the different input fields
         // Create a Rule using the created Trigger and Action
         Rule rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
-        
+
         // Add the created rule to the ObservableList in the first controller
         controllerOne.addRuleToObsList(rule);
-        
+
         // Close the current stage (window)
         Stage currentStage = (Stage) saveButton.getScene().getWindow();
+
         currentStage.close();
     }
 
@@ -308,7 +333,41 @@ public class FXMLDocumentTwoController implements Initializable {
             fileAudioNameLabel.textProperty().setValue(selectedFile.getName());
             fileAudioNameLabel.visibleProperty().setValue(Boolean.TRUE);
         }
-        
+
+    }
+
+    @FXML
+    private void onSourceDirectoryButton(ActionEvent event) {
+        Stage primaryStage = (Stage) sourceDirectoryButton.getScene().getWindow();
+
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the source directory of the file to copy");
+
+        //Get source directory if it's not null
+        File checkFile = directoryChooser.showDialog(primaryStage);
+        if (checkFile != null) {
+            selectedSourcePath = checkFile.toPath();
+            selectedSourceDirectoryLabel.textProperty().setValue(selectedSourcePath.getFileName().toString());
+            selectedSourceDirectoryLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+    }
+
+    @FXML
+    private void onDestinationDirectoryButton(ActionEvent event) {
+        Stage primaryStage = (Stage) destinationDirectoryButton.getScene().getWindow();
+
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the destination directory of the file to copy");
+
+        //Get source directory if it's not null
+        File checkFile = directoryChooser.showDialog(primaryStage);
+        if (checkFile != null) {
+            selectedDestinationPath = checkFile.toPath();
+            selectedDestinationDirectoryLabel.textProperty().setValue(selectedDestinationPath.getFileName().toString());
+            selectedDestinationDirectoryLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
     }
 
     @FXML
@@ -333,8 +392,8 @@ public class FXMLDocumentTwoController implements Initializable {
         // Reset UI elements based on action selection
         // ... (reset UI elements based on actionComboBox selection)
     }
-    
-    public void setControllerOne(FXMLDocumentController controllerOne){
+
+    public void setControllerOne(FXMLDocumentController controllerOne) {
         //Sets the reference to the first controller
         this.controllerOne = controllerOne;
     }

@@ -46,14 +46,12 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Rule, RuleState> statusColumn;
     @FXML
     private SplitPane splitPane;
-
-    private RuleManager rm;
-    
+    private RuleManagerProxy rmp;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Creating RuleManager object
-        rm = RuleManager.getInstance();
+        rmp =RuleManagerProxy.getInstance();
 
         // Initializing TableView and its columns
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
@@ -70,11 +68,9 @@ public class FXMLDocumentController implements Initializable {
         statusColumn.resizableProperty().setValue(Boolean.FALSE);
 
         // Binding TableView to the ObservableList        
-        tableView.setItems(rm.getRules());
 
-        // Adding a sample rule to the TableView
-        rm.addRule(new Rule("Promemoria 1", new ShowMessageAction("Portare giu il cane"), new TimeTrigger(LocalTime.of(12, 30))));
-        rm.addRule(new Rule("Promemoria 2", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(10, 15))));
+        tableView.setItems(rmp.getRules());
+
 
         // Disabling removeRuleButton and toggleStateButton when no row is selected
         removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
@@ -85,7 +81,7 @@ public class FXMLDocumentController implements Initializable {
         splitPane.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
             splitPane.setDividerPosition(0, 0.3);
         });
-        rm.periodicCheck();
+        rmp.periodicCheck();
         
         
     }
@@ -109,45 +105,44 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onRemoveRule(ActionEvent event) {
         // Handling the 'Remove Rule' button click
-        
+
         //Display warning message for removing rule
         Alert messageBox = new Alert(Alert.AlertType.NONE);
-        ButtonType confButton = new ButtonType("Remove");
-        ButtonType cancelButton = new ButtonType("Cancel");
-        messageBox.getButtonTypes().setAll(cancelButton, confButton);
+        ButtonType confButton = new ButtonType("Yes");
+        ButtonType cancelButton = new ButtonType("No");
+        messageBox.getButtonTypes().setAll(confButton, cancelButton);
         messageBox.setTitle("Warning");
         messageBox.setContentText("Do you want to permanently remove the rule?");
         // Display the Alert and wait for user to decide if removing the rule or not
         messageBox.showAndWait().ifPresent(buttonType -> {
-            if(buttonType == confButton){
-                rm.removeRule(tableView.getSelectionModel().selectedItemProperty().getValue());
+            if (buttonType == confButton) {
+                rmp.removeRule(tableView.getSelectionModel().selectedItemProperty().getValue());
                 tableView.getSelectionModel().clearSelection();
             }
         });
-    
-        
+
     }
 
     @FXML
     private void onToggleState(ActionEvent event) {
         Rule r = tableView.getSelectionModel().selectedItemProperty().getValue();
         if(r.isActive()){
-            rm.deactivateRule(r);
+            rmp.deactivateRule(r);
             toggleStateButton.textProperty().setValue("Activate Rule");
             
         }else{
-            rm.activateRule(r);
+            rmp.activateRule(r);
             toggleStateButton.textProperty().setValue("Deactivate Rule");
         }
         tableView.refresh();
     }
     
     public void addRuleToObsList(Rule r) {
-        rm.addRule(r);
+        rmp.addRule(r);
     }
-    
-    public void endThread(){
-        RuleManager.shutdownScheduler();
+
+    public void endThread() {
+        ConcreteRuleManager.shutdownScheduler();
     }
 
     @FXML

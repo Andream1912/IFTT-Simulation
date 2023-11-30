@@ -1,72 +1,17 @@
 package progettose;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class RuleManager {
+public interface RuleManager {
 
-    private ObservableList<Rule> rules;
-    private static RuleManager UniqueInstance = null;
-    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    public void addRule(Rule r);
 
-
-    private RuleManager(){
-        this.rules =FXCollections.observableArrayList();     
-    }
-
-    public static RuleManager getInstance() {
-        //Singleton pattern to Rulemanager
-        if (UniqueInstance == null) {
-            UniqueInstance = new RuleManager();
-        }
-        return UniqueInstance;
-    }
-
-    public ObservableList<Rule> getRules() {
-        return this.rules;
-    }
-
-    public void setRules(ObservableList<Rule> r) {
-        this.rules = r;
-    }
-
-    public void addRule(Rule r) {
-        this.rules.add(r);
-    }
-
-    public void removeRule(Rule r) {
-        this.rules.remove(r);
-    }
+    public void removeRule(Rule r);
     
-    public void activateRule(Rule r) {
-        r.setState(true);
-    }
+    public void activateRule(Rule r);
     
-    public void deactivateRule(Rule r) {
-        r.setState(false);
-    }
-    
-    public void periodicCheck() {
-        //Scheduler check the rule firing
-        scheduler.scheduleAtFixedRate(() -> {
-            for (Rule r : rules) {
-                if (r.evaluateTrigger()) {
-                    this.fireRule(r);
-                }
-            }
-        }, 0, 3, TimeUnit.SECONDS);
-    }
-
-    public void fireRule(Rule r) {
-        r.getAction().execute();
-    }
-
-    public static void shutdownScheduler() {
-        //Use it everytime a scheduler is created
-        scheduler.shutdown();
-    }
+    public void deactivateRule(Rule r);
+   
+    public ObservableList<Rule> getRules();
 
 }

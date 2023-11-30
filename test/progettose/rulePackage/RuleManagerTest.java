@@ -9,7 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.After;
 import progettose.Rule;
-import progettose.RuleManager;
+import progettose.ConcreteRuleManager;
+import progettose.RuleManagerProxy;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageActionCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
@@ -17,13 +18,13 @@ import progettose.triggerPackage.Trigger;
 
 public class RuleManagerTest {
 
-    private RuleManager ruleManager;
+    private ConcreteRuleManager ruleManager;
     ActionMock actionMock = new ActionMock();
     TriggerMock triggerMock = new TriggerMock();
 
     @Before
     public void setUp() {
-        ruleManager = RuleManager.getInstance();
+        ruleManager = new ConcreteRuleManager();
         //Cleare possible values in the instance
         ruleManager.getRules().clear();
         //initialize mocks
@@ -86,7 +87,7 @@ public class RuleManagerTest {
     @After
     public void tearDown() {
         // Close of resources
-        RuleManager.shutdownScheduler();
+        ConcreteRuleManager.shutdownScheduler();
     }
 
     // Mock class Action
@@ -101,6 +102,16 @@ public class RuleManagerTest {
 
         public boolean isExecuted() {
             return executed;
+        }
+
+        @Override
+        public String getType() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+
+        @Override
+        public String getToCSV() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
         }
     }
 
@@ -117,11 +128,22 @@ public class RuleManagerTest {
         public void setEvaluateResult(boolean result) {
             evaluateResult = result;
         }
+
+        @Override
+        public String getType() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+
+        @Override
+        public String getToCSV() {
+            throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        }
+
     }
     
     @Test
     public void ruleManagerActivateAndDeactivateRule() {
-        RuleManager ruleManager = RuleManager.getInstance();
+        RuleManagerProxy ruleManager = RuleManagerProxy.getInstance();
         Rule rule = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now()).createTrigger());
 
         ruleManager.addRule(rule);
