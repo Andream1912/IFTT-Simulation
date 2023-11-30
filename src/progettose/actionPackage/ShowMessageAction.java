@@ -43,6 +43,6 @@ public class ShowMessageAction implements Action {
 
     @Override
     public String toString() {
-        return "A message will be shown, it says: " + message;
+        return "Message: \n" + message;
     }
 }

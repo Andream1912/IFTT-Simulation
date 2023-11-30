@@ -41,11 +41,19 @@ public class RuleManager {
         this.rules.remove(r);
     }
     
+    public void activateRule(Rule r) {
+        r.setState(true);
+    }
+    
+    public void deactivateRule(Rule r) {
+        r.setState(false);
+    }
+    
     public void periodicCheck() {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
             for (Rule r : rules) {
-                if (r.getTrigger().evaluate()) {
+                if (r.evaluateTrigger()) {
                     this.fireRule(r);
                 }
             }

@@ -1,5 +1,6 @@
 package progettose.rulePackage;
 
+import java.time.LocalTime;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,8 @@ import org.junit.After;
 import progettose.Rule;
 import progettose.RuleManager;
 import progettose.actionPackage.Action;
+import progettose.actionPackage.ShowMessageActionCreator;
+import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 
 public class RuleManagerTest {
@@ -114,5 +117,20 @@ public class RuleManagerTest {
         public void setEvaluateResult(boolean result) {
             evaluateResult = result;
         }
+    }
+    
+    @Test
+    public void ruleManagerActivateAndDeactivateRule() {
+        RuleManager ruleManager = RuleManager.getInstance();
+        Rule rule = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now()).createTrigger());
+
+        ruleManager.addRule(rule);
+        assertTrue(rule.isActive());
+
+        ruleManager.deactivateRule(rule);
+        assertFalse(rule.isActive());
+
+        ruleManager.activateRule(rule);
+        assertTrue(rule.isActive());
     }
 }

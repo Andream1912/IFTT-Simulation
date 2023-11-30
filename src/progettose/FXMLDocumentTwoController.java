@@ -144,8 +144,8 @@ public class FXMLDocumentTwoController implements Initializable {
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio"/*,
-                "Append String to Textfile", "Move File",
-                "Copy File", "Delete File",
+                "Append String to Textfile", "Move File"*/,
+                "Copy File"/*, "Delete File",
                 "Execute Program"*/);
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();

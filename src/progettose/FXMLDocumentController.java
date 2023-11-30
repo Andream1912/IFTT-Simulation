@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,10 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageAction;
 import progettose.triggerPackage.TimeTrigger;
@@ -47,14 +43,12 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Rule, Trigger> triggerColumn;
     @FXML
-    private AnchorPane anchorPane;
-
-    // ObservableList to store data for TableView
-    private ObservableList<Rule> tableViewObs;
+    private TableColumn<Rule, RuleState> statusColumn;
     @FXML
     private SplitPane splitPane;
 
     private RuleManager rm;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -65,27 +59,35 @@ public class FXMLDocumentController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
         actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
-
+        statusColumn.setCellValueFactory(new PropertyValueFactory("state"));
+       
+        
+        
         // Making columns non-resizable
         nameColumn.resizableProperty().setValue(Boolean.FALSE);
         actionColumn.resizableProperty().setValue(Boolean.FALSE);
         triggerColumn.resizableProperty().setValue(Boolean.FALSE);
+        statusColumn.resizableProperty().setValue(Boolean.FALSE);
 
         // Binding TableView to the ObservableList        
         tableView.setItems(rm.getRules());
 
         // Adding a sample rule to the TableView
-        rm.addRule(new Rule("Promemoria 1", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(00, 59))));
+        rm.addRule(new Rule("Promemoria 1", new ShowMessageAction("Portare giu il cane"), new TimeTrigger(LocalTime.of(12, 30))));
         rm.addRule(new Rule("Promemoria 2", new ShowMessageAction("Vai a fare la spesa"), new TimeTrigger(LocalTime.of(10, 15))));
 
-        // Disabling removeRuleButton when no row is selected
+        // Disabling removeRuleButton and toggleStateButton when no row is selected
         removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
-
+        toggleStateButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+        
+        
         // Setting a position for the SplitPane divider
         splitPane.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
             splitPane.setDividerPosition(0, 0.3);
         });
         rm.periodicCheck();
+        
+        
     }
 
     @FXML
@@ -128,8 +130,18 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void onToggleState(ActionEvent event) {
+        Rule r = tableView.getSelectionModel().selectedItemProperty().getValue();
+        if(r.isActive()){
+            rm.deactivateRule(r);
+            toggleStateButton.textProperty().setValue("Activate Rule");
+            
+        }else{
+            rm.activateRule(r);
+            toggleStateButton.textProperty().setValue("Deactivate Rule");
+        }
+        tableView.refresh();
     }
-
+    
     public void addRuleToObsList(Rule r) {
         rm.addRule(r);
     }
@@ -144,4 +156,17 @@ public class FXMLDocumentController implements Initializable {
         tableView.getSelectionModel().clearSelection();
     }
 
+    @FXML
+    private void onSelectRule(MouseEvent event) {
+        Rule r = tableView.getSelectionModel().selectedItemProperty().getValue();
+        if(r.isActive())
+            toggleStateButton.textProperty().setValue("Deactivate Rule");
+        else
+            toggleStateButton.textProperty().setValue("Activate Rule");
+
+        
+    }
+
 }
+
+
