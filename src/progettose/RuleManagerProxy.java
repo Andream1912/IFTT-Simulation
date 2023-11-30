@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
+import progettose.actionPackage.CopyFileActionCreator;
+import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
@@ -103,6 +105,12 @@ public class RuleManagerProxy implements RuleManager {
             case "Show Message":
                 ActionCreator showMessageAC = new ShowMessageActionCreator(column[i++]);
                 return showMessageAC.createAction();
+            case "Copy File":
+                ActionCreator copyFileAC = new CopyFileActionCreator(Paths.get(column[i++]), Paths.get(column[i++]));
+                return copyFileAC.createAction();
+            case "Move File":
+                ActionCreator moveFileAC = new MoveFileActionCreator(Paths.get(column[i++]), Paths.get(column[i++]));
+                return moveFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;

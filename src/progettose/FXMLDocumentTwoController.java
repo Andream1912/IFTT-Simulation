@@ -27,6 +27,7 @@ import progettose.actionPackage.ShowMessageActionCreator;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.DirectoryChooser;
 import progettose.actionPackage.CopyFileActionCreator;
+import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -153,7 +154,7 @@ public class FXMLDocumentTwoController implements Initializable {
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio"/*,
-                "Append String to Textfile", "Move File",
+                "Append String to Textfile"*/, "Move File"/*,
                  */, "Copy File"/*, "Delete File",
                 "Execute Program"*/);
 
@@ -280,6 +281,9 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Copy File":
                 ActionCreator copyFileAC = new CopyFileActionCreator(Paths.get(selectedSourcePath.toString() + "/" + moveCopyTextField.getText()), selectedDestinationPath);
                 return copyFileAC.createAction();
+            case "Move File":
+                ActionCreator moveFileAC = new MoveFileActionCreator(Paths.get(selectedSourcePath.toString() + "/" + moveCopyTextField.getText()), selectedDestinationPath);
+                return moveFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
