@@ -6,19 +6,20 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 public class CopyFileAction implements Action {
 
-    //Path of the file to copy 
+    //Path for the file to copy 
     private Path filePath;
-    //Path of the direcotry where to copy the file
     private Path copyPath;
-
-    //Constructor of COpyFileAction
+    //Defining type for action
+    private final String type;
+    
+    //Constructor of CopyFileAction
     public CopyFileAction(Path filePath, Path copyPath) {
         this.filePath = filePath;
         this.copyPath = copyPath;
+        this.type = "Copy File";
     }
 
     //Getter and setter for both filePath and copyPath
