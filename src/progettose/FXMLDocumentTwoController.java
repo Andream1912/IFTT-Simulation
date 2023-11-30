@@ -33,6 +33,7 @@ import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
+import progettose.triggerPackage.FileCheckTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -137,6 +138,7 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedFilePath;
     private Path selectedSourcePath;
     private Path selectedDestinationPath;
+    private Path selectedExFile;
     @FXML
     private Label selectedDestinationDirectoryLabel;
     @FXML
@@ -152,8 +154,8 @@ public class FXMLDocumentTwoController implements Initializable {
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
         triggerList.addAll("Time","Day of Week","Day of Month",
-                 "Date"/*,
-                "File Existance Verification", "File Dimension Verification",
+                 "Date","File Existance Verification"/*,
+                , "File Dimension Verification",
                 "Program Exit Status Verification"*/);
 
         ObservableList<String> actionList = FXCollections.observableArrayList();
@@ -193,7 +195,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(dayOfWeekComboBox.valueProperty().isNull())
                 .and(dayOfMonthComboBox.valueProperty().isNull())
                 .and(datePicker.valueProperty().isNull())
-                //.and((exFileTextField.textProperty().isEmpty()).or())
+                .and((exFileTextField.textProperty().isEmpty()))
                 //.and((fileDimensionTextField.textProperty().isEmpty()).or())
                 //.and((execProgramTextField.textProperty().isEmpty()).or())
                 .or(triggerComboBox.valueProperty().isNull()))
@@ -285,6 +287,9 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Date":
                 TriggerCreator dateTC = new DateTriggerCreator(datePicker.getValue());
                 return dateTC.createTrigger();
+            case "File Existance Verification":
+                TriggerCreator fileExTC= new FileCheckTriggerCreator(selectedExFile.toString(),exFileTextField.getText());
+                return fileExTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;
@@ -415,5 +420,23 @@ public class FXMLDocumentTwoController implements Initializable {
     public void setControllerOne(FXMLDocumentController controllerOne) {
         //Sets the reference to the first controller
         this.controllerOne = controllerOne;
+    }
+    
+    @FXML
+    private void onExFileButton(ActionEvent event){
+         Stage primaryStage = (Stage) destinationDirectoryButton.getScene().getWindow();
+
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the destination directory of the file to copy");
+
+        //Get source directory if it's not null
+        File checkFile = directoryChooser.showDialog(primaryStage);
+        if (checkFile != null) {
+            selectedExFile = checkFile.toPath();
+            exFileLabel.textProperty().setValue("File in: "+selectedExFile.getFileName().toString());
+            exFileLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+
     }
 }
