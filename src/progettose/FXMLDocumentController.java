@@ -2,7 +2,6 @@ package progettose;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,8 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import progettose.actionPackage.Action;
-import progettose.actionPackage.ShowMessageAction;
-import progettose.triggerPackage.TimeTrigger;
 import progettose.triggerPackage.Trigger;
 
 public class FXMLDocumentController implements Initializable {

@@ -62,9 +62,7 @@ public class MoveFileActionTest {
     //Test MoveFileAction with null or empty paths
     @Test
     public void testMoveFileActionNullOrEmptyPath(){
-        Path path1 = Paths.get("");
-        Path path2 = Paths.get("");
-        MoveFileAction moveFile = new MoveFileAction(path1, path2);
+        MoveFileAction moveFile = new MoveFileAction(null, null);
         assertNotNull(moveFile);
         assertTrue(moveFile instanceof MoveFileAction);
     }

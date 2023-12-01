@@ -36,7 +36,7 @@
       <Button fx:id="sourceDirectoryButton" layoutX="545.0" layoutY="362.0" mnemonicParsing="false" onAction="#onSourceDirectoryButton" text="Choose" />
       <TextField fx:id="moveCopyTextField" layoutX="320.0" layoutY="362.0" />
       <TextField fx:id="execArgumentsTextField" layoutX="598.0" layoutY="362.0" />
-      <Button fx:id="deleteButton" layoutX="643.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <Button fx:id="deleteButton" layoutX="643.0" layoutY="362.0" mnemonicParsing="false" onAction="#onDeleteButton" text="Choose" />
       <TextField fx:id="deleteTextField" layoutX="399.0" layoutY="362.0" />
       <Label fx:id="playAudioLabel" layoutX="521.0" layoutY="342.0" text="Choose a file audio" />
       <Label fx:id="appendToFileLabel1" layoutX="431.0" layoutY="342.0" text="Select a text file" />
@@ -55,7 +55,7 @@
       <Button fx:id="execProgButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
       <DatePicker fx:id="datePicker" layoutX="482.0" layoutY="212.0" />
       <TextField fx:id="exFileTextField" layoutX="399.0" layoutY="212.0" />
-      <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" text="Choose directory" />
+      <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" onAction="#onExFileButton" text="Choose directory" />
       <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" />
       <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" onAction="#onFileDimensionButton" text="Choose file" />
       <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
@@ -86,5 +86,6 @@
       <Label fx:id="selectedSourceDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="435.0" layoutY="396.0" prefHeight="17.0" prefWidth="279.0" text="Label" textAlignment="CENTER" visible="false" />
       <Label fx:id="labelDimensionFile" alignment="CENTER" contentDisplay="CENTER" layoutX="395.0" layoutY="237.0" prefHeight="35.0" prefWidth="150.0" text="labelDimensionFile" textAlignment="CENTER" visible="false" />
       <ComboBox fx:id="typeDimensionComboBox" layoutX="751.0" layoutY="212.0" prefHeight="25.0" prefWidth="79.0" />
+      <Label fx:id="deleteFileLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="561.0" layoutY="396.0" prefHeight="17.0" prefWidth="228.0" text="Label" visible="false" />
    </children>
 </AnchorPane>

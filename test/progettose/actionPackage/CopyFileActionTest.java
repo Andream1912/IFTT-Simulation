@@ -62,9 +62,7 @@ public class CopyFileActionTest {
     //Test CopyFileAction with null or empty paths
     @Test
     public void testCopyFileActionNullOrEmptyPath(){
-        Path path1 = Paths.get("");
-        Path path2 = Paths.get("");
-        CopyFileAction copyFile = new CopyFileAction(path1, path2);
+        CopyFileAction copyFile = new CopyFileAction(null, null);
         assertNotNull(copyFile);
         assertTrue(copyFile instanceof CopyFileAction);
     }

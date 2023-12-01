@@ -56,7 +56,7 @@ public class PlayAudioActionTest {
     @Test
     public void testPlayAudioActionCreatorCreateActionWithEmptyOrNullPath() {
         // Implement a test to check the behavior of PlayAudioActionCreator with an empty or null path
-        PlayAudioActionCreator playAudioCreator = new PlayAudioActionCreator(Paths.get(""));
+        PlayAudioActionCreator playAudioCreator = new PlayAudioActionCreator(null);
         Action playAudioAction = playAudioCreator.createAction();
         assertNotNull(playAudioAction);
         assertTrue(playAudioAction instanceof PlayAudioAction);

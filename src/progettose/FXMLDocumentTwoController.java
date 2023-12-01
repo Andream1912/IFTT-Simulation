@@ -29,11 +29,13 @@ import progettose.actionPackage.ShowMessageActionCreator;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.DirectoryChooser;
 import progettose.actionPackage.CopyFileActionCreator;
+import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
 import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
+import progettose.triggerPackage.FileCheckTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -141,16 +143,19 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label labelDimensionFile;
     @FXML
     private ComboBox<String> typeDimensionComboBox;
-
+    @FXML
+    private Label deleteFileLabel;
     /*
     
     Global Variable
      */
+    private Path selectedFileForDimension;
     private FXMLDocumentController controllerOne;
     private Path selectedFilePath;
     private Path selectedSourcePath;
     private Path selectedDestinationPath;
-    private Path selectedFileForDimension;
+    private Path selectedDeleteSourcePath;
+    private Path selectedExFile;
 
     /**
      * Initializes the controller class.
@@ -171,7 +176,7 @@ public class FXMLDocumentTwoController implements Initializable {
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio"/*,
                 "Append String to Textfile"*/, "Move File"/*,
-                 */, "Copy File"/*, "Delete File",
+                 */, "Copy File", "Delete File"/*,
                 "Execute Program"*/);
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
@@ -216,7 +221,7 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and(fileAudioNameLabel.visibleProperty().not())
                                 //.and((appendToFileTextArea.textProperty().isEmpty()).or())
                                 .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
-                                //.and((deleteTextField.textProperty().isEmpty()).or())
+                                .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
                                 //.and((execArgumentsTextField.textProperty().isEmpty()).or())
                                 .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty())
@@ -305,6 +310,9 @@ public class FXMLDocumentTwoController implements Initializable {
             case "File Dimension Verification":
                 TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(selectedFileForDimension, Long.parseLong(fileDimensionTextField.textProperty().getValue()), typeDimensionComboBox.getValue());
                 return fileDimensionTC.createTrigger();
+            case "File Existance Verification":
+                TriggerCreator fileExTC = new FileCheckTriggerCreator(selectedExFile.toString(), exFileTextField.getText());
+                return fileExTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;
@@ -327,6 +335,9 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Move File":
                 ActionCreator moveFileAC = new MoveFileActionCreator(Paths.get(selectedSourcePath.toString() + "/" + moveCopyTextField.getText()), selectedDestinationPath);
                 return moveFileAC.createAction();
+            case "Delete File":
+                ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(selectedDeleteSourcePath.toString() + "/" + deleteTextField.getText()));
+                return deleteFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
@@ -431,6 +442,23 @@ public class FXMLDocumentTwoController implements Initializable {
     }
 
     @FXML
+    private void onDeleteButton(ActionEvent event) {
+        Stage primaryStage = (Stage) deleteButton.getScene().getWindow();
+
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the directory of the file to delete");
+
+        //Get directory of file to delete if it's not null
+        File checkFile = directoryChooser.showDialog(primaryStage);
+        if (checkFile != null) {
+            selectedDeleteSourcePath = checkFile.toPath();
+            deleteFileLabel.textProperty().setValue(selectedDeleteSourcePath.getFileName().toString());
+            deleteFileLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+    }
+
+    @FXML
     private void onChangeAction(ActionEvent event) {
         // Reset UI elements based on action selection
         // ... (reset UI elements based on actionComboBox selection)
@@ -458,5 +486,23 @@ public class FXMLDocumentTwoController implements Initializable {
             labelDimensionFile.setVisible(true);
 
         }
+    }
+
+    @FXML
+    private void onExFileButton(ActionEvent event) {
+        Stage primaryStage = (Stage) destinationDirectoryButton.getScene().getWindow();
+
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the destination directory of the file to copy");
+
+        //Get source directory if it's not null
+        File checkFile = directoryChooser.showDialog(primaryStage);
+        if (checkFile != null) {
+            selectedExFile = checkFile.toPath();
+            exFileLabel.textProperty().setValue("File in: " + selectedExFile.getFileName().toString());
+            exFileLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+
     }
 }
