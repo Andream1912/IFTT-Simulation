@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
+<AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
    <children>
       <Label layoutX="24.0" layoutY="28.0" text="Create new rule">
          <font>
@@ -55,7 +55,7 @@
       <Button fx:id="execProgButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
       <DatePicker fx:id="datePicker" layoutX="482.0" layoutY="212.0" />
       <TextField fx:id="exFileTextField" layoutX="399.0" layoutY="212.0" />
-      <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" text="Choose directory" />
+      <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" onAction="#onExFileButton" text="Choose directory" />
       <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" />
       <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
       <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
