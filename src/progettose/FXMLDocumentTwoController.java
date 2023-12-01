@@ -29,6 +29,7 @@ import progettose.actionPackage.ShowMessageActionCreator;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.DirectoryChooser;
 import progettose.actionPackage.CopyFileActionCreator;
+import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
@@ -137,10 +138,13 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedFilePath;
     private Path selectedSourcePath;
     private Path selectedDestinationPath;
+    private Path selectedDeleteSourcePath;
     @FXML
     private Label selectedDestinationDirectoryLabel;
     @FXML
     private Label selectedSourceDirectoryLabel;
+    @FXML
+    private Label deleteFileLabel;
 
     /**
      * Initializes the controller class.
@@ -160,7 +164,7 @@ public class FXMLDocumentTwoController implements Initializable {
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio"/*,
                 "Append String to Textfile"*/, "Move File"/*,
-                 */, "Copy File"/*, "Delete File",
+                 */, "Copy File", "Delete File"/*,
                 "Execute Program"*/);
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
@@ -202,7 +206,7 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and(fileAudioNameLabel.visibleProperty().not())
                                 //.and((appendToFileTextArea.textProperty().isEmpty()).or())
                                 .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
-                                //.and((deleteTextField.textProperty().isEmpty()).or())
+                                .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
                                 //.and((execArgumentsTextField.textProperty().isEmpty()).or())
                                 .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty()));
@@ -307,6 +311,9 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Move File":
                 ActionCreator moveFileAC = new MoveFileActionCreator(Paths.get(selectedSourcePath.toString() + "/" + moveCopyTextField.getText()), selectedDestinationPath);
                 return moveFileAC.createAction();
+            case "Delete File":
+                ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(selectedDeleteSourcePath.toString() + "/" + deleteTextField.getText()));
+                return deleteFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
@@ -405,7 +412,24 @@ public class FXMLDocumentTwoController implements Initializable {
         execProgramTextField.textProperty().setValue(null);
         execProgramButton.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
     }
-
+    
+    @FXML
+    private void onDeleteButton(ActionEvent event) {
+        Stage primaryStage = (Stage) deleteButton.getScene().getWindow();
+        
+        //Create a DirectoryChooser
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select the directory of the file to delete");
+        
+        //Get directory of file to delete if it's not null
+        File checkFile = directoryChooser.showDialog(primaryStage);
+        if(checkFile != null){
+            selectedDeleteSourcePath = checkFile.toPath();
+            deleteFileLabel.textProperty().setValue(selectedDeleteSourcePath.getFileName().toString());
+            deleteFileLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+    }
+    
     @FXML
     private void onChangeAction(ActionEvent event) {
         // Reset UI elements based on action selection

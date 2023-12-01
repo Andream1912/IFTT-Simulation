@@ -42,7 +42,7 @@ public class CopyFileAction implements Action {
     //ToString for CopyFileAction
     @Override
     public String toString() {
-        return "Copy the file - " + this.filePath.getFileName() + " - to the directory - " + this.copyPath.getFileName();
+        return "Copy the file  '" + this.filePath.getFileName() + "'  to the directory  '" + this.copyPath.getFileName() + "'";
     }
 
     //Implementing execute method from action

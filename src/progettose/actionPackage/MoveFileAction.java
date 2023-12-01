@@ -44,7 +44,7 @@ public class MoveFileAction implements Action {
     //ToString for MoveFileAction
     @Override
     public String toString() {
-        return "Move the file - " + filePath.getFileName() + " - to the directory - " + this.movePath.getFileName();
+        return "Move the file  '" + filePath.getFileName() + "'  to the directory  '" + this.movePath.getFileName() + "'";
     }
 
     //Implementig execute method from action

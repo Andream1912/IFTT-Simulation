@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
+import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
@@ -152,6 +153,9 @@ public class RuleManagerProxy implements RuleManager {
             case "Move File":
                 ActionCreator moveFileAC = new MoveFileActionCreator(Paths.get(column[i++]), Paths.get(column[i++]));
                 return moveFileAC.createAction();
+            case "Delete File":
+                ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(column[i++]));
+                return deleteFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;

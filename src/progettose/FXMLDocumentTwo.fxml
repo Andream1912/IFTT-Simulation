@@ -36,7 +36,7 @@
       <Button fx:id="sourceDirectoryButton" layoutX="545.0" layoutY="362.0" mnemonicParsing="false" onAction="#onSourceDirectoryButton" text="Choose" />
       <TextField fx:id="moveCopyTextField" layoutX="320.0" layoutY="362.0" />
       <TextField fx:id="execArgumentsTextField" layoutX="598.0" layoutY="362.0" />
-      <Button fx:id="deleteButton" layoutX="643.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <Button fx:id="deleteButton" layoutX="643.0" layoutY="362.0" mnemonicParsing="false" onAction="#onDeleteButton" text="Choose" />
       <TextField fx:id="deleteTextField" layoutX="399.0" layoutY="362.0" />
       <Label fx:id="playAudioLabel" layoutX="521.0" layoutY="342.0" text="Choose a file audio" />
       <Label fx:id="appendToFileLabel1" layoutX="431.0" layoutY="342.0" text="Select a text file" />
@@ -84,5 +84,6 @@
       </Label>
       <Label fx:id="selectedDestinationDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="592.0" layoutY="396.0" prefHeight="17.0" prefWidth="288.0" text="Label" textAlignment="CENTER" visible="false" />
       <Label fx:id="selectedSourceDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="435.0" layoutY="396.0" prefHeight="17.0" prefWidth="279.0" text="Label" textAlignment="CENTER" visible="false" />
+      <Label fx:id="deleteFileLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="561.0" layoutY="396.0" prefHeight="17.0" prefWidth="228.0" text="Label" visible="false" />
    </children>
 </AnchorPane>
