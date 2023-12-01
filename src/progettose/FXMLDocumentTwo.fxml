@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
+<AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
    <children>
       <Label layoutX="24.0" layoutY="28.0" text="Create new rule">
          <font>
@@ -57,7 +57,7 @@
       <TextField fx:id="exFileTextField" layoutX="399.0" layoutY="212.0" />
       <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" text="Choose directory" />
       <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" />
-      <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
+      <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" onAction="#onFileDimensionButton" text="Choose file" />
       <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
       <TextField fx:id="execProgramTextField" layoutX="598.0" layoutY="212.0" />
       <ComboBox fx:id="dayOfMonthComboBox" layoutX="497.0" layoutY="212.0" prefWidth="150.0" />
@@ -69,7 +69,7 @@
       <Label fx:id="dayOfWeekLabel" layoutX="514.0" layoutY="192.0" text="Choose a day of week" />
       <Label fx:id="dayOfMonthLabel" layoutX="510.0" layoutY="192.0" text="Choose a day of month" />
       <Label fx:id="exFileLabel" layoutX="429.0" layoutY="192.0" text="Insert a filename" />
-      <Label fx:id="fileDimensionLabel" layoutX="590.0" layoutY="192.0" text="Insert a file dimension (in byte)" />
+      <Label fx:id="fileDimensionLabel" layoutX="590.0" layoutY="192.0" text="Insert a file dimension" />
       <Label fx:id="execProgramLabel" layoutX="611.0" layoutY="192.0" text="Insert a program name" />
       <ComboBox fx:id="triggerComboBox" layoutX="59.0" layoutY="212.0" onAction="#onChangeTrigger" prefHeight="25.0" prefWidth="216.0" />
       <Label layoutX="59.0" layoutY="182.0" text="Select the Trigger">
@@ -84,5 +84,7 @@
       </Label>
       <Label fx:id="selectedDestinationDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="592.0" layoutY="396.0" prefHeight="17.0" prefWidth="288.0" text="Label" textAlignment="CENTER" visible="false" />
       <Label fx:id="selectedSourceDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="435.0" layoutY="396.0" prefHeight="17.0" prefWidth="279.0" text="Label" textAlignment="CENTER" visible="false" />
+      <Label fx:id="labelDimensionFile" alignment="CENTER" contentDisplay="CENTER" layoutX="395.0" layoutY="237.0" prefHeight="35.0" prefWidth="150.0" text="labelDimensionFile" textAlignment="CENTER" visible="false" />
+      <ComboBox fx:id="typeDimensionComboBox" layoutX="751.0" layoutY="212.0" prefHeight="25.0" prefWidth="79.0" />
    </children>
 </AnchorPane>
