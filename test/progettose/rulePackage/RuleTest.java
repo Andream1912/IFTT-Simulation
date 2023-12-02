@@ -3,7 +3,7 @@ package progettose.rulePackage;
 import java.time.LocalTime;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import progettose.Rule;
+
 import progettose.RuleStateActive;
 import progettose.RuleStateInactive;
 import progettose.actionPackage.Action;

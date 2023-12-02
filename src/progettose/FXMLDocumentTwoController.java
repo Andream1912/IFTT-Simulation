@@ -34,6 +34,7 @@ import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
+import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
 import progettose.triggerPackage.FileCheckTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
@@ -131,37 +132,44 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private TextField ruleNameTextField;
     @FXML
-    private SplitPane newRuleSplitPane;
-    @FXML
     private Label fileAudioNameLabel;
-
+    @FXML
+    private Label selectedDestinationDirectoryLabel;
+    @FXML
+    private Label selectedSourceDirectoryLabel;
+    @FXML
+    private Label labelDimensionFile;
+    @FXML
+    private ComboBox<String> typeDimensionComboBox;
+    @FXML
+    private Label deleteFileLabel;
+    @FXML
+    private Label exFileDirectoryLabel;
+    
+    
+    private Path selectedFileForDimension;
     private FXMLDocumentController controllerOne;
     private Path selectedFilePath;
     private Path selectedSourcePath;
     private Path selectedDestinationPath;
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
-    @FXML
-    private Label selectedDestinationDirectoryLabel;
-    @FXML
-    private Label selectedSourceDirectoryLabel;
-    @FXML
-    private Label deleteFileLabel;
-    @FXML
-    private Label exFileDirectoryLabel;
+    
+
 
     /**
      * Initializes the controller class.
      */
     @Override
+
     public void initialize(URL url, ResourceBundle rb) {
         // Initialize ComboBox options
         // ... (initialize triggerList, actionList, dayOfWeekList, dayOfMonthList, hourList, minuteList)
         ObservableList<String> triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
-        triggerList.addAll("Time","Day of Week","Day of Month",
-                 "Date","File Existance Verification"/*,
-                , "File Dimension Verification",
+        triggerList.addAll("Time", "Day of Week", "Day of Month",
+                "Date",
+                "File Existance Verification", "File Dimension Verification" /*,
                 "Program Exit Status Verification"*/);
 
         ObservableList<String> actionList = FXCollections.observableArrayList();
@@ -194,6 +202,9 @@ public class FXMLDocumentTwoController implements Initializable {
         for (int i = 0; i <= 59; i++) {
             minuteList.add(String.format("%02d", i));
         }
+        ObservableList<String> typeDimensionList = FXCollections.observableArrayList("Byte", "KB", "MB", "GB");
+        typeDimensionComboBox.setValue("Byte");
+        typeDimensionComboBox.setItems(typeDimensionList);
 
         // Bind disable properties for the saveButton
         // ... (binding saveButton disable property based on various conditions)
@@ -202,7 +213,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(dayOfMonthComboBox.valueProperty().isNull())
                 .and(datePicker.valueProperty().isNull())
                 .and((exFileTextField.textProperty().isEmpty()).or(exFileDirectoryLabel.visibleProperty().not()))
-                //.and((fileDimensionTextField.textProperty().isEmpty()).or())
+                .and((fileDimensionTextField.textProperty().isEmpty()).or(labelDimensionFile.visibleProperty().not()))
                 //.and((execProgramTextField.textProperty().isEmpty()).or())
                 .or(triggerComboBox.valueProperty().isNull()))
                 .or(
@@ -213,11 +224,13 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
                                 //.and((execArgumentsTextField.textProperty().isEmpty()).or())
                                 .or(actionComboBox.valueProperty().isNull()))
-                .or(ruleNameTextField.textProperty().isEmpty()));
+                .or(ruleNameTextField.textProperty().isEmpty())
+        );
 
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
         exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
-        
+        labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
+
 
         // Set initial visibility properties for UI elements based on trigger and action selection
         // ... (set visibility properties based on triggerComboBox and actionComboBox values)
@@ -239,6 +252,7 @@ public class FXMLDocumentTwoController implements Initializable {
         exFileLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Existance Verification"));
         fileDimensionLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
         execProgramLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
+        typeDimensionComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
 
         showMessageTextArea.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Show Message"));
         playAudioButton.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Play Audio"));
@@ -269,7 +283,7 @@ public class FXMLDocumentTwoController implements Initializable {
 
         //Placeholder text for showMessageTextArea
         showMessageTextArea.setPromptText("Max 1000 characters...");
-        
+
         datePicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -295,8 +309,11 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Date":
                 TriggerCreator dateTC = new DateTriggerCreator(datePicker.getValue());
                 return dateTC.createTrigger();
+            case "File Dimension Verification":
+                TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(selectedFileForDimension, Long.parseLong(fileDimensionTextField.textProperty().getValue()), typeDimensionComboBox.getValue());
+                return fileDimensionTC.createTrigger();
             case "File Existance Verification":
-                TriggerCreator fileExTC= new FileCheckTriggerCreator(selectedExFile.toString(),exFileTextField.getText());
+                TriggerCreator fileExTC = new FileCheckTriggerCreator(selectedExFile.toString(), exFileTextField.getText());
                 return fileExTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
@@ -358,7 +375,7 @@ public class FXMLDocumentTwoController implements Initializable {
         fileChooser.setTitle("Choose Audio File");
 
         // Set the filter for audio files
-        FileChooser.ExtensionFilter audioFilter = new FileChooser.ExtensionFilter("Audio Files", "*.wav");
+        FileChooser.ExtensionFilter audioFilter = new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3");
         fileChooser.getExtensionFilters().add(audioFilter);
 
         // Show the FileChooser and get the selected file
@@ -421,39 +438,62 @@ public class FXMLDocumentTwoController implements Initializable {
         execProgramTextField.textProperty().setValue(null);
         execProgramButton.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
         exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
+        execProgramTextField.textProperty().setValue(null);
+        labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
+        fileDimensionTextField.textProperty().setValue(null);
+
     }
-    
+
     @FXML
     private void onDeleteButton(ActionEvent event) {
         Stage primaryStage = (Stage) deleteButton.getScene().getWindow();
-        
+
         //Create a DirectoryChooser
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select the directory of the file to delete");
-        
+
         //Get directory of file to delete if it's not null
         File checkFile = directoryChooser.showDialog(primaryStage);
-        if(checkFile != null){
+        if (checkFile != null) {
             selectedDeleteSourcePath = checkFile.toPath();
             deleteFileLabel.textProperty().setValue(selectedDeleteSourcePath.getFileName().toString());
             deleteFileLabel.visibleProperty().setValue(Boolean.TRUE);
         }
     }
-    
+
     @FXML
     private void onChangeAction(ActionEvent event) {
         // Reset UI elements based on action selection
         // ... (reset UI elements based on actionComboBox selection)
+        fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
+
     }
 
     public void setControllerOne(FXMLDocumentController controllerOne) {
         //Sets the reference to the first controller
         this.controllerOne = controllerOne;
     }
-    
+
     @FXML
-    private void onExFileButton(ActionEvent event){
-         Stage primaryStage = (Stage) destinationDirectoryButton.getScene().getWindow();
+    private void onFileDimensionButton(ActionEvent event) {
+        Stage primaryStage = (Stage) playAudioButton.getScene().getWindow();
+
+        // Create a FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose a File");
+        // Show the FileChooser and get the selected file
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+        if (selectedFile != null) {
+            selectedFileForDimension = selectedFile.toPath();
+            labelDimensionFile.textProperty().setValue(selectedFileForDimension.getFileName().toString());
+            labelDimensionFile.setVisible(true);
+
+        }
+    }
+
+    @FXML
+    private void onExFileButton(ActionEvent event) {
+        Stage primaryStage = (Stage) destinationDirectoryButton.getScene().getWindow();
 
         //Create a DirectoryChooser
         DirectoryChooser directoryChooser = new DirectoryChooser();

@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.After;
-import progettose.Rule;
+
 import progettose.ConcreteRuleManager;
 import progettose.RuleManagerProxy;
 import progettose.actionPackage.Action;
