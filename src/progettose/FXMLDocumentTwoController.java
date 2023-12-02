@@ -147,6 +147,8 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label selectedSourceDirectoryLabel;
     @FXML
     private Label deleteFileLabel;
+    @FXML
+    private Label exFileDirectoryLabel;
 
     /**
      * Initializes the controller class.
@@ -199,7 +201,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(dayOfWeekComboBox.valueProperty().isNull())
                 .and(dayOfMonthComboBox.valueProperty().isNull())
                 .and(datePicker.valueProperty().isNull())
-                .and((exFileTextField.textProperty().isEmpty()))
+                .and((exFileTextField.textProperty().isEmpty()).or(exFileDirectoryLabel.visibleProperty().not()))
                 //.and((fileDimensionTextField.textProperty().isEmpty()).or())
                 //.and((execProgramTextField.textProperty().isEmpty()).or())
                 .or(triggerComboBox.valueProperty().isNull()))
@@ -214,6 +216,8 @@ public class FXMLDocumentTwoController implements Initializable {
                 .or(ruleNameTextField.textProperty().isEmpty()));
 
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
+        exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
+        
 
         // Set initial visibility properties for UI elements based on trigger and action selection
         // ... (set visibility properties based on triggerComboBox and actionComboBox values)
@@ -416,6 +420,7 @@ public class FXMLDocumentTwoController implements Initializable {
         fileDimensionButton.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
         execProgramTextField.textProperty().setValue(null);
         execProgramButton.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
+        exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
     }
     
     @FXML
@@ -452,14 +457,14 @@ public class FXMLDocumentTwoController implements Initializable {
 
         //Create a DirectoryChooser
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Select the destination directory of the file to copy");
+        directoryChooser.setTitle("Select the directory of the file to check");
 
         //Get source directory if it's not null
         File checkFile = directoryChooser.showDialog(primaryStage);
         if (checkFile != null) {
             selectedExFile = checkFile.toPath();
-            exFileLabel.textProperty().setValue("File in: "+selectedExFile.getFileName().toString());
-            exFileLabel.visibleProperty().setValue(Boolean.TRUE);
+            exFileDirectoryLabel.textProperty().setValue(selectedExFile.getFileName().toString());
+            exFileDirectoryLabel.visibleProperty().setValue(Boolean.TRUE);
         }
 
     }
