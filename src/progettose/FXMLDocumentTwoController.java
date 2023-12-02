@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
@@ -156,7 +157,9 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedDestinationPath;
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
-
+    @FXML
+    private CheckBox fireOnceCheckBox;
+ 
     /**
      * Initializes the controller class.
      */
@@ -354,6 +357,11 @@ public class FXMLDocumentTwoController implements Initializable {
         //When copyFileAction is selected, onSave the action is created from the different input fields
         // Create a Rule using the created Trigger and Action
         Rule rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
+        
+        //when the checkbox is selected activate the fire once mode of the rule.
+        if(fireOnceCheckBox.isSelected()){
+            rule.setFiredOnce();
+        }
 
         // Add the created rule to the ObservableList in the first controller
         controllerOne.addRuleToObsList(rule);

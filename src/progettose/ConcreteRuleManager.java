@@ -1,5 +1,6 @@
 package progettose;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,12 +24,12 @@ public class ConcreteRuleManager implements RuleManager {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
             for (Rule r : rules) {
-                if(r.wantToFireOnce()){
-                  if(!r.hasFired() && r.evaluateTrigger()){
+                if(r.getFiredOnce()){
+                  if(r.getLastTimeFired()==null && r.evaluateTrigger()){
                       this.fireRule(r);
                   }  
                 }
-                if (r.evaluateTrigger()) {
+                if (!r.getFiredOnce()&& r.evaluateTrigger()) {
                     this.fireRule(r);
                 }
             }
@@ -37,7 +38,7 @@ public class ConcreteRuleManager implements RuleManager {
 
     public void fireRule(Rule r) {
         r.getAction().execute();
-        r.isFired();
+        r.setLastTimeFired(LocalDateTime.now());
     }
 
     public static void shutdownScheduler() {
