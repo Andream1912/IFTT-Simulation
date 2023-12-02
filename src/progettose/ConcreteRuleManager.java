@@ -18,11 +18,16 @@ public class ConcreteRuleManager implements RuleManager {
     public void setRules(ObservableList<Rule> r) {
         this.rules = r;
     }
-
+    
     public void periodicCheck() {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
             for (Rule r : rules) {
+                if(r.wantToFireOnce()){
+                  if(!r.hasFired() && r.evaluateTrigger()){
+                      this.fireRule(r);
+                  }  
+                }
                 if (r.evaluateTrigger()) {
                     this.fireRule(r);
                 }
@@ -32,6 +37,7 @@ public class ConcreteRuleManager implements RuleManager {
 
     public void fireRule(Rule r) {
         r.getAction().execute();
+        r.isFired();
     }
 
     public static void shutdownScheduler() {
@@ -61,5 +67,5 @@ public class ConcreteRuleManager implements RuleManager {
     public void deactivateRule(Rule r) {
         r.setState(false);
     }
-
+    
 }
