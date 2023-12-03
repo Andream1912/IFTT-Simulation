@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
+<AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
    <children>
       <Label layoutX="24.0" layoutY="28.0" text="Create new rule">
          <font>
@@ -52,7 +52,7 @@
       <Button fx:id="appendToFileButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
       <Button fx:id="playAudioButton" layoutX="545.0" layoutY="362.0" mnemonicParsing="false" onAction="#onPlayAudioButton" text="Choose" />
       <Button fx:id="destinationDirectoryButton" layoutX="706.0" layoutY="362.0" mnemonicParsing="false" onAction="#onDestinationDirectoryButton" text="Choose" />
-      <Button fx:id="execProgButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <Button fx:id="execProgButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#onExecProgButton" text="Choose" />
       <DatePicker fx:id="datePicker" layoutX="482.0" layoutY="212.0" />
       <TextField fx:id="exFileTextField" layoutX="399.0" layoutY="212.0" />
       <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" onAction="#onExFileButton" text="Choose directory" />
@@ -85,5 +85,6 @@
       <Label fx:id="selectedDestinationDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="592.0" layoutY="396.0" prefHeight="17.0" prefWidth="288.0" text="Label" textAlignment="CENTER" visible="false" />
       <Label fx:id="selectedSourceDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="435.0" layoutY="396.0" prefHeight="17.0" prefWidth="279.0" text="Label" textAlignment="CENTER" visible="false" />
       <Label fx:id="deleteFileLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="561.0" layoutY="396.0" prefHeight="17.0" prefWidth="228.0" text="Label" visible="false" />
+      <Label fx:id="execProgramActionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="407.0" layoutY="396.0" prefHeight="17.0" prefWidth="138.0" text="Label" textAlignment="CENTER" visible="false" />
    </children>
 </AnchorPane>

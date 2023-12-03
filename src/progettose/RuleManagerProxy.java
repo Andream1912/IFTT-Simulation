@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -16,6 +18,7 @@ import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
+import progettose.actionPackage.ExecuteProgramActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
@@ -156,6 +159,14 @@ public class RuleManagerProxy implements RuleManager {
             case "Delete File":
                 ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(column[i++]));
                 return deleteFileAC.createAction();
+            case "Execute Program":
+                int n = Integer.parseInt(column[i++]);
+                List<String> execProgList = new ArrayList<>();
+                for(int j = 0; j<n;j++){
+                    execProgList.add(column[i++]);
+                }
+                ActionCreator executeProgramAC = new ExecuteProgramActionCreator(execProgList);
+                return executeProgramAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
