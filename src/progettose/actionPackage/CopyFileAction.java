@@ -97,7 +97,7 @@ public class CopyFileAction implements Action {
 
     @Override
     public String getType() {
-        return "Copy File";
+        return this.type;
     }
 
     @Override

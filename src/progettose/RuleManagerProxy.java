@@ -19,12 +19,14 @@ import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.ExecuteProgramActionCreator;
+import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
+import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 import progettose.triggerPackage.TriggerCreator;
@@ -50,7 +52,7 @@ public class RuleManagerProxy implements RuleManager {
             Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static RuleManagerProxy getInstance() {
         //Singleton pattern to Rulemanager
         if (uniqueInstance == null) {
@@ -88,7 +90,7 @@ public class RuleManagerProxy implements RuleManager {
     }
 
     @Override
-    public void activateRule(Rule r){
+    public void activateRule(Rule r) {
         this.concrRM.activateRule(r);
         try {
             this.storeToFile();
@@ -96,9 +98,9 @@ public class RuleManagerProxy implements RuleManager {
             Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
-    public void deactivateRule(Rule r){
+    public void deactivateRule(Rule r) {
         this.concrRM.deactivateRule(r);
         try {
             this.storeToFile();
@@ -106,13 +108,13 @@ public class RuleManagerProxy implements RuleManager {
             Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void storeToFile() throws IOException {
 
         // Writes rules from the ConcreteRuleManager to a CSV file.
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(directoryProject, false))) {
             for (Rule r : this.concrRM.getRules()) {
-                writer.write(r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV() + ";"+r.isActive());
+                writer.write(r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV() + ";" + r.isActive());
                 writer.newLine();
             }
             writer.close();
@@ -134,6 +136,9 @@ public class RuleManagerProxy implements RuleManager {
             case "Date":
                 TriggerCreator dateTC = new DateTriggerCreator(LocalDate.parse(column[i++]));
                 return dateTC.createTrigger();
+            case "File Dimension Verification":
+                TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(Paths.get(column[i++]), Long.parseLong(column[i++]), column[i++]);
+                return fileDimensionTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;
@@ -167,6 +172,9 @@ public class RuleManagerProxy implements RuleManager {
                 }
                 ActionCreator executeProgramAC = new ExecuteProgramActionCreator(execProgList);
                 return executeProgramAC.createAction();
+            case "Append String to Textfile":
+                ActionCreator appendFileAC = new FileAppenderActionCreator(Paths.get(column[i++]), column[i++]);
+                return appendFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
@@ -188,10 +196,10 @@ public class RuleManagerProxy implements RuleManager {
                     Trigger trigger = checkTrigger(nameTrigger, column);
                     String nameAction = column[i++];
                     Action action = checkAction(nameAction, column);
-                    Rule r =new Rule(ruleName, action, trigger);
+                    Rule r = new Rule(ruleName, action, trigger);
                     r.setState(Boolean.parseBoolean(column[i++]));
                     this.concrRM.addRule(r);
-                    
+
                 } else {
                     System.out.println("Error in reading the line");
                 }
@@ -199,7 +207,8 @@ public class RuleManagerProxy implements RuleManager {
             reader.close();
         }
     }
-    public void periodicCheck(){
+
+    public void periodicCheck() {
         this.concrRM.periodicCheck();
     }
 }

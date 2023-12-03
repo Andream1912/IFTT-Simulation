@@ -2,7 +2,6 @@ package progettose;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,8 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import progettose.actionPackage.Action;
-import progettose.actionPackage.ShowMessageAction;
-import progettose.triggerPackage.TimeTrigger;
 import progettose.triggerPackage.Trigger;
 
 public class FXMLDocumentController implements Initializable {
@@ -51,16 +48,14 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Creating RuleManager object
-        rmp =RuleManagerProxy.getInstance();
+        rmp = RuleManagerProxy.getInstance();
 
         // Initializing TableView and its columns
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
         actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
         statusColumn.setCellValueFactory(new PropertyValueFactory("state"));
-       
-        
-        
+
         // Making columns non-resizable
         nameColumn.resizableProperty().setValue(Boolean.FALSE);
         actionColumn.resizableProperty().setValue(Boolean.FALSE);
@@ -68,22 +63,18 @@ public class FXMLDocumentController implements Initializable {
         statusColumn.resizableProperty().setValue(Boolean.FALSE);
 
         // Binding TableView to the ObservableList        
-
         tableView.setItems(rmp.getRules());
-
 
         // Disabling removeRuleButton and toggleStateButton when no row is selected
         removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
         toggleStateButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
-        
-        
+
         // Setting a position for the SplitPane divider
         splitPane.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
             splitPane.setDividerPosition(0, 0.3);
         });
         rmp.periodicCheck();
-        
-        
+
     }
 
     @FXML
@@ -126,17 +117,17 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onToggleState(ActionEvent event) {
         Rule r = tableView.getSelectionModel().selectedItemProperty().getValue();
-        if(r.isActive()){
+        if (r.isActive()) {
             rmp.deactivateRule(r);
             toggleStateButton.textProperty().setValue("Activate Rule");
-            
-        }else{
+
+        } else {
             rmp.activateRule(r);
             toggleStateButton.textProperty().setValue("Deactivate Rule");
         }
         tableView.refresh();
     }
-    
+
     public void addRuleToObsList(Rule r) {
         rmp.addRule(r);
     }
@@ -154,14 +145,14 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void onSelectRule(MouseEvent event) {
         Rule r = tableView.getSelectionModel().selectedItemProperty().getValue();
-        if(r.isActive())
-            toggleStateButton.textProperty().setValue("Deactivate Rule");
-        else
-            toggleStateButton.textProperty().setValue("Activate Rule");
+        if (r != null) {
+            if (r.isActive()) {
+                toggleStateButton.textProperty().setValue("Deactivate Rule");
+            } else {
+                toggleStateButton.textProperty().setValue("Activate Rule");
+            }
+        }
 
-        
     }
 
 }
-
-

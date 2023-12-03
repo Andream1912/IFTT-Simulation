@@ -1,5 +1,6 @@
 package progettose;
 
+import java.time.LocalDateTime;
 import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 
@@ -9,11 +10,15 @@ public class Rule {
     private Trigger trigger;
     private Action action;
     private RuleState state;
+    private LocalDateTime lastTimeFired;
+    private boolean firedOnce;
 
     public Rule(String n, Action a, Trigger t) {
         this.name = n;
         this.action = a;
         this.trigger = t;
+        this.lastTimeFired=null;
+        this.firedOnce=false;
         this.state = new RuleStateActive();
         
     }
@@ -45,6 +50,24 @@ public class Rule {
     public void setName(String n) {
         this.name = n;
     }
+    
+    public void setLastTimeFired(LocalDateTime t){
+        this.lastTimeFired=t;
+    }
+    
+    public void setFiredOnce(){
+        this.firedOnce=true;
+    }
+    
+    
+    public LocalDateTime getLastTimeFired(){
+        return this.lastTimeFired;
+    }
+    
+    public boolean getFiredOnce() {
+        return this.firedOnce;
+    }
+    
     
     public boolean isActive(){
         return state instanceof RuleStateActive;

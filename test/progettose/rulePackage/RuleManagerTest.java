@@ -67,6 +67,30 @@ public class RuleManagerTest {
         assertEquals(rules, ruleManager.getRules());
     }
 
+     
+    @Test
+    public void testFireOncePeriodicCheck() {
+        // Create a mock rule with a trigger that always evaluates to true
+        Rule FireOnceRule = new Rule("FireOnceRule", new ActionMock(), new TriggerMock());
+        FireOnceRule.setFiredOnce();
+        // Add the mock rule to the RuleManager
+        ruleManager.addRule(FireOnceRule);
+
+
+        // Wait for some time (e.g., 10 seconds) to allow periodic checks to occur
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        //Assert that the fire once condition is activated
+        assertTrue(FireOnceRule.getFiredOnce());
+        // Assert that the action was executed (assuming the trigger always evaluates to true)
+        assertTrue(((ActionMock) FireOnceRule.getAction()).isExecuted());
+
+    }
+
     @Test
     public void testPeriodicCheckAndFireRule() {
         Rule rule = new Rule("TestRule", actionMock, triggerMock);

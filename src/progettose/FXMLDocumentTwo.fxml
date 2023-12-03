@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -10,7 +11,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<<<<<<< HEAD
 <AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
+=======
+<AnchorPane id="AnchorPane" prefHeight="649.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
+>>>>>>> eb87235ff653a3cd8fb4920e6652ac0ba248c6e4
    <children>
       <Label layoutX="24.0" layoutY="28.0" text="Create new rule">
          <font>
@@ -49,7 +54,7 @@
       <Label fx:id="deleteLabel2" layoutX="623.0" layoutY="342.0" text="Choose a directory" />
       <Label fx:id="execProgLabel" layoutX="424.0" layoutY="342.0" text="Choose a file (.exe)" />
       <Label fx:id="execArgumentsLabel" layoutX="587.0" layoutY="342.0" text="Write command-line arguments" />
-      <Button fx:id="appendToFileButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <Button fx:id="appendToFileButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#onAppendToFileButton" text="Choose" />
       <Button fx:id="playAudioButton" layoutX="545.0" layoutY="362.0" mnemonicParsing="false" onAction="#onPlayAudioButton" text="Choose" />
       <Button fx:id="destinationDirectoryButton" layoutX="706.0" layoutY="362.0" mnemonicParsing="false" onAction="#onDestinationDirectoryButton" text="Choose" />
       <Button fx:id="execProgButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#onExecProgButton" text="Choose" />
@@ -57,7 +62,7 @@
       <TextField fx:id="exFileTextField" layoutX="399.0" layoutY="212.0" />
       <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" onAction="#onExFileButton" text="Choose directory" />
       <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" />
-      <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
+      <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" onAction="#onFileDimensionButton" text="Choose file" />
       <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
       <TextField fx:id="execProgramTextField" layoutX="598.0" layoutY="212.0" />
       <ComboBox fx:id="dayOfMonthComboBox" layoutX="497.0" layoutY="212.0" prefWidth="150.0" />
@@ -69,7 +74,7 @@
       <Label fx:id="dayOfWeekLabel" layoutX="514.0" layoutY="192.0" text="Choose a day of week" />
       <Label fx:id="dayOfMonthLabel" layoutX="510.0" layoutY="192.0" text="Choose a day of month" />
       <Label fx:id="exFileLabel" layoutX="429.0" layoutY="192.0" text="Insert a filename" />
-      <Label fx:id="fileDimensionLabel" layoutX="590.0" layoutY="192.0" text="Insert a file dimension (in byte)" />
+      <Label fx:id="fileDimensionLabel" layoutX="590.0" layoutY="192.0" text="Insert a file dimension" />
       <Label fx:id="execProgramLabel" layoutX="611.0" layoutY="192.0" text="Insert a program name" />
       <ComboBox fx:id="triggerComboBox" layoutX="59.0" layoutY="212.0" onAction="#onChangeTrigger" prefHeight="25.0" prefWidth="216.0" />
       <Label layoutX="59.0" layoutY="182.0" text="Select the Trigger">
@@ -84,7 +89,15 @@
       </Label>
       <Label fx:id="selectedDestinationDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="592.0" layoutY="396.0" prefHeight="17.0" prefWidth="288.0" text="Label" textAlignment="CENTER" visible="false" />
       <Label fx:id="selectedSourceDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="435.0" layoutY="396.0" prefHeight="17.0" prefWidth="279.0" text="Label" textAlignment="CENTER" visible="false" />
+      <Label fx:id="labelDimensionFile" alignment="CENTER" contentDisplay="CENTER" layoutX="395.0" layoutY="237.0" prefHeight="35.0" prefWidth="150.0" text="labelDimensionFile" textAlignment="CENTER" visible="false" />
+      <ComboBox fx:id="typeDimensionComboBox" layoutX="751.0" layoutY="212.0" prefHeight="25.0" prefWidth="79.0" />
       <Label fx:id="deleteFileLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="561.0" layoutY="396.0" prefHeight="17.0" prefWidth="228.0" text="Label" visible="false" />
+<<<<<<< HEAD
       <Label fx:id="execProgramActionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="407.0" layoutY="396.0" prefHeight="17.0" prefWidth="138.0" text="Label" textAlignment="CENTER" visible="false" />
    </children>
+=======
+      <CheckBox fx:id="fireOnceCheckBox" layoutX="59.0" layoutY="565.0" mnemonicParsing="false" text="Fire Only Once" />
+      <Label fx:id="fileToAppendLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="441.0" layoutY="388.0" prefHeight="20.0" prefWidth="59.0" text="Label" textAlignment="CENTER" visible="false" />
+        </children>
+>>>>>>> eb87235ff653a3cd8fb4920e6652ac0ba248c6e4
 </AnchorPane>
