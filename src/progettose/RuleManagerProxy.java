@@ -8,10 +8,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
@@ -32,6 +37,7 @@ public class RuleManagerProxy implements RuleManager {
     private ConcreteRuleManager concrRM;
     private static RuleManagerProxy uniqueInstance;
     private final String directoryProject = System.getProperty("user.dir") + "/rules.csv";
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private int i = 0;
 
     private RuleManagerProxy() {
@@ -109,8 +115,11 @@ public class RuleManagerProxy implements RuleManager {
 
         // Writes rules from the ConcreteRuleManager to a CSV file.
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(directoryProject, false))) {
-            for (Rule r : this.concrRM.getRules()) {
-                writer.write(r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV() + ";" + r.isActive());
+            for (Rule r : this.getRules()) {
+                writer.write(r.getClass().getSimpleName() +";"+r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV());
+                if(r instanceof SleepingTimeRule)
+                    writer.write(";"+((SleepingTimeRule) r).getNumDays()+";"+((SleepingTimeRule) r).getNumHours()+";"+((SleepingTimeRule) r).getNumMinutes()+";"+((SleepingTimeRule) r).getLastTimeFired());
+                writer.write(";" + r.isActive());
                 writer.newLine();
             }
             writer.close();
@@ -170,18 +179,25 @@ public class RuleManagerProxy implements RuleManager {
         // Reads rules from a CSV file and adds them to the ConcreteRuleManager.
         try (BufferedReader reader = new BufferedReader(new FileReader(directoryProject))) {
             String s;
+            Rule r;
             String[] column;
             while ((s = reader.readLine()) != null) {
 
                 i = 0;
                 column = s.split(";");
                 if (i < column.length) {
+                    String ruleType = column[i++];
                     String ruleName = column[i++];
                     String nameTrigger = column[i++];
                     Trigger trigger = checkTrigger(nameTrigger, column);
                     String nameAction = column[i++];
                     Action action = checkAction(nameAction, column);
-                    Rule r = new Rule(ruleName, action, trigger);
+                    if(ruleType.equals("FireOnceRule")){
+                        r = new FireOnceRule(ruleName, action, trigger);
+                    } else {
+                        r = new SleepingTimeRule(ruleName, action, trigger, Integer.parseInt(column[i++]), Integer.parseInt(column[i++]), Integer.parseInt(column[i++]));
+                        ((SleepingTimeRule) r).setLastTimeFired(LocalDateTime.parse(column[i++]));
+                    }
                     r.setState(Boolean.parseBoolean(column[i++]));
                     this.concrRM.addRule(r);
 
@@ -193,7 +209,29 @@ public class RuleManagerProxy implements RuleManager {
         }
     }
 
-    public void periodicCheck() {
-        this.concrRM.periodicCheck();
+    public void periodicCheck(TableView tb) {
+        //Scheduler check the rule firing
+        scheduler.scheduleAtFixedRate(() -> {
+            for (Rule r : this.concrRM.getRules()) {
+                if (r.evaluateTrigger()) {
+                    this.fireRule(r);
+                }
+            }
+            tb.refresh();
+        }, 0, 3, TimeUnit.SECONDS);
+    }
+    
+    public void fireRule(Rule r) {
+        r.getAction().execute();
+        try {
+            this.storeToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void shutdownScheduler() {
+        //Use it everytime a scheduler is created
+        scheduler.shutdown();
     }
 }

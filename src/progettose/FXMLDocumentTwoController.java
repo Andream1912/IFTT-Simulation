@@ -13,10 +13,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -145,7 +147,22 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label deleteFileLabel;
     @FXML
     private Label exFileDirectoryLabel;
-    
+    @FXML
+    private CheckBox fireOnceCheckBox;
+    @FXML
+    private CheckBox fireSleepingTimeCheckBox;
+    @FXML
+    private Spinner<Integer> minuteSleepingTimeSpinner;
+    @FXML
+    private Spinner<Integer> hourSleepingTimeSpinner; 
+    @FXML
+    private Spinner<Integer> daySleepingTimeSpinner;
+    @FXML
+    private Label daySleepingTimeLabel;
+    @FXML
+    private Label hourSleepingTimeLabel;
+    @FXML
+    private Label minuteSleepingTimeLabel;
     
     private Path selectedFileForDimension;
     private FXMLDocumentController controllerOne;
@@ -155,7 +172,8 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
     
-
+    
+    
 
     /**
      * Initializes the controller class.
@@ -230,7 +248,17 @@ public class FXMLDocumentTwoController implements Initializable {
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
         exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
         labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
-
+        
+        fireSleepingTimeCheckBox.disableProperty().bind(fireOnceCheckBox.selectedProperty());
+        fireOnceCheckBox.disableProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
+        
+        minuteSleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
+        hourSleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
+        daySleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
+        minuteSleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
+        hourSleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
+        daySleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
+        
 
         // Set initial visibility properties for UI elements based on trigger and action selection
         // ... (set visibility properties based on triggerComboBox and actionComboBox values)
@@ -352,13 +380,19 @@ public class FXMLDocumentTwoController implements Initializable {
         // ... (create Trigger and Action based on triggerComboBox and actionComboBox values)
         Trigger trigger = checkTrigger(triggerComboBox.getValue());
         Action action = checkAction(actionComboBox.getValue());
-
+        Rule r;
         //When copyFileAction is selected, onSave the action is created from the different input fields
         // Create a Rule using the created Trigger and Action
-        Rule rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
+        if(fireSleepingTimeCheckBox.selectedProperty().getValue())
+            r = new SleepingTimeRule(ruleNameTextField.textProperty().getValue(), action, trigger, daySleepingTimeSpinner.valueProperty().getValue(), hourSleepingTimeSpinner.valueProperty().getValue(), minuteSleepingTimeSpinner.valueProperty().getValue());
+        else
+            r = new FireOnceRule(ruleNameTextField.textProperty().getValue(), action, trigger);
+        //else
+            //rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
+        
 
         // Add the created rule to the ObservableList in the first controller
-        controllerOne.addRuleToObsList(rule);
+        controllerOne.addRuleToObsList(r);
 
         // Close the current stage (window)
         Stage currentStage = (Stage) saveButton.getScene().getWindow();

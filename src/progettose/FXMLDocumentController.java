@@ -3,6 +3,10 @@ package progettose;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,11 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import progettose.actionPackage.Action;
@@ -32,6 +36,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button toggleStateButton;
     @FXML
+    private AnchorPane anchorPane;
+    @FXML
     private TableView<Rule> tableView;
     @FXML
     private TableColumn<Rule, String> nameColumn;
@@ -42,8 +48,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Rule, RuleState> statusColumn;
     @FXML
-    private SplitPane splitPane;
+    private TableColumn<Rule, String> typeColumn;
     private RuleManagerProxy rmp;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -55,6 +62,7 @@ public class FXMLDocumentController implements Initializable {
         actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
         statusColumn.setCellValueFactory(new PropertyValueFactory("state"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory("ruleTypeDescription"));
 
         // Making columns non-resizable
         nameColumn.resizableProperty().setValue(Boolean.FALSE);
@@ -69,11 +77,7 @@ public class FXMLDocumentController implements Initializable {
         removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
         toggleStateButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
 
-        // Setting a position for the SplitPane divider
-        splitPane.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
-            splitPane.setDividerPosition(0, 0.3);
-        });
-        rmp.periodicCheck();
+        rmp.periodicCheck(tableView);      
 
     }
 
@@ -126,6 +130,7 @@ public class FXMLDocumentController implements Initializable {
             toggleStateButton.textProperty().setValue("Deactivate Rule");
         }
         tableView.refresh();
+        tableView.getSelectionModel().clearSelection();
     }
 
     public void addRuleToObsList(Rule r) {
@@ -133,7 +138,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void endThread() {
-        ConcreteRuleManager.shutdownScheduler();
+        RuleManagerProxy.shutdownScheduler();
     }
 
     @FXML

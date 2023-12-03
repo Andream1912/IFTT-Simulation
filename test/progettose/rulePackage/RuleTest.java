@@ -1,11 +1,15 @@
 package progettose.rulePackage;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import static org.junit.Assert.*;
 import org.junit.Test;
+import progettose.FireOnceRule;
+import progettose.Rule;
 
 import progettose.RuleStateActive;
 import progettose.RuleStateInactive;
+import progettose.SleepingTimeRule;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageAction;
 import progettose.actionPackage.ShowMessageActionCreator;
@@ -82,5 +86,43 @@ public class RuleTest {
         rule3.setState(false);
         assertTrue(rule3.getState() instanceof RuleStateInactive);
         assertFalse(rule3.evaluateTrigger()); 
+    }
+    
+    @Test
+    public void testFireOnceRule() {
+        Action action = new ShowMessageActionCreator("Ciao").createAction();
+        Trigger trigger = new TimeTriggerCreator(LocalTime.now()).createTrigger();
+        FireOnceRule fireOnceRule = new FireOnceRule("TestFireOnceRule", action, trigger);
+
+        assertEquals("Fire Only Once", fireOnceRule.getRuleTypeDescription());
+
+        // Trigger should return true only once
+        assertTrue(fireOnceRule.evaluateTrigger());
+        assertFalse(fireOnceRule.evaluateTrigger());
+    }
+    
+    @Test
+    public void testSleepingTimeRule() {
+        Action action = new ShowMessageActionCreator("Ciao").createAction();
+        Trigger trigger = new TimeTriggerCreator(LocalTime.now()).createTrigger();
+        int numDays = 1;
+        int numHours = 2;
+        int numMinutes = 30;
+
+        SleepingTimeRule sleepingTimeRule = new SleepingTimeRule("TestSleepingTimeRule", action, trigger, numDays, numHours, numMinutes);
+
+        assertEquals("Fire again after\n1d, 2h, 30m", sleepingTimeRule.getRuleTypeDescription());
+
+        // Trigger should return true only if after sleeping time
+        assertTrue(sleepingTimeRule.evaluateTrigger());
+
+        // Trigger should return false because the sleeping time is not passed
+        assertFalse(sleepingTimeRule.evaluateTrigger());
+        // Manually set lastTimeFired to test if the evaluateTrigger() works after the sleeping time
+        sleepingTimeRule.setLastTimeFired(LocalDateTime.now().minusDays(numDays).minusHours(numHours).minusMinutes(numMinutes+1));
+        assertTrue(sleepingTimeRule.evaluateTrigger());
+        assertFalse(sleepingTimeRule.isAfterSleepingTime());
+
+  
     }
 }

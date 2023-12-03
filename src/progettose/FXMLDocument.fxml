@@ -3,63 +3,47 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="625.0" prefWidth="912.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" onMouseClicked="#unselectRow" prefHeight="617.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentController">
     <children>
-      <SplitPane fx:id="splitPane" dividerPositions="0.29797979797979796" layoutX="14.0" onMousePressed="#unselectRow" prefHeight="625.0" prefWidth="912.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="623.0" prefWidth="297.0">
+      <VBox alignment="TOP_CENTER" prefHeight="561.0" prefWidth="759.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Separator prefHeight="0.0" prefWidth="766.0" />
+            <Label text="SCAMRules">
+               <font>
+                  <Font size="27.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="20.0" top="30.0" />
+               </VBox.margin>
+            </Label>
+            <TableView fx:id="tableView" maxWidth="677.0" onMouseClicked="#onSelectRule" prefHeight="400.0" prefWidth="677.0">
+              <columns>
+                <TableColumn fx:id="nameColumn" editable="false" prefWidth="135.0" sortable="false" text="Name" />
+                  <TableColumn fx:id="typeColumn" prefWidth="135.0" text="Type" />
+                <TableColumn fx:id="actionColumn" editable="false" prefWidth="135.0" sortable="false" text="Action" />
+                  <TableColumn fx:id="triggerColumn" editable="false" prefWidth="135.0" sortable="false" text="Trigger" />
+                  <TableColumn fx:id="statusColumn" editable="false" prefWidth="135.0" sortable="false" text="Status" />
+              </columns>
+            </TableView>
+            <HBox alignment="CENTER" prefHeight="69.0" prefWidth="672.0" spacing="50.0">
                <children>
-                  <Label layoutX="43.0" layoutY="24.0" text="IFTTT">
-                     <font>
-                        <Font name="System Bold" size="41.0" />
-                     </font>
-                  </Label>
-                  <VBox alignment="TOP_CENTER" layoutX="84.0" layoutY="158.0" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                          <Button fx:id="addRuleButton" onAction="#onAddRule" prefHeight="25.0" prefWidth="131.0" text="Add Rule">
-                           <VBox.margin>
-                              <Insets top="25.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="removeRuleButton" disable="true" mnemonicParsing="false" onAction="#onRemoveRule" prefHeight="25.0" prefWidth="123.0" text="Remove Rule">
-                           <VBox.margin>
-                              <Insets top="25.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="toggleStateButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onToggleState" text="Deactivate Rule">
-                           <VBox.margin>
-                              <Insets top="25.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
+                  <Button fx:id="removeRuleButton" disable="true" mnemonicParsing="false" onAction="#onRemoveRule" prefHeight="25.0" prefWidth="130.0" text="Remove Rule" />
+                    <Button fx:id="addRuleButton" onAction="#onAddRule" prefHeight="25.0" prefWidth="130.0" text="Add Rule" />
+                  <Button fx:id="toggleStateButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onToggleState" prefHeight="25.0" prefWidth="130.0" text="Deactivate Rule" />
                </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <TableView fx:id="tableView" layoutX="58.0" layoutY="90.0" onMouseClicked="#onSelectRule" prefHeight="400.0" prefWidth="540.0">
-                    <columns>
-                      <TableColumn fx:id="nameColumn" editable="false" prefWidth="135.0" sortable="false" text="Name" />
-                      <TableColumn fx:id="actionColumn" editable="false" prefWidth="135.0" sortable="false" text="Action" />
-                        <TableColumn fx:id="triggerColumn" editable="false" prefWidth="135.0" sortable="false" text="Trigger" />
-                        <TableColumn fx:id="statusColumn" editable="false" prefWidth="135.0" sortable="false" text="Status" />
-                    </columns>
-                  </TableView>
-                  <Label layoutX="304.0" layoutY="38.0" text="Rules">
-                     <font>
-                        <Font size="27.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>

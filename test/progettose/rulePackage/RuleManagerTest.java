@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import org.junit.After;
 
 import progettose.ConcreteRuleManager;
+import progettose.Rule;
 import progettose.RuleManagerProxy;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageActionCreator;
@@ -87,7 +88,7 @@ public class RuleManagerTest {
     @After
     public void tearDown() {
         // Close of resources
-        ConcreteRuleManager.shutdownScheduler();
+        RuleManagerProxy.shutdownScheduler();
     }
 
     // Mock class Action
