@@ -66,10 +66,8 @@ public class Rule extends Observable{
     public void setState(boolean active){
         if (active){
             state = new RuleStateActive();
-            System.out.println("Impostando attiva");
         } else {
             state = new RuleStateInactive();
-            System.out.println("Impostando inattiva");
         }  
     }
 }

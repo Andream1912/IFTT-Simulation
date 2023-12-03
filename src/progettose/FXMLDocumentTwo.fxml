@@ -53,14 +53,14 @@
       <Label fx:id="deleteLabel2" layoutX="623.0" layoutY="342.0" text="Choose a directory" />
       <Label fx:id="execProgLabel" layoutX="424.0" layoutY="342.0" text="Choose a file (.exe)" />
       <Label fx:id="execArgumentsLabel" layoutX="587.0" layoutY="342.0" text="Write command-line arguments" />
-      <Button fx:id="appendToFileButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
+      <Button fx:id="appendToFileButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#onAppendToFileButton" text="Choose" />
       <Button fx:id="playAudioButton" layoutX="545.0" layoutY="362.0" mnemonicParsing="false" onAction="#onPlayAudioButton" text="Choose" />
       <Button fx:id="destinationDirectoryButton" layoutX="706.0" layoutY="362.0" mnemonicParsing="false" onAction="#onDestinationDirectoryButton" text="Choose" />
       <Button fx:id="execProgButton" layoutX="444.0" layoutY="362.0" mnemonicParsing="false" text="Choose" />
       <DatePicker fx:id="datePicker" layoutX="482.0" layoutY="212.0" />
       <TextField fx:id="exFileTextField" layoutX="399.0" layoutY="212.0" />
       <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" onAction="#onExFileButton" text="Choose directory" />
-      <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" />
+      <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" onKeyTyped="#onFileDimensionCheck" />
       <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" onAction="#onFileDimensionButton" text="Choose file" />
       <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
       <TextField fx:id="execProgramTextField" layoutX="598.0" layoutY="212.0" />
@@ -91,6 +91,7 @@
       <Label fx:id="labelDimensionFile" alignment="CENTER" contentDisplay="CENTER" layoutX="395.0" layoutY="237.0" prefHeight="35.0" prefWidth="150.0" text="labelDimensionFile" textAlignment="CENTER" visible="false" />
       <ComboBox fx:id="typeDimensionComboBox" layoutX="751.0" layoutY="212.0" prefHeight="25.0" prefWidth="79.0" />
       <Label fx:id="deleteFileLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="561.0" layoutY="396.0" prefHeight="17.0" prefWidth="228.0" text="Label" visible="false" />
+
        <CheckBox fx:id="fireOnceCheckBox" layoutX="49.0" layoutY="504.0" mnemonicParsing="false" text="Fire Only Once" />
       <Label fx:id="exFileDirectoryLabel" alignment="CENTER" layoutX="553.0" layoutY="244.0" prefHeight="17.0" prefWidth="254.0" text="Label" visible="false" />
       <Separator layoutY="115.0" prefHeight="46.0" prefWidth="891.0" />
@@ -101,5 +102,7 @@
       <Label fx:id="daySleepingTimeLabel" layoutX="99.0" layoutY="554.0" text="Days:" />
       <Label fx:id="hourSleepingTimeLabel" layoutX="99.0" layoutY="594.0" text="Hours:" />
       <Label fx:id="minuteSleepingTimeLabel" layoutX="99.0" layoutY="634.0" text="Minutes:" />
+      <Label fx:id="fileToAppendLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="441.0" layoutY="388.0" prefHeight="20.0" prefWidth="59.0" text="Label" textAlignment="CENTER" visible="false" />
    </children>
+
 </AnchorPane>

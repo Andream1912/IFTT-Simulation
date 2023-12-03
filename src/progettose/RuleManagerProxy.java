@@ -21,6 +21,7 @@ import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
+import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
@@ -169,6 +170,9 @@ public class RuleManagerProxy implements RuleManager {
             case "Delete File":
                 ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(column[i++]));
                 return deleteFileAC.createAction();
+            case "Append String to Textfile":
+                ActionCreator appendFileAC = new FileAppenderActionCreator(Paths.get(column[i++]), column[i++]);
+                return appendFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
