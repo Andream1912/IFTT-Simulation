@@ -2,6 +2,7 @@ package progettose;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.stage.DirectoryChooser;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
+import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
@@ -146,6 +148,10 @@ public class FXMLDocumentTwoController implements Initializable {
     private ComboBox<String> typeDimensionComboBox;
     @FXML
     private Label deleteFileLabel;
+    @FXML
+    private Label fileToAppendLabel;
+    @FXML
+    private CheckBox fireOnceCheckBox;
     /*
     
     Global Variable
@@ -157,9 +163,8 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedDestinationPath;
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
-    @FXML
-    private CheckBox fireOnceCheckBox;
- 
+    private Path selectedAppendFile;
+
     /**
      * Initializes the controller class.
      */
@@ -177,8 +182,8 @@ public class FXMLDocumentTwoController implements Initializable {
 
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
-        actionList.addAll("Show Message", "Play Audio"/*,
-                "Append String to Textfile"*/, "Move File"/*,
+        actionList.addAll("Show Message", "Play Audio",
+                "Append String to Textfile"/*, "Move File"/*,
                  */, "Copy File", "Delete File"/*,
                 "Execute Program"*/);
 
@@ -222,7 +227,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 .or(
                         (showMessageTextArea.textProperty().isEmpty())
                                 .and(fileAudioNameLabel.visibleProperty().not())
-                                //.and((appendToFileTextArea.textProperty().isEmpty()).or())
+                                .and((appendToFileTextArea.textProperty().isEmpty()).or(fileToAppendLabel.visibleProperty().not()))
                                 .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
                                 .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
                                 //.and((execArgumentsTextField.textProperty().isEmpty()).or())
@@ -341,6 +346,9 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Delete File":
                 ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(selectedDeleteSourcePath.toString() + "/" + deleteTextField.getText()));
                 return deleteFileAC.createAction();
+            case "Append String to Textfile":
+                ActionCreator appendFileAC = new FileAppenderActionCreator(selectedAppendFile, appendToFileTextArea.getText());
+                return appendFileAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
@@ -357,9 +365,9 @@ public class FXMLDocumentTwoController implements Initializable {
         //When copyFileAction is selected, onSave the action is created from the different input fields
         // Create a Rule using the created Trigger and Action
         Rule rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
-        
+
         //when the checkbox is selected activate the fire once mode of the rule.
-        if(fireOnceCheckBox.isSelected()){
+        if (fireOnceCheckBox.isSelected()) {
             rule.setFiredOnce();
         }
 
@@ -471,6 +479,7 @@ public class FXMLDocumentTwoController implements Initializable {
         // Reset UI elements based on action selection
         // ... (reset UI elements based on actionComboBox selection)
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
+        fileToAppendLabel.visibleProperty().setValue(Boolean.FALSE);
 
     }
 
@@ -513,4 +522,36 @@ public class FXMLDocumentTwoController implements Initializable {
         }
 
     }
+
+    @FXML
+    private void onAppendToFileButton(ActionEvent event) {
+        Stage primaryStage = (Stage) appendToFileTextArea.getScene().getWindow();
+
+        // Create a FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose a File");
+
+        // Set the default filter for text files
+        FileChooser.ExtensionFilter defaultFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(defaultFilter);
+
+        // Add an additional filter for all files
+        FileChooser.ExtensionFilter allFilter = new FileChooser.ExtensionFilter("All files", "*.*");
+        fileChooser.getExtensionFilters().add(allFilter);
+
+        // Show the FileChooser and get the selected file
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+        if (selectedFile != null) {
+            selectedAppendFile = selectedFile.toPath();
+            // Check if the file is readable, writable, and a text file
+            if (Files.isReadable(selectedAppendFile) && Files.isWritable(selectedAppendFile)) {
+                fileToAppendLabel.textProperty().setValue(selectedFile.getName());
+                fileToAppendLabel.visibleProperty().setValue(Boolean.TRUE);
+            } else {
+                // Handle cases where the selected file is not a readable/writable text file
+                System.out.println("");
+            }
+        }
+    }
+
 }
