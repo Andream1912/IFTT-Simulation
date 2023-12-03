@@ -7,6 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +23,6 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -34,6 +36,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.DirectoryChooser;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
+import progettose.actionPackage.ExecuteProgramActionCreator;
 import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
@@ -168,6 +171,8 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label minuteSleepingTimeLabel;
     @FXML
     private Label fileToAppendLabel;
+    @FXML
+    private Label execProgramActionLabel;
     
     private Path selectedFileForDimension;
     private FXMLDocumentController controllerOne;
@@ -183,7 +188,6 @@ public class FXMLDocumentTwoController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-
     public void initialize(URL url, ResourceBundle rb) {
         // Initialize ComboBox options
         // ... (initialize triggerList, actionList, dayOfWeekList, dayOfMonthList, hourList, minuteList)
@@ -196,10 +200,12 @@ public class FXMLDocumentTwoController implements Initializable {
 
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
-        actionList.addAll("Show Message", "Play Audio",
-                "Append String to Textfile"/*, "Move File"/*,
-                 */, "Copy File", "Delete File"/*,
-                "Execute Program"*/);
+
+        actionList.addAll("Show Message", "Play Audio"/*,
+                "Append String to Textfile"*/, "Move File"/*,
+                 */, "Copy File", "Delete File",
+                "Execute Program");
+
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
         dayOfWeekComboBox.setItems(dayOfWeekList);
@@ -244,9 +250,11 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and((appendToFileTextArea.textProperty().isEmpty()).or(fileToAppendLabel.visibleProperty().not()))
                                 .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
                                 .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
-                                //.and((execArgumentsTextField.textProperty().isEmpty()).or())
+                                .and((execArgumentsTextField.textProperty().isEmpty()).or(execProgramActionLabel.visibleProperty().not()))
                                 .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty())
+                .or(fireSleepingTimeCheckBox.selectedProperty().not()
+                        .and(fireOnceCheckBox.selectedProperty().not()))
         );
 
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
@@ -372,6 +380,12 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Delete File":
                 ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(selectedDeleteSourcePath.toString() + "/" + deleteTextField.getText()));
                 return deleteFileAC.createAction();
+            case "Execute Program":
+                List<String> execProgList = new ArrayList<>();
+                execProgList.add(selectedFilePath.toString());
+                execProgList.addAll(Arrays.asList(execArgumentsTextField.getText().split(" ")));
+                ActionCreator execProgAC = new ExecuteProgramActionCreator(execProgList);
+                return execProgAC.createAction();
             case "Append String to Textfile":
                 ActionCreator appendFileAC = new FileAppenderActionCreator(selectedAppendFile, appendToFileTextArea.getText());
                 return appendFileAC.createAction();
@@ -551,6 +565,28 @@ public class FXMLDocumentTwoController implements Initializable {
     }
 
     @FXML
+    private void onExecProgButton(ActionEvent event) {
+        Stage primaryStage = (Stage) execProgButton.getScene().getWindow();
+        
+        //Setting the FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select the program to execute:");
+        
+        //Setting the filter for exe files
+        FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*");
+        fileChooser.getExtensionFilters().add(exeFilter);
+        
+        //Showing FileChooser and getting file path
+        File selectedProgram = fileChooser.showOpenDialog(primaryStage);
+        if (selectedProgram != null) {
+            selectedFilePath = selectedProgram.toPath();
+            //Add execProgLabel here
+            execProgramActionLabel.textProperty().setValue(selectedFilePath.getFileName().toString());
+            execProgramActionLabel.visibleProperty().setValue(Boolean.TRUE);
+        }
+    }
+
+    @FXML
     private void onAppendToFileButton(ActionEvent event) {
         Stage primaryStage = (Stage) appendToFileTextArea.getScene().getWindow();
 
@@ -580,6 +616,7 @@ public class FXMLDocumentTwoController implements Initializable {
             }
         }
     }
+
 
     @FXML
     private void onFileDimensionCheck(KeyEvent event) {

@@ -13,6 +13,8 @@ import java.time.LocalTime;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
@@ -21,6 +23,7 @@ import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
+import progettose.actionPackage.ExecuteProgramActionCreator;
 import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
@@ -170,6 +173,14 @@ public class RuleManagerProxy implements RuleManager {
             case "Delete File":
                 ActionCreator deleteFileAC = new DeleteFileActionCreator(Paths.get(column[i++]));
                 return deleteFileAC.createAction();
+            case "Execute Program":
+                int n = Integer.parseInt(column[i++]);
+                List<String> execProgList = new ArrayList<>();
+                for(int j = 0; j<n;j++){
+                    execProgList.add(column[i++]);
+                }
+                ActionCreator executeProgramAC = new ExecuteProgramActionCreator(execProgList);
+                return executeProgramAC.createAction();
             case "Append String to Textfile":
                 ActionCreator appendFileAC = new FileAppenderActionCreator(Paths.get(column[i++]), column[i++]);
                 return appendFileAC.createAction();
