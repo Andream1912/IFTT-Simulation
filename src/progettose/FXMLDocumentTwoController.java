@@ -1,5 +1,8 @@
 package progettose;
 
+import rulePackage.FireOnceRule;
+import rulePackage.Rule;
+import rulePackage.SleepingTimeRule;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
@@ -16,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -160,7 +164,7 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private Spinner<Integer> minuteSleepingTimeSpinner;
     @FXML
-    private Spinner<Integer> hourSleepingTimeSpinner; 
+    private Spinner<Integer> hourSleepingTimeSpinner;
     @FXML
     private Spinner<Integer> daySleepingTimeSpinner;
     @FXML
@@ -173,7 +177,7 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label fileToAppendLabel;
     @FXML
     private Label execProgramActionLabel;
-    
+
     private Path selectedFileForDimension;
     private FXMLDocumentController controllerOne;
     private Path selectedFilePath;
@@ -182,7 +186,6 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
     private Path selectedAppendFile;
-
 
     /**
      * Initializes the controller class.
@@ -205,7 +208,6 @@ public class FXMLDocumentTwoController implements Initializable {
                 "Append String to Textfile"*/, "Move File"/*,
                  */, "Copy File", "Delete File",
                 "Execute Program");
-
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
         dayOfWeekComboBox.setItems(dayOfWeekList);
@@ -260,17 +262,16 @@ public class FXMLDocumentTwoController implements Initializable {
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
         exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
         labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
-        
+
         fireSleepingTimeCheckBox.disableProperty().bind(fireOnceCheckBox.selectedProperty());
         fireOnceCheckBox.disableProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
-        
+
         minuteSleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         hourSleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         daySleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         minuteSleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         hourSleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         daySleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
-        
 
         // Set initial visibility properties for UI elements based on trigger and action selection
         // ... (set visibility properties based on triggerComboBox and actionComboBox values)
@@ -404,20 +405,28 @@ public class FXMLDocumentTwoController implements Initializable {
         Rule r;
         //When copyFileAction is selected, onSave the action is created from the different input fields
         // Create a Rule using the created Trigger and Action
-        if(fireSleepingTimeCheckBox.selectedProperty().getValue())
-            r = new SleepingTimeRule(ruleNameTextField.textProperty().getValue(), action, trigger, daySleepingTimeSpinner.valueProperty().getValue(), hourSleepingTimeSpinner.valueProperty().getValue(), minuteSleepingTimeSpinner.valueProperty().getValue());
-        else
-            r = new FireOnceRule(ruleNameTextField.textProperty().getValue(), action, trigger);
-        //else
+        if (controllerOne.checkNameRule(ruleNameTextField.textProperty().getValue())) {
+            if (fireSleepingTimeCheckBox.selectedProperty().getValue()) {
+                r = new SleepingTimeRule(ruleNameTextField.textProperty().getValue(), action, trigger, daySleepingTimeSpinner.valueProperty().getValue(), hourSleepingTimeSpinner.valueProperty().getValue(), minuteSleepingTimeSpinner.valueProperty().getValue());
+            } else {
+                r = new FireOnceRule(ruleNameTextField.textProperty().getValue(), action, trigger);
+            }
+            //else
             //rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
 
-        // Add the created rule to the ObservableList in the first controller
-        controllerOne.addRuleToObsList(r);
+            // Add the created rule to the ObservableList in the first controller
+            controllerOne.addRuleToObsList(r);
 
-        // Close the current stage (window)
-        Stage currentStage = (Stage) saveButton.getScene().getWindow();
+            // Close the current stage (window)
+            Stage currentStage = (Stage) saveButton.getScene().getWindow();
 
-        currentStage.close();
+            currentStage.close();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("OK");
+            alert.setContentText("The name exists already!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -521,6 +530,8 @@ public class FXMLDocumentTwoController implements Initializable {
         // ... (reset UI elements based on actionComboBox selection)
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
         fileToAppendLabel.visibleProperty().setValue(Boolean.FALSE);
+        exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
+        execProgramActionLabel.visibleProperty().setValue(Boolean.FALSE);
 
     }
 
@@ -567,15 +578,14 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private void onExecProgButton(ActionEvent event) {
         Stage primaryStage = (Stage) execProgButton.getScene().getWindow();
-        
+
         //Setting the FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select the program to execute:");
-        
+
         //Setting the filter for exe files
         FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*");
         fileChooser.getExtensionFilters().add(exeFilter);
-        
         //Showing FileChooser and getting file path
         File selectedProgram = fileChooser.showOpenDialog(primaryStage);
         if (selectedProgram != null) {
@@ -617,10 +627,9 @@ public class FXMLDocumentTwoController implements Initializable {
         }
     }
 
-
     @FXML
     private void onFileDimensionCheck(KeyEvent event) {
-        if (!(event.getCharacter()).matches("^\\d*")){
+        if (!(event.getCharacter()).matches("^\\d*")) {
             event.consume();
         }
     }

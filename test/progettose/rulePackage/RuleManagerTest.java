@@ -10,8 +10,8 @@ import javafx.collections.ObservableList;
 import org.junit.After;
 
 import progettose.ConcreteRuleManager;
-import progettose.Rule;
-import progettose.RuleManagerProxy;
+import rulePackage.Rule;
+import rulePackage.RuleManagerProxy;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageActionCreator;
 import progettose.triggerPackage.TimeTriggerCreator;

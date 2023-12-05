@@ -1,4 +1,4 @@
-package progettose;
+package rulePackage;
 
 import java.util.Observable;
 import progettose.actionPackage.Action;

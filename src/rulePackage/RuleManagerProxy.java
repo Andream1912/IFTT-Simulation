@@ -1,4 +1,4 @@
-package progettose;
+package rulePackage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
+import progettose.ConcreteRuleManager;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
@@ -120,9 +121,10 @@ public class RuleManagerProxy implements RuleManager {
         // Writes rules from the ConcreteRuleManager to a CSV file.
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(directoryProject, false))) {
             for (Rule r : this.getRules()) {
-                writer.write(r.getClass().getSimpleName() +";"+r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV());
-                if(r instanceof SleepingTimeRule)
-                    writer.write(";"+((SleepingTimeRule) r).getNumDays()+";"+((SleepingTimeRule) r).getNumHours()+";"+((SleepingTimeRule) r).getNumMinutes()+";"+((SleepingTimeRule) r).getLastTimeFired());
+                writer.write(r.getClass().getSimpleName() + ";" + r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV());
+                if (r instanceof SleepingTimeRule) {
+                    writer.write(";" + ((SleepingTimeRule) r).getNumDays() + ";" + ((SleepingTimeRule) r).getNumHours() + ";" + ((SleepingTimeRule) r).getNumMinutes() + ";" + ((SleepingTimeRule) r).getLastTimeFired());
+                }
                 writer.write(";" + r.isActive());
                 writer.newLine();
             }
@@ -176,7 +178,7 @@ public class RuleManagerProxy implements RuleManager {
             case "Execute Program":
                 int n = Integer.parseInt(column[i++]);
                 List<String> execProgList = new ArrayList<>();
-                for(int j = 0; j<n;j++){
+                for (int j = 0; j < n; j++) {
                     execProgList.add(column[i++]);
                 }
                 ActionCreator executeProgramAC = new ExecuteProgramActionCreator(execProgList);
@@ -207,7 +209,7 @@ public class RuleManagerProxy implements RuleManager {
                     Trigger trigger = checkTrigger(nameTrigger, column);
                     String nameAction = column[i++];
                     Action action = checkAction(nameAction, column);
-                    if(ruleType.equals("FireOnceRule")){
+                    if (ruleType.equals("FireOnceRule")) {
                         r = new FireOnceRule(ruleName, action, trigger);
                     } else {
                         r = new SleepingTimeRule(ruleName, action, trigger, Integer.parseInt(column[i++]), Integer.parseInt(column[i++]), Integer.parseInt(column[i++]));
@@ -235,7 +237,7 @@ public class RuleManagerProxy implements RuleManager {
             tb.refresh();
         }, 0, 3, TimeUnit.SECONDS);
     }
-    
+
     public void fireRule(Rule r) {
         r.getAction().execute();
         try {
@@ -244,7 +246,7 @@ public class RuleManagerProxy implements RuleManager {
             Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void shutdownScheduler() {
         //Use it everytime a scheduler is created
         scheduler.shutdown();

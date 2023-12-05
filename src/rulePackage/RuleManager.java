@@ -1,4 +1,4 @@
-package progettose;
+package rulePackage;
 
 import javafx.collections.ObservableList;
 

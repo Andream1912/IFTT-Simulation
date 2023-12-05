@@ -1,4 +1,4 @@
-package progettose;
+package rulePackage;
 
 import java.time.LocalDateTime;
 import progettose.actionPackage.Action;
