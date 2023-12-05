@@ -1,5 +1,7 @@
 package progettose;
 
+import rulePackage.Rule;
+import rulePackage.RuleManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

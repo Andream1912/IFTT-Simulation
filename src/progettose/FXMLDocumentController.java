@@ -1,5 +1,8 @@
 package progettose;
 
+import rulePackage.Rule;
+import rulePackage.RuleState;
+import rulePackage.RuleManagerProxy;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,7 +49,6 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableColumn<Rule, String> typeColumn;
     private RuleManagerProxy rmp;
-    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -73,7 +75,7 @@ public class FXMLDocumentController implements Initializable {
         removeRuleButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
         toggleStateButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
 
-        rmp.periodicCheck(tableView);      
+        rmp.periodicCheck(tableView);
 
     }
 
@@ -135,6 +137,15 @@ public class FXMLDocumentController implements Initializable {
 
     public void endThread() {
         RuleManagerProxy.shutdownScheduler();
+    }
+
+    public boolean checkNameRule(String s) {
+        for (Rule r : rmp.getRules()) {
+            if (r.getName().equals(s)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @FXML

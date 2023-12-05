@@ -4,12 +4,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import progettose.FireOnceRule;
-import progettose.Rule;
-
-import progettose.RuleStateActive;
-import progettose.RuleStateInactive;
-import progettose.SleepingTimeRule;
+import rulePackage.FireOnceRule;
+import rulePackage.Rule;
+import rulePackage.RuleStateActive;
+import rulePackage.RuleStateInactive;
+import rulePackage.SleepingTimeRule;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageAction;
 import progettose.actionPackage.ShowMessageActionCreator;

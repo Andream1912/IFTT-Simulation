@@ -1,16 +1,16 @@
-package progettose;
+package rulePackage;
 
 import progettose.triggerPackage.Trigger;
 
-public class RuleStateActive implements RuleState {
+public class RuleStateInactive implements RuleState{
 
     @Override
     public boolean checkTrigger(Trigger t) {
-        return t.evaluate();
+        return false;
     }
     
     @Override 
     public String toString(){
-        return "Active";
+        return "Inactive";
     }
 }
