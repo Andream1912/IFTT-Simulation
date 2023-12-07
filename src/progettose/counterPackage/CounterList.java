@@ -63,6 +63,15 @@ public class CounterList {
         saveToFile();
     }
 
+    public void updateKeyName(String oldKey, String newKey) {
+        // Updates the key of a key-value pair.
+        if (hashCount.containsKey(oldKey)) {
+            int value = hashCount.remove(oldKey);
+            hashCount.put(newKey, value);
+            saveToFile();
+        }
+    }
+
     private void saveToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             for (HashMap.Entry<String, Integer> entry : hashCount.entrySet()) {
