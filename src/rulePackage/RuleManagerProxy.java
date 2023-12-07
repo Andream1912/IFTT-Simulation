@@ -32,6 +32,7 @@ import progettose.actionPackage.ShowMessageActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
+import progettose.triggerPackage.ExecuteProgramTriggerCreator;
 import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
@@ -150,6 +151,14 @@ public class RuleManagerProxy implements RuleManager {
             case "File Dimension Verification":
                 TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(Paths.get(column[i++]), Long.parseLong(column[i++]), column[i++]);
                 return fileDimensionTC.createTrigger();
+            case "Program Exit Status Verification":
+                int n = Integer.parseInt(column[i++]);
+                List<String> execProgList = new ArrayList<>();
+                for (int j = 0; j < n; j++) {
+                    execProgList.add(column[i++]);
+                }
+                TriggerCreator executeProgramAC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(column[i++]));
+                return executeProgramAC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;

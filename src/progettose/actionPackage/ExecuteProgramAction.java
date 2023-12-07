@@ -70,7 +70,8 @@ public class ExecuteProgramAction implements Action {
             } else {
                 Alert fileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
                 fileNotFoundAlert.setTitle("Error");
-                fileNotFoundAlert.setHeaderText("File not found");
+                fileNotFoundAlert.setHeaderText("File '" + 
+                        Paths.get(this.commandList.get(0)).getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
         });

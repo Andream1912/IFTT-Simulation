@@ -135,7 +135,7 @@ public class MoveFileAction implements Action {
             else {
                 Alert fileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
                 fileNotFoundAlert.setTitle("Error");
-                fileNotFoundAlert.setHeaderText("File not found");
+                fileNotFoundAlert.setHeaderText("File '" + this.filePath.getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
         });

@@ -46,6 +46,7 @@ import progettose.actionPackage.MoveFileActionCreator;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
+import progettose.triggerPackage.ExecuteProgramTriggerCreator;
 import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
 import progettose.triggerPackage.FileCheckTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
@@ -177,6 +178,10 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label fileToAppendLabel;
     @FXML
     private Label execProgramActionLabel;
+    @FXML
+    private TextField insertExitValueTextField;
+    @FXML
+    private Label insertExitValueLabel;
 
     private Path selectedFileForDimension;
     private FXMLDocumentController controllerOne;
@@ -186,6 +191,8 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
     private Path selectedAppendFile;
+    @FXML
+    private Label exitValueProgramLabel;
 
     /**
      * Initializes the controller class.
@@ -198,8 +205,8 @@ public class FXMLDocumentTwoController implements Initializable {
         triggerComboBox.setItems(triggerList);
         triggerList.addAll("Time", "Day of Week", "Day of Month",
                 "Date",
-                "File Existance Verification", "File Dimension Verification" /*,
-                "Program Exit Status Verification"*/);
+                "File Existance Verification", "File Dimension Verification",
+                "Program Exit Status Verification");
 
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
@@ -244,7 +251,8 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(datePicker.valueProperty().isNull())
                 .and((exFileTextField.textProperty().isEmpty()).or(exFileDirectoryLabel.visibleProperty().not()))
                 .and((fileDimensionTextField.textProperty().isEmpty()).or(labelDimensionFile.visibleProperty().not()))
-                //.and((execProgramTextField.textProperty().isEmpty()).or())
+                .and((execProgramTextField.textProperty().isEmpty()).or(exitValueProgramLabel.visibleProperty().not()))
+                .and(insertExitValueTextField.textProperty().isEmpty())
                 .or(triggerComboBox.valueProperty().isNull()))
                 .or(
                         (showMessageTextArea.textProperty().isEmpty())
@@ -253,6 +261,7 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
                                 .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
                                 .and((execArgumentsTextField.textProperty().isEmpty()).or(execProgramActionLabel.visibleProperty().not()))
+                                .and((insertExitValueTextField.textProperty().isEmpty()))
                                 .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty())
                 .or(fireSleepingTimeCheckBox.selectedProperty().not()
@@ -294,6 +303,8 @@ public class FXMLDocumentTwoController implements Initializable {
         fileDimensionLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
         execProgramLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
         typeDimensionComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
+        insertExitValueLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
+        insertExitValueTextField.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
 
         showMessageTextArea.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Show Message"));
         playAudioButton.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Play Audio"));
@@ -356,6 +367,12 @@ public class FXMLDocumentTwoController implements Initializable {
             case "File Existance Verification":
                 TriggerCreator fileExTC = new FileCheckTriggerCreator(selectedExFile.toString(), exFileTextField.getText());
                 return fileExTC.createTrigger();
+            case "Program Exit Status Verification":
+                List<String> execProgList = new ArrayList<>();
+                execProgList.add(selectedExFile.toString());
+                execProgList.addAll(Arrays.asList(execProgramTextField.getText().split(" ")));
+                TriggerCreator execProgTC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(insertExitValueTextField.getText()));
+                return execProgTC.createTrigger();
             default:
                 System.out.println("Not valid Trigger");
                 return null;
@@ -504,6 +521,9 @@ public class FXMLDocumentTwoController implements Initializable {
         execProgramTextField.textProperty().setValue(null);
         labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
         fileDimensionTextField.textProperty().setValue(null);
+        insertExitValueLabel.visibleProperty().setValue(Boolean.FALSE);
+        insertExitValueTextField.textProperty().setValue(null);
+        exitValueProgramLabel.visibleProperty().setValue(Boolean.FALSE);
 
     }
 
@@ -583,7 +603,7 @@ public class FXMLDocumentTwoController implements Initializable {
         fileChooser.setTitle("Select the program to execute:");
 
         //Setting the filter for exe files
-        FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*");
+        FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*", "*.jar");
         fileChooser.getExtensionFilters().add(exeFilter);
         //Showing FileChooser and getting file path
         File selectedProgram = fileChooser.showOpenDialog(primaryStage);
@@ -630,6 +650,27 @@ public class FXMLDocumentTwoController implements Initializable {
     private void onFileDimensionCheck(KeyEvent event) {
         if (!(event.getCharacter()).matches("^\\d*")) {
             event.consume();
+        }
+    }
+
+    @FXML
+    private void onExecProgramButton(ActionEvent event) {
+        Stage primaryStage = (Stage) execProgramButton.getScene().getWindow();
+
+        //Setting the FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select the program to execute:");
+
+        //Setting the filter for exe files
+        FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*", "*.jar");
+        fileChooser.getExtensionFilters().add(exeFilter);
+        //Showing FileChooser and getting file path
+        File selectedProgram = fileChooser.showOpenDialog(primaryStage);
+        if (selectedProgram != null) {
+            selectedExFile = selectedProgram.toPath();
+            //Add execProgLabel here
+            exitValueProgramLabel.textProperty().setValue(selectedExFile.getFileName().toString());
+            exitValueProgramLabel.visibleProperty().setValue(Boolean.TRUE);
         }
     }
 }

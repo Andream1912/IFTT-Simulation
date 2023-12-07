@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="645.0" prefWidth="891.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
+<AnchorPane id="AnchorPane" prefHeight="645.0" prefWidth="891.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentTwoController">
    <children>
       <Label layoutX="24.0" layoutY="28.0" text="Create new rule">
          <font>
@@ -62,7 +62,7 @@
       <Button fx:id="exFileButton" layoutX="619.0" layoutY="212.0" mnemonicParsing="false" onAction="#onExFileButton" text="Choose directory" />
       <TextField fx:id="fileDimensionTextField" layoutX="598.0" layoutY="212.0" onKeyTyped="#onFileDimensionCheck" />
       <Button fx:id="fileDimensionButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" onAction="#onFileDimensionButton" text="Choose file" />
-      <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" text="Choose file" />
+      <Button fx:id="execProgramButton" layoutX="436.0" layoutY="212.0" mnemonicParsing="false" onAction="#onExecProgramButton" text="Choose file" />
       <TextField fx:id="execProgramTextField" layoutX="598.0" layoutY="212.0" />
       <ComboBox fx:id="dayOfMonthComboBox" layoutX="497.0" layoutY="212.0" prefWidth="150.0" />
       <ComboBox fx:id="dayOfWeekComboBox" layoutX="497.0" layoutY="212.0" prefWidth="150.0" />
@@ -74,7 +74,7 @@
       <Label fx:id="dayOfMonthLabel" layoutX="510.0" layoutY="192.0" text="Choose a day of month" />
       <Label fx:id="exFileLabel" layoutX="429.0" layoutY="192.0" text="Insert a filename" />
       <Label fx:id="fileDimensionLabel" layoutX="590.0" layoutY="192.0" text="Insert a file dimension" />
-      <Label fx:id="execProgramLabel" layoutX="611.0" layoutY="192.0" text="Insert a program name" />
+      <Label fx:id="execProgramLabel" layoutX="611.0" layoutY="192.0" text="Insert in-line arguments" />
       <ComboBox fx:id="triggerComboBox" layoutX="59.0" layoutY="212.0" onAction="#onChangeTrigger" prefHeight="25.0" prefWidth="216.0" />
       <Label layoutX="59.0" layoutY="182.0" text="Select the Trigger">
          <font>
@@ -103,5 +103,8 @@
       <Label fx:id="minuteSleepingTimeLabel" layoutX="310.0" layoutY="579.0" text="Minutes:" />
       <Label fx:id="fileToAppendLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="441.0" layoutY="388.0" prefHeight="20.0" prefWidth="59.0" text="Label" textAlignment="CENTER" visible="false" />
       <Label fx:id="execProgramActionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="407.0" layoutY="396.0" prefHeight="17.0" prefWidth="138.0" text="Label" textAlignment="CENTER" visible="false" />
+      <TextField fx:id="insertExitValueTextField" layoutX="708.0" layoutY="272.0" prefHeight="26.0" prefWidth="91.0" />
+      <Label fx:id="insertExitValueLabel" layoutX="709.0" layoutY="253.0" prefHeight="17.0" prefWidth="100.0" text="Insert exit value:" />
+      <Label fx:id="exitValueProgramLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="424.0" layoutY="244.0" prefHeight="17.0" prefWidth="100.0" textAlignment="CENTER" visible="false" />
    </children>
 </AnchorPane>
