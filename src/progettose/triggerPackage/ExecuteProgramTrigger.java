@@ -1,5 +1,6 @@
 package progettose.triggerPackage;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,14 +22,14 @@ public class ExecuteProgramTrigger implements Trigger {
     }
 
     //Getter and setter for userValue
-    public int getUserValue(){
+    public int getUserValue() {
         return this.userValue;
     }
-    
-    public void setUserValue(int n){
+
+    public void setUserValue(int n) {
         this.userValue = n;
     }
-    
+
     //Getter for commandList
     public List<String> getCommandList() {
         return this.commandList;
@@ -71,7 +72,7 @@ public class ExecuteProgramTrigger implements Trigger {
                 Process processFile = executeFile.start();
                 int exitCode = processFile.waitFor();
                 return exitCode == this.userValue;
-            } catch (Exception e) {
+            } catch (IOException | InterruptedException e) {
                 System.out.println("Error during file execution: " + e.getMessage());
             }
         }

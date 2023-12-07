@@ -5,7 +5,7 @@ import java.nio.file.Path;
 public class DeleteFileActionCreator extends ActionCreator{
     
     //Path for DeleteFileAction
-    private Path filePath;
+    private final Path filePath;
     
     //Constructor for DeleteFileActionCreator
     public DeleteFileActionCreator(Path filePath){

@@ -31,10 +31,6 @@ public class ExecuteProgramAction implements Action {
         this.commandList.add(command);
     }
 
-    public void removeCommand(String command) {
-        this.commandList.remove(command);
-    }
-
     @Override
     public String toString() {
 

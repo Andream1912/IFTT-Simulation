@@ -5,8 +5,8 @@ import java.nio.file.Path;
 public class CopyFileActionCreator extends ActionCreator{
     
     //Paths for CopyFileAction
-    private Path filePath;
-    private Path copyPath;
+    private final Path filePath;
+    private final Path copyPath;
     
     //Costructor of the CopyFileActionCreator
     public CopyFileActionCreator(Path filePath, Path copyPath){

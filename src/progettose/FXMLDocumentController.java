@@ -1,9 +1,9 @@
 package progettose;
 
-import counterPackage.CounterList;
-import rulePackage.Rule;
-import rulePackage.RuleState;
-import rulePackage.RuleManagerProxy;
+import progettose.counterPackage.CounterList;
+import progettose.rulePackage.Rule;
+import progettose.rulePackage.RuleState;
+import progettose.rulePackage.RuleManagerProxy;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -30,12 +30,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 
@@ -119,20 +121,73 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void configureTWColumns() {
+        // Creating key and value columns for the tW table
         TableColumn<Map.Entry<String, Integer>, String> keyColumn = new TableColumn<>("Name");
         TableColumn<Map.Entry<String, Integer>, Integer> valueColumn = new TableColumn<>("Value");
 
+        // Making columns non-resizable
         keyColumn.resizableProperty().setValue(Boolean.FALSE);
         valueColumn.resizableProperty().setValue(Boolean.FALSE);
 
-        keyColumn.setCellValueFactory(entry -> new SimpleStringProperty(entry.getValue().getKey()));
-        valueColumn.setCellValueFactory(entry -> new SimpleIntegerProperty(entry.getValue().getValue()).asObject());
+        // Enabling table editing
+        tW.setEditable(true);
 
+        // Configuring the "Name" column cell to be editable
+        keyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        keyColumn.setOnEditCommit(event -> handleKeyColumnEditCommit(event));
+
+        // Configuring the "Value" column cell to be editable
+        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        try {
+            valueColumn.setOnEditCommit(event -> handleValueColumnEditCommit(event));
+            keyColumn.setCellValueFactory(entry -> new SimpleStringProperty(entry.getValue().getKey()));
+            valueColumn.setCellValueFactory(entry -> new SimpleIntegerProperty(entry.getValue().getValue()).asObject());
+        } catch (NumberFormatException e) {
+            // Handling potential NumberFormatException and printing the error
+            System.out.println(e);
+        }
+
+        // Setting minimum and maximum width for columns
         keyColumn.setMinWidth(125);
         keyColumn.setMaxWidth(136);
         valueColumn.setMaxWidth(60);
 
+        // Setting the columns for the tW table
         tW.getColumns().setAll(keyColumn, valueColumn);
+    }
+
+// Handles the event of editing the "Name" column.
+    private void handleKeyColumnEditCommit(TableColumn.CellEditEvent<Map.Entry<String, Integer>, String> event) {
+        // Retrieves the Map.Entry associated with the edited cell.
+        Map.Entry<String, Integer> entry = event.getRowValue();
+        // Obtains the new value entered for the "Name" column.
+        String newKey = event.getNewValue();
+        // Calls the updateKeyName method in the CounterList class to update the key.
+        counter.updateKeyName(entry.getKey(), newKey);
+        // Updates the TableView with the modified data.
+        updateTWTableWithData();
+    }
+
+// Handle the event of editing the "Value" column
+    private void handleValueColumnEditCommit(TableColumn.CellEditEvent<Map.Entry<String, Integer>, Integer> event) {
+        Map.Entry<String, Integer> entry = event.getRowValue();
+        Integer newValue = event.getNewValue();
+
+        // Check if newValue is an instance of Integer
+        if (newValue instanceof Integer) {
+            // Update the counter value
+            counter.setValue(entry.getKey(), newValue);
+            updateTWTableWithData();
+        } else {
+            // Display an error alert and revert to the previous value
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Value");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter a valid number for the 'Value' column.");
+            alert.showAndWait();
+            counter.setValue(entry.getKey(), entry.getValue());
+            tW.refresh();
+        }
     }
 
     private void createTWContextMenu() {
@@ -153,7 +208,7 @@ public class FXMLDocumentController implements Initializable {
     private void handleDeleteMenuItemTW() {
         Map.Entry<String, Integer> selectedItem = tW.getSelectionModel().getSelectedItem();
         tW.getItems().remove(selectedItem);
-        counter.removeValue(selectedItem.getKey());
+        counter.removeCounter(selectedItem.getKey());
     }
 
     private void handleAddMenuItemTW() {
@@ -182,7 +237,7 @@ public class FXMLDocumentController implements Initializable {
         valueResult.ifPresent(v -> {
             try {
                 int itemValue = Integer.parseInt(v);
-                counter.addValue(name, itemValue);
+                counter.addCounter(name, itemValue);
 
                 // Update the TableView
                 ObservableList<Map.Entry<String, Integer>> items = FXCollections.observableArrayList(counter.getHashMap().entrySet());

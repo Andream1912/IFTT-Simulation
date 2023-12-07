@@ -9,9 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.After;
 
-import progettose.ConcreteRuleManager;
-import rulePackage.Rule;
-import rulePackage.RuleManagerProxy;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ShowMessageActionCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
@@ -141,7 +138,7 @@ public class RuleManagerTest {
         }
 
     }
-    
+
     @Test
     public void ruleManagerActivateAndDeactivateRule() {
         RuleManagerProxy ruleManager = RuleManagerProxy.getInstance();

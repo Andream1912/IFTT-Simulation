@@ -1,22 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package progettose.triggerPackage;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author manue
- */
-public class DayOfMonthTrigger implements Trigger{
-     private int day;
-     private String type;
-    
+public class DayOfMonthTrigger implements Trigger {
+
+    private int day;
+    private String type;
+
     public DayOfMonthTrigger(int day) {
-        this.day=day;
-        this.type="Day of Month";
+        this.day = day;
+        this.type = "Day of Month";
     }
 
     public int getDay() {
@@ -30,9 +23,9 @@ public class DayOfMonthTrigger implements Trigger{
     @Override
     public boolean evaluate() {
         int currentDay = LocalDate.now().getDayOfMonth();
-        return day==currentDay;
+        return day == currentDay;
     }
-    
+
     @Override
     public String toString() {
         return "On " + day;
@@ -42,10 +35,10 @@ public class DayOfMonthTrigger implements Trigger{
     public String getType() {
         return this.type;
     }
-    
+
     @Override
     public String getToCSV() {
         return Integer.toString(this.day);
     }
-    
-}   
+
+}

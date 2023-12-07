@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class DateTriggerCreator extends TriggerCreator {
 
-    private LocalDate date;
+    private final LocalDate date;
 
     public DateTriggerCreator(LocalDate date) {
         this.date = date;

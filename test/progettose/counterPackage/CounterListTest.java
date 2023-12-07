@@ -1,18 +1,17 @@
-package Counters;
+package progettose.counterPackage;
 
-import counterPackage.CounterList;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
-public class CounterTest {
-
+public class CounterListTest {
     // The original file for testing
+
     static File testFile = new File(System.getProperty("user.dir") + "/counter.csv");
 
     // Backup copy of the original file
@@ -31,7 +30,7 @@ public class CounterTest {
                 testFile.delete();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error SETUP CounterList");
         }
     }
 
@@ -42,16 +41,16 @@ public class CounterTest {
 
         // Performs some operations
         counter.increment("A");
-        counter.addValue("B", 5);
+        counter.addCounter("B", 5);
         counter.setValue("C", 10);
 
         // Creates a new instance of Counter to simulate a fresh application start
         CounterList newCounter = new CounterList();
 
         // Checks that the data has been correctly loaded, and the operations have taken place
-        assertEquals(1, newCounter.getCount("A"));
-        assertEquals(5, newCounter.getCount("B"));
-        assertEquals(10, newCounter.getCount("C"));
+        assertEquals(1, newCounter.getCounter("A"));
+        assertEquals(5, newCounter.getCounter("B"));
+        assertEquals(10, newCounter.getCounter("C"));
     }
 
     @Test
@@ -67,15 +66,15 @@ public class CounterTest {
         CounterList newCounter = new CounterList();
 
         // Checks that the data has been correctly loaded, and the increments have occurred
-        assertEquals(2, newCounter.getCount("Key1"));
-        assertEquals(1, newCounter.getCount("Key2"));
-        assertEquals(0, newCounter.getCount("Key3")); // Key not present, should be 0
+        assertEquals(2, newCounter.getCounter("Key1"));
+        assertEquals(1, newCounter.getCounter("Key2"));
+        assertEquals(0, newCounter.getCounter("Key3")); // Key not present, should be 0
     }
 
     @Test
     public void testAddValueAndSetValue() {
         CounterList counter = new CounterList(); // Performs some add and set operations
-        counter.addValue("A", 5);
+        counter.addCounter("A", 5);
         counter.setValue("B", 10);
         counter.setValue("C", 15);
 
@@ -83,9 +82,9 @@ public class CounterTest {
         CounterList newCounter = new CounterList();
 
         // Checks that the data has been correctly loaded, and the values added/set are correct
-        assertEquals(5, newCounter.getCount("A"));
-        assertEquals(10, newCounter.getCount("B"));
-        assertEquals(15, newCounter.getCount("C"));
+        assertEquals(5, newCounter.getCounter("A"));
+        assertEquals(10, newCounter.getCounter("B"));
+        assertEquals(15, newCounter.getCounter("C"));
     }
 
     @AfterClass
