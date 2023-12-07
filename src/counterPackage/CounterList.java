@@ -52,6 +52,11 @@ public class CounterList {
         saveToFile();
     }
 
+    public void removeValue(String key) {
+        this.hashCount.remove(key);
+        saveToFile();
+    }
+
     public void setValue(String key, int value) {
         // Sets the specified value for the given key.
         hashCount.put(key, value);
