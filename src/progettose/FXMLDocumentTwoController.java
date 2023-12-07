@@ -1,8 +1,8 @@
 package progettose;
 
-import rulePackage.FireOnceRule;
-import rulePackage.Rule;
-import rulePackage.SleepingTimeRule;
+import progettose.rulePackage.FireOnceRule;
+import progettose.rulePackage.Rule;
+import progettose.rulePackage.SleepingTimeRule;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
@@ -182,6 +182,8 @@ public class FXMLDocumentTwoController implements Initializable {
     private TextField insertExitValueTextField;
     @FXML
     private Label insertExitValueLabel;
+    @FXML
+    private Label exitValueProgramLabel;
 
     private Path selectedFileForDimension;
     private FXMLDocumentController controllerOne;
@@ -191,8 +193,6 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
     private Path selectedAppendFile;
-    @FXML
-    private Label exitValueProgramLabel;
 
     /**
      * Initializes the controller class.
@@ -211,9 +211,9 @@ public class FXMLDocumentTwoController implements Initializable {
         ObservableList<String> actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
 
-        actionList.addAll("Show Message", "Play Audio"/*,
-                "Append String to Textfile"*/, "Move File"/*,
-                 */, "Copy File", "Delete File",
+        actionList.addAll("Show Message", "Play Audio",
+                "Append String to Textfile", "Move File",
+                "Copy File", "Delete File",
                 "Execute Program");
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
@@ -341,7 +341,7 @@ public class FXMLDocumentTwoController implements Initializable {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
 
-                // Disabilita le date precedenti a oggi
+                // Disable dates that have already passed
                 setDisable(date.isBefore(LocalDate.now()));
             }
         });
@@ -381,7 +381,7 @@ public class FXMLDocumentTwoController implements Initializable {
 
     private Action checkAction(String s) {
         switch (s) {
-            case "Play Audio": //* Da cambiare con il rispettivo nome
+            case "Play Audio":
                 ActionCreator playAudioAC = new PlayAudioActionCreator(selectedFilePath);
                 return playAudioAC.createAction();
 
@@ -549,9 +549,12 @@ public class FXMLDocumentTwoController implements Initializable {
         // Reset UI elements based on action selection
         // ... (reset UI elements based on actionComboBox selection)
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
-        exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
         execProgramActionLabel.visibleProperty().setValue(Boolean.FALSE);
-
+        labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
+        fileToAppendLabel.visibleProperty().setValue(Boolean.FALSE);
+        deleteFileLabel.visibleProperty().setValue(Boolean.FALSE);
+        selectedDestinationDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
+        selectedSourceDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
     }
 
     public void setControllerOne(FXMLDocumentController controllerOne) {

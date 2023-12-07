@@ -1,4 +1,4 @@
-package rulePackage;
+package progettose.rulePackage;
 
 import progettose.triggerPackage.Trigger;
 

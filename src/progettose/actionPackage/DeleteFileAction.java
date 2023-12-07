@@ -2,14 +2,13 @@ package progettose.actionPackage;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 public class DeleteFileAction implements Action {
 
     //Path for DeleteFileAction
-    private Path filePath;
+    private final Path filePath;
     //Defining type for action
     private final String type;
 
@@ -24,10 +23,6 @@ public class DeleteFileAction implements Action {
         return this.filePath;
     }
 
-    public void setFilePath(Path path) {
-        this.filePath = path;
-    }
-
     //ToString for DeleteFileAction
     @Override
     public String toString() {
@@ -35,6 +30,7 @@ public class DeleteFileAction implements Action {
     }
 
     //Implementing execute method from action
+    @Override
     public void execute() {
         Platform.runLater(() -> {
             //Check if file exists
@@ -61,7 +57,7 @@ public class DeleteFileAction implements Action {
 
     @Override
     public String getType() {
-        return "Delete File";
+        return this.type;
     }
 
     @Override

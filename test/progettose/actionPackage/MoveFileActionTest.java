@@ -34,29 +34,15 @@ public class MoveFileActionTest {
         assertEquals(movePath, ((MoveFileAction)moveFile).getMovePath());
     }
     
-    //Test for getters and setters
+    //Test for getters
     @Test
     public void testGetFilePath(){
         assertEquals(filePath, action.getFilePath());
     }
     
     @Test
-    public void testSetFilePath(){
-        Path newFilePath = Paths.get("New/starting/file/directory");
-        action.setFilePath(newFilePath);
-        assertEquals(newFilePath, action.getFilePath());
-    }
-    
-    @Test
     public void testGetMovePath(){
         assertEquals(movePath, action.getMovePath());
-    }
-    
-    @Test
-    public void testSetMovePath(){
-        Path newMovePath = Paths.get("New/starting/file/directory");
-        action.setMovePath(newMovePath);
-        assertEquals(newMovePath, action.getMovePath());
     }
     
     //Test MoveFileAction with null or empty paths

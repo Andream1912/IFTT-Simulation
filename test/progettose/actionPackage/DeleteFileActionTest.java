@@ -31,17 +31,10 @@ public class DeleteFileActionTest {
         assertEquals(filePath, ((DeleteFileAction) deleteFile).getFilePath());
     }
     
-    //Test for getter and setter
+    //Test for getter
     @Test
     public void testGetFilePath(){
         assertEquals(filePath, action.getFilePath());
-    }
-    
-    @Test
-    public void testSetFilePath(){
-        Path newFilePath = Paths.get("New/delete/file/directory");
-        action.setFilePath(newFilePath);
-        assertEquals(newFilePath, action.getFilePath());
     }
     
     //Test DeleteFileAction with null or empty paths

@@ -1,5 +1,6 @@
-package rulePackage;
+package progettose.rulePackage;
 
+import progettose.rulePackage.RuleState;
 import progettose.triggerPackage.Trigger;
 
 public class RuleStateActive implements RuleState {

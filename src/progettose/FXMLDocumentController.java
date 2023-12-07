@@ -1,9 +1,9 @@
 package progettose;
 
-import counterPackage.CounterList;
-import rulePackage.Rule;
-import rulePackage.RuleState;
-import rulePackage.RuleManagerProxy;
+import progettose.counterPackage.CounterList;
+import progettose.rulePackage.Rule;
+import progettose.rulePackage.RuleState;
+import progettose.rulePackage.RuleManagerProxy;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;

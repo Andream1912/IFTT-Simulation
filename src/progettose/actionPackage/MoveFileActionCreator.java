@@ -5,7 +5,7 @@ import java.nio.file.Path;
 public class MoveFileActionCreator extends ActionCreator{
     
     //Paths for MoveFileAction
-    private Path filePath;
+    private final Path filePath;
     private Path movePath;
     
     //Constructor for MoveFileActionCreator

@@ -34,29 +34,15 @@ public class CopyFileActionTest {
         assertEquals(copyPath, ((CopyFileAction)copyFile).getCopyPath());
     }
     
-    //Test for getters and setters
+    //Test for getters
     @Test
     public void testGetFilePath(){
         assertEquals(filePath, action.getFilePath());
     }
     
     @Test
-    public void testSetFilePath(){
-        Path newFilePath = Paths.get("New/starting/file/directory");
-        action.setFilePath(newFilePath);
-        assertEquals(newFilePath, action.getFilePath());
-    }
-    
-    @Test
     public void testGetCopyPath(){
         assertEquals(copyPath, action.getCopyPath());
-    }
-    
-    @Test
-    public void testSetCopyPath(){
-        Path newCopyPath = Paths.get("New/destination/file/directory");
-        action.setCopyPath(newCopyPath);
-        assertEquals(newCopyPath, action.getCopyPath());
     }
     
     //Test CopyFileAction with null or empty paths

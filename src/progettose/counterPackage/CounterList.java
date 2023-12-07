@@ -1,4 +1,4 @@
-package counterPackage;
+package progettose.counterPackage;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 public class MoveFileAction implements Action {
 
     //Paths for the file to be moved
-    private Path filePath;
+    private final Path filePath;
     private Path movePath;
     //Defining type for action
     private final String type;
@@ -29,16 +29,8 @@ public class MoveFileAction implements Action {
         return this.filePath;
     }
 
-    public void setFilePath(Path path) {
-        this.filePath = path;
-    }
-
     public Path getMovePath() {
         return this.movePath;
-    }
-
-    public void setMovePath(Path path) {
-        this.movePath = path;
     }
 
     //ToString for MoveFileAction
@@ -145,7 +137,7 @@ public class MoveFileAction implements Action {
     @Override
 
     public String getType() {
-        return "Move File";
+        return this.type;
     }
 
     @Override

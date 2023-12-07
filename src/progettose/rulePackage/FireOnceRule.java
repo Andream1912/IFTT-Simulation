@@ -1,6 +1,5 @@
-package rulePackage;
+package progettose.rulePackage;
 
-import rulePackage.Rule;
 import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 

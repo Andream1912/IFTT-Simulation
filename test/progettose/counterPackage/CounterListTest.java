@@ -1,18 +1,16 @@
-package Counters;
+package progettose.counterPackage;
 
-import counterPackage.CounterList;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
-public class CounterTest {
-
-    // The original file for testing
+public class CounterListTest {
+     // The original file for testing
     static File testFile = new File(System.getProperty("user.dir") + "/counter.csv");
 
     // Backup copy of the original file

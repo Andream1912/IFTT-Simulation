@@ -1,5 +1,6 @@
-package rulePackage;
+package progettose.rulePackage;
 
+import progettose.rulePackage.Rule;
 import java.time.LocalDateTime;
 import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;

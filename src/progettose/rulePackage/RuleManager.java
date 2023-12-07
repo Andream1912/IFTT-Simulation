@@ -1,5 +1,6 @@
-package rulePackage;
+package progettose.rulePackage;
 
+import progettose.rulePackage.Rule;
 import javafx.collections.ObservableList;
 
 public interface RuleManager {

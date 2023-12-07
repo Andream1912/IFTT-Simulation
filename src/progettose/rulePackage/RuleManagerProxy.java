@@ -1,4 +1,4 @@
-package rulePackage;
+package progettose.rulePackage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
-import progettose.ConcreteRuleManager;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
@@ -33,6 +32,7 @@ import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
 import progettose.triggerPackage.ExecuteProgramTriggerCreator;
+import progettose.triggerPackage.FileCheckTriggerCreator;
 import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
@@ -148,6 +148,9 @@ public class RuleManagerProxy implements RuleManager {
             case "Date":
                 TriggerCreator dateTC = new DateTriggerCreator(LocalDate.parse(column[i++]));
                 return dateTC.createTrigger();
+            case "File Existance Verification":
+                TriggerCreator fileCheckTC = new FileCheckTriggerCreator(column[i++], column[i++]);
+                return fileCheckTC.createTrigger();
             case "File Dimension Verification":
                 TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(Paths.get(column[i++]), Long.parseLong(column[i++]), column[i++]);
                 return fileDimensionTC.createTrigger();

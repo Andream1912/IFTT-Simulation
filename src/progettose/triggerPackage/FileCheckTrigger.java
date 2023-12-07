@@ -2,45 +2,37 @@ package progettose.triggerPackage;
 
 import java.io.File;
 
-
 public class FileCheckTrigger implements Trigger {
-    private String directoryPath;
-    private String fileName;
+
+    private final String directoryPath;
+    private final String fileName;
     private String type;
 
     public FileCheckTrigger(String directoryPath, String fileName) {
         this.directoryPath = directoryPath;
         this.fileName = fileName;
-        this.type="File Existance Verification";
+        this.type = "File Existance Verification";
     }
 
     public String getDirectoryPath() {
-        return directoryPath;
-    }
-
-    public void setDirectoryPath(String directoryPath) {
-        this.directoryPath = directoryPath;
+        return this.directoryPath;
     }
 
     public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+        return this.fileName;
     }
 
     @Override
     public boolean evaluate() {
-        File file = new File(directoryPath, fileName);
+        File file = new File(this.directoryPath, this.fileName);
         return file.exists() && file.isFile();
     }
 
     @Override
     public String toString() {
-        return "File: " + fileName + " in directory " + directoryPath;
+        return "File: " + this.fileName + " in directory " + this.directoryPath;
     }
-    
+
     @Override
     public String getType() {
         return this.type;
@@ -48,7 +40,7 @@ public class FileCheckTrigger implements Trigger {
 
     @Override
     public String getToCSV() {
-        return this.fileName+" "+this.directoryPath;
+        return this.directoryPath + ";" + this.fileName;
     }
-    
+
 }
