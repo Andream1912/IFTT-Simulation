@@ -10,7 +10,8 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 
 public class CounterListTest {
-     // The original file for testing
+    // The original file for testing
+
     static File testFile = new File(System.getProperty("user.dir") + "/counter.csv");
 
     // Backup copy of the original file
@@ -29,7 +30,7 @@ public class CounterListTest {
                 testFile.delete();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error SETUP CounterList");
         }
     }
 

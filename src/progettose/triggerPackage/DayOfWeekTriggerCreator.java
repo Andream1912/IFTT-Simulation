@@ -1,12 +1,9 @@
 package progettose.triggerPackage;
 
-/**
- *
- * @author manue
- */
-public class DayOfWeekTriggerCreator extends TriggerCreator{
+public class DayOfWeekTriggerCreator extends TriggerCreator {
+
     private String day;
-   
+
     public DayOfWeekTriggerCreator(String day) {
         this.day = day;
     }

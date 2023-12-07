@@ -13,7 +13,7 @@ import javafx.scene.media.MediaPlayer;
 public class PlayAudioAction implements Action {
 
     // The path to the audio file
-    public Path path;
+    private final Path path;
     private final String type;
 
     public PlayAudioAction(Path path) {
@@ -23,10 +23,6 @@ public class PlayAudioAction implements Action {
 
     public Path getPath() {
         return this.path;
-    }
-
-    public void setPath(Path path) {
-        this.path = path;
     }
 
     @Override

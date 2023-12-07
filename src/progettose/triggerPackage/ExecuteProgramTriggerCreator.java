@@ -7,7 +7,7 @@ public class ExecuteProgramTriggerCreator extends TriggerCreator {
 
     //Attributes for ExecuteProgramTriggerCreator
     private List<String> commandList = new ArrayList<>();
-    private int userValue;
+    private final int userValue;
 
     //Constructor for ExecuteProgramTriggerCreator
     public ExecuteProgramTriggerCreator(List<String> commandList, int userValue) {

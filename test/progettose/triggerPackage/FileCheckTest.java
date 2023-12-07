@@ -2,28 +2,30 @@ package progettose.triggerPackage;
 
 import org.junit.Test;
 import java.io.File;
+import java.io.IOException;
 import static org.junit.Assert.*;
 
 public class FileCheckTest {
+
     //change this variable for test dynamically
-    private String TestingDirectory= "";
-    
-   @Test
+    private final String TestingDirectory = "";
+
+    @Test
     public void testEvaluateFileExists() {
-    // Set up the FileCheckTrigger for an existing file
-    FileCheckTrigger trigger = new FileCheckTrigger(TestingDirectory, "existingFile.txt");
+        // Set up the FileCheckTrigger for an existing file
+        FileCheckTrigger trigger = new FileCheckTrigger(TestingDirectory, "existingFile.txt");
 
-    // Create the file for testing
-    File file = new File(TestingDirectory, "existingFile.txt");
-    try {
-        file.createNewFile();
-    } catch (Exception e) {
-        e.printStackTrace();
+        // Create the file for testing
+        File file = new File(TestingDirectory, "existingFile.txt");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("Problem test Evaluate File exists");
+        }
+
+        // Evaluate the trigger
+        assertTrue(trigger.evaluate());
     }
-
-    // Evaluate the trigger
-    assertTrue(trigger.evaluate());
-}
 
     @Test
     public void testEvaluateFileDoesNotExist() {
@@ -31,7 +33,6 @@ public class FileCheckTest {
         FileCheckTrigger trigger = new FileCheckTrigger(TestingDirectory, "nonExistingFile.txt");
 
         // Ensure the file does not exist
-
         // Evaluate the trigger
         assertFalse(trigger.evaluate());
     }
@@ -42,7 +43,7 @@ public class FileCheckTest {
         FileCheckTrigger trigger = new FileCheckTrigger(TestingDirectory, "example.txt");
 
         // Check the toString representation
-        assertEquals("File: example.txt in directory "+ TestingDirectory, trigger.toString());
+        assertEquals("File: example.txt in directory " + TestingDirectory, trigger.toString());
     }
 
     @Test
@@ -60,8 +61,7 @@ public class FileCheckTest {
         FileCheckTrigger trigger = new FileCheckTrigger(TestingDirectory, "example.txt");
 
         // Check the CSV representation
-        assertEquals("example.txt "+TestingDirectory, trigger.getToCSV());
+        assertEquals("example.txt " + TestingDirectory, trigger.getToCSV());
     }
 
- 
 }

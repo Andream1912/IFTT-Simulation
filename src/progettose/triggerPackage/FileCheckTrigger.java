@@ -6,7 +6,7 @@ public class FileCheckTrigger implements Trigger {
 
     private final String directoryPath;
     private final String fileName;
-    private String type;
+    private final String type;
 
     public FileCheckTrigger(String directoryPath, String fileName) {
         this.directoryPath = directoryPath;

@@ -138,7 +138,7 @@ public class RuleManagerTest {
         }
 
     }
-    
+
     @Test
     public void ruleManagerActivateAndDeactivateRule() {
         RuleManagerProxy ruleManager = RuleManagerProxy.getInstance();
