@@ -32,6 +32,7 @@ public class FileCheckTrigger implements Trigger {
 
     @Override
     public boolean evaluate() {
+        //crate a file type and verufy if it exists in the specified directory
         File file = new File(directoryPath, fileName);
         return file.exists() && file.isFile();
     }
@@ -48,7 +49,7 @@ public class FileCheckTrigger implements Trigger {
 
     @Override
     public String getToCSV() {
-        return this.fileName+" "+this.directoryPath;
+        return this.fileName+this.directoryPath+";";
     }
     
 }

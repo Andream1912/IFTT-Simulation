@@ -37,7 +37,7 @@ public class PlayAudioAction implements Action {
     //Executes the action, playing the audio file
     @Override
     public void execute() {
-        Platform.runLater(() -> {
+       Platform.runLater(() -> {
             try {
                 File file = new File(this.path.toString());
                 if (file.exists()) {
@@ -74,7 +74,7 @@ public class PlayAudioAction implements Action {
                 // Handle exceptions during audio playback
                 System.out.println("Error during audio playback: " + e.getMessage());
             }
-        });
+       });
     }
 
     @Override
