@@ -153,7 +153,7 @@ public class FXMLDocumentController implements Initializable {
     private void handleDeleteMenuItemTW() {
         Map.Entry<String, Integer> selectedItem = tW.getSelectionModel().getSelectedItem();
         tW.getItems().remove(selectedItem);
-        counter.removeValue(selectedItem.getKey());
+        counter.removeCounter(selectedItem.getKey());
     }
 
     private void handleAddMenuItemTW() {
@@ -182,7 +182,7 @@ public class FXMLDocumentController implements Initializable {
         valueResult.ifPresent(v -> {
             try {
                 int itemValue = Integer.parseInt(v);
-                counter.addValue(name, itemValue);
+                counter.addCounter(name, itemValue);
 
                 // Update the TableView
                 ObservableList<Map.Entry<String, Integer>> items = FXCollections.observableArrayList(counter.getHashMap().entrySet());

@@ -35,7 +35,7 @@ public class CounterList {
         saveToFile();
     }
 
-    public int getCount(String key) {
+    public int getCounter(String key) {
         // Returns the count for the specified key.
         return hashCount.getOrDefault(key, 0);
     }
@@ -45,14 +45,14 @@ public class CounterList {
         return hashCount;
     }
 
-    public void addValue(String key, int value) {
+    public void addCounter(String key, int value) {
         // Adds a new key-value pair to the HashMap.
         // If the key already exists, updates the value.
         hashCount.put(key, value);
         saveToFile();
     }
 
-    public void removeValue(String key) {
+    public void removeCounter(String key) {
         this.hashCount.remove(key);
         saveToFile();
     }
