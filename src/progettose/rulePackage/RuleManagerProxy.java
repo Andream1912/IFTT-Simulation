@@ -1,4 +1,4 @@
-package progettose;
+package progettose.rulePackage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,6 +32,8 @@ import progettose.triggerPackage.CompositeTrigger;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
+import progettose.triggerPackage.ExecuteProgramTriggerCreator;
+import progettose.triggerPackage.FileCheckTriggerCreator;
 import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
@@ -121,9 +123,10 @@ public class RuleManagerProxy implements RuleManager {
         // Writes rules from the ConcreteRuleManager to a CSV file.
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(directoryProject, false))) {
             for (Rule r : this.getRules()) {
-                writer.write(r.getClass().getSimpleName() +";"+r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV());
-                if(r instanceof SleepingTimeRule)
-                    writer.write(";"+((SleepingTimeRule) r).getNumDays()+";"+((SleepingTimeRule) r).getNumHours()+";"+((SleepingTimeRule) r).getNumMinutes()+";"+((SleepingTimeRule) r).getLastTimeFired());
+                writer.write(r.getClass().getSimpleName() + ";" + r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV());
+                if (r instanceof SleepingTimeRule) {
+                    writer.write(";" + ((SleepingTimeRule) r).getNumDays() + ";" + ((SleepingTimeRule) r).getNumHours() + ";" + ((SleepingTimeRule) r).getNumMinutes() + ";" + ((SleepingTimeRule) r).getLastTimeFired());
+                }
                 writer.write(";" + r.isActive());
                 writer.newLine();
             }
@@ -146,9 +149,20 @@ public class RuleManagerProxy implements RuleManager {
             case "Date":
                 TriggerCreator dateTC = new DateTriggerCreator(LocalDate.parse(column[i++]));
                 return dateTC.createTrigger();
+            case "File Existance Verification":
+                TriggerCreator fileCheckTC = new FileCheckTriggerCreator(column[i++], column[i++]);
+                return fileCheckTC.createTrigger();
             case "File Dimension Verification":
                 TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(Paths.get(column[i++]), Long.parseLong(column[i++]), column[i++]);
                 return fileDimensionTC.createTrigger();
+            case "Program Exit Status Verification":
+                int n = Integer.parseInt(column[i++]);
+                List<String> execProgList = new ArrayList<>();
+                for (int j = 0; j < n; j++) {
+                    execProgList.add(column[i++]);
+                }
+                TriggerCreator executeProgramAC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(column[i++]));
+                return executeProgramAC.createTrigger();
             default:
                 if(s.startsWith("Composite")){
                     Trigger t1 = checkTrigger(column[i++], column);
@@ -187,7 +201,7 @@ public class RuleManagerProxy implements RuleManager {
             case "Execute Program":
                 int n = Integer.parseInt(column[i++]);
                 List<String> execProgList = new ArrayList<>();
-                for(int j = 0; j<n;j++){
+                for (int j = 0; j < n; j++) {
                     execProgList.add(column[i++]);
                 }
                 ActionCreator executeProgramAC = new ExecuteProgramActionCreator(execProgList);
@@ -218,7 +232,7 @@ public class RuleManagerProxy implements RuleManager {
                     Trigger trigger = checkTrigger(nameTrigger, column);
                     String nameAction = column[i++];
                     Action action = checkAction(nameAction, column);
-                    if(ruleType.equals("FireOnceRule")){
+                    if (ruleType.equals("FireOnceRule")) {
                         r = new FireOnceRule(ruleName, action, trigger);
                     } else {
                         r = new SleepingTimeRule(ruleName, action, trigger, Integer.parseInt(column[i++]), Integer.parseInt(column[i++]), Integer.parseInt(column[i++]));
@@ -246,7 +260,7 @@ public class RuleManagerProxy implements RuleManager {
             tb.refresh();
         }, 0, 3, TimeUnit.SECONDS);
     }
-    
+
     public void fireRule(Rule r) {
         r.getAction().execute();
         try {
@@ -255,7 +269,7 @@ public class RuleManagerProxy implements RuleManager {
             Logger.getLogger(RuleManagerProxy.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void shutdownScheduler() {
         //Use it everytime a scheduler is created
         scheduler.shutdown();

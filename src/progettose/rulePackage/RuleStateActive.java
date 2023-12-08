@@ -1,4 +1,4 @@
-package progettose;
+package progettose.rulePackage;
 
 import progettose.triggerPackage.Trigger;
 
@@ -8,9 +8,9 @@ public class RuleStateActive implements RuleState {
     public boolean checkTrigger(Trigger t) {
         return t.evaluate();
     }
-    
-    @Override 
-    public String toString(){
+
+    @Override
+    public String toString() {
         return "Active";
     }
 }

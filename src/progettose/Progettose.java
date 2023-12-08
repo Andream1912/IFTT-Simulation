@@ -12,20 +12,21 @@ public class Progettose extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        
-        
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
         Parent root = (Parent) fxmlLoader.load();
-        
+
         FXMLDocumentController controllerOne = fxmlLoader.getController();
-        
+
         Scene scene = new Scene(root);
+
         stage.setTitle("MyIFTTT");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-              controllerOne.endThread();
-          }
+                controllerOne.endThread();
+            }
         });
         stage.show();
     }

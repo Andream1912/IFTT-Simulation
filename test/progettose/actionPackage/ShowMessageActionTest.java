@@ -9,24 +9,13 @@ public class ShowMessageActionTest {
     
     private ShowMessageAction action;
 
-    //Test for the get and set methods
+    //Test for getter
     @Test
     public void testGetMessage() {
         String message = "Test message";
         action = new ShowMessageAction(message);
 
         assertEquals(message, action.getMessage());
-    }
-
-    @Test
-    public void testSetMessage() {
-        String initialMessage = "Initial message";
-        action = new ShowMessageAction(initialMessage);
-
-        String newMessage = "New message";
-        action.setMessage(newMessage);
-
-        assertEquals(newMessage, action.getMessage());
     }
 
     //Test for the initialization of ShowMessageAction

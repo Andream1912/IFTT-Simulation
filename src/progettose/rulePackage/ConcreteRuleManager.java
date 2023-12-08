@@ -1,4 +1,4 @@
-package progettose;
+package progettose.rulePackage;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 public class ConcreteRuleManager implements RuleManager {
 
     private ObservableList<Rule> rules;
-    
 
     public ConcreteRuleManager() {
         this.rules = FXCollections.observableArrayList();
@@ -18,7 +17,7 @@ public class ConcreteRuleManager implements RuleManager {
 
     public void fireRule(Rule r) {
         r.getAction().execute();
-    }   
+    }
 
     @Override
     public void addRule(Rule r) {
@@ -35,10 +34,12 @@ public class ConcreteRuleManager implements RuleManager {
         return this.rules;
     }
 
+    @Override
     public void activateRule(Rule r) {
         r.setState(true);
     }
 
+    @Override
     public void deactivateRule(Rule r) {
         r.setState(false);
     }

@@ -4,9 +4,9 @@ import java.nio.file.Path;
 
 public class FileSizeCheckerTriggerCreator extends TriggerCreator {
 
-    private Path filePath;
-    private long value;
-    private String typeDimension;
+    private final Path filePath;
+    private final long value;
+    private final String typeDimension;
 
     public FileSizeCheckerTriggerCreator(Path file, long value, String typeDimension) {
         this.filePath = file;

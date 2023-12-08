@@ -11,39 +11,48 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" onMouseClicked="#unselectRow" prefHeight="617.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" maxHeight="693.0" maxWidth="1222" minHeight="693.0" minWidth="840.0" onMouseClicked="#unselectRow" prefHeight="693.0" prefWidth="840.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="progettose.FXMLDocumentController">
     <children>
-      <VBox alignment="TOP_CENTER" prefHeight="561.0" prefWidth="759.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Separator prefHeight="0.0" prefWidth="766.0" />
-            <Label text="SCAMRules">
-               <font>
-                  <Font size="27.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="20.0" top="30.0" />
-               </VBox.margin>
-            </Label>
-            <TableView fx:id="tableView" maxWidth="677.0" onMouseClicked="#onSelectRule" prefHeight="400.0" prefWidth="677.0">
-              <columns>
-                <TableColumn fx:id="nameColumn" editable="false" prefWidth="135.0" sortable="false" text="Name" />
-                  <TableColumn fx:id="typeColumn" prefWidth="135.0" text="Type" />
-                <TableColumn fx:id="actionColumn" editable="false" prefWidth="135.0" sortable="false" text="Action" />
-                  <TableColumn fx:id="triggerColumn" editable="false" prefWidth="135.0" sortable="false" text="Trigger" />
-                  <TableColumn fx:id="statusColumn" editable="false" prefWidth="135.0" sortable="false" text="Status" />
-              </columns>
-            </TableView>
-            <HBox alignment="CENTER" prefHeight="69.0" prefWidth="672.0" spacing="50.0">
-               <children>
-                  <Button fx:id="removeRuleButton" disable="true" mnemonicParsing="false" onAction="#onRemoveRule" prefHeight="25.0" prefWidth="130.0" text="Remove Rule" />
-                    <Button fx:id="addRuleButton" onAction="#onAddRule" prefHeight="25.0" prefWidth="130.0" text="Add Rule" />
-                  <Button fx:id="toggleStateButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onToggleState" prefHeight="25.0" prefWidth="130.0" text="Deactivate Rule" />
-               </children>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </HBox>
-         </children>
-      </VBox>
+        <Separator fx:id="separatorCounter" layoutX="688.0" orientation="VERTICAL" prefHeight="693.0" prefWidth="4.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="688.0" AnchorPane.rightAnchor="148.0" AnchorPane.topAnchor="0.0" />
+        <VBox fx:id="vBoxSCAM" alignment="TOP_CENTER" prefHeight="725.0" prefWidth="851.0" style="-fx-background-color: #f0f0f0;">
+            <children>
+                <Label style="-fx-text-fill: #333333;" text="SCAMRules">
+                    <font>
+                        <Font size="27.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="20.0" top="30.0" />
+                    </VBox.margin>
+                </Label>
+                <TableView fx:id="tableView" maxWidth="677.0" onMouseClicked="#onSelectRule" prefHeight="475.0" prefWidth="677.0">
+                    <columns>
+                        <TableColumn fx:id="nameColumn" editable="false" prefWidth="135.0" text="Name" />
+                        <TableColumn fx:id="typeColumn" editable="false" prefWidth="135.0" sortable="false" text="Type" />
+                        <TableColumn fx:id="actionColumn" editable="false" prefWidth="135.0" sortable="false" text="Action" />
+                        <TableColumn fx:id="triggerColumn" editable="false" prefWidth="135.0" sortable="false" text="Trigger" />
+                        <TableColumn fx:id="statusColumn" editable="false" prefWidth="135.0" text="Status" />
+                    </columns>
+                </TableView>
+                <HBox alignment="CENTER" prefHeight="69.0" prefWidth="672.0" spacing="50.0">
+                    <children>
+                        <Button fx:id="removeRuleButton" disable="true" mnemonicParsing="false" onAction="#onRemoveRule" prefHeight="25.0" prefWidth="130.0" style="-fx-background-color: #d9534f; -fx-text-fill: white;" text="Remove Rule" />
+                        <Button fx:id="addRuleButton" onAction="#onAddRule" prefHeight="25.0" prefWidth="130.0" style="-fx-background-color: #5cb85c; -fx-text-fill: white;" text="Add Rule" />
+                        <Button fx:id="toggleStateButton" disable="true" minWidth="100.0" mnemonicParsing="false" onAction="#onToggleState" prefHeight="25.0" prefWidth="130.0" style="-fx-background-color: #337ab7; -fx-text-fill: white;" text="Deactivate Rule" />
+                    </children>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+        <Button fx:id="arrowButton" layoutX="824.0" layoutY="314.0" mnemonicParsing="false" onAction="#onShowCounter" style="-fx-background-color: #5FADFF;" text="▶">
+         <font>
+            <Font name="Juice ITC" size="15.0" />
+         </font>
+         <padding>
+            <Insets bottom="10.0" left="8.0" right="8.0" top="10.0" />
+         </padding>
+      </Button>
+          <Separator prefHeight="3.0" prefWidth="840.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     </children>
 </AnchorPane>

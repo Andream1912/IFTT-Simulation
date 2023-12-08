@@ -8,7 +8,7 @@ import javafx.scene.control.ButtonType;
 public class ShowMessageAction implements Action {
 
     // The message to be displayed
-    private String message;
+    private final String message;
     private final String type;
 
     // Constructor to initialize ShowMessageAction with the specified message.
@@ -20,11 +20,6 @@ public class ShowMessageAction implements Action {
     // Method for getting message
     public String getMessage() {
         return this.message;
-    }
-
-    // Method for setting message
-    public void setMessage(String temp) {
-        this.message = temp;
     }
 
     @Override

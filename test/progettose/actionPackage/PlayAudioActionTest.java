@@ -16,15 +16,6 @@ public class PlayAudioActionTest {
     }
 
     @Test
-    public void testPlayAudioActionSetPath() {
-        // Implement a test for the setPath method of PlayAudioAction
-        PlayAudioAction playAudioAction = new PlayAudioAction(Paths.get("path/to/audio/file.mp3"));
-        Path newFilePath = Paths.get("new/path/to/audio/file.mp3");
-        playAudioAction.setPath(newFilePath);
-        assertEquals(newFilePath, playAudioAction.getPath());
-    }
-
-    @Test
     public void testPlayAudioActionInitialization() {
         // Implement a test to ensure that PlayAudioAction is initialized correctly
         Path filePath = Paths.get("path/to/audio/file.mp3");

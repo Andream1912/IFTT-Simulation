@@ -31,10 +31,6 @@ public class ExecuteProgramAction implements Action {
         this.commandList.add(command);
     }
 
-    public void removeCommand(String command) {
-        this.commandList.remove(command);
-    }
-
     @Override
     public String toString() {
 
@@ -70,7 +66,8 @@ public class ExecuteProgramAction implements Action {
             } else {
                 Alert fileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
                 fileNotFoundAlert.setTitle("Error");
-                fileNotFoundAlert.setHeaderText("File not found");
+                fileNotFoundAlert.setHeaderText("File '" + 
+                        Paths.get(this.commandList.get(0)).getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
         });

@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTrigger implements Trigger {
 
-    private LocalDate date;
+    private final LocalDate date;
     private final String type;
 
     public DateTrigger(LocalDate date) {
@@ -15,10 +15,6 @@ public class DateTrigger implements Trigger {
 
     public LocalDate getDate() {
         return this.date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     } 
     
     @Override

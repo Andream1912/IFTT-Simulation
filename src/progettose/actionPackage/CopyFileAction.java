@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
 public class CopyFileAction implements Action {
 
     //Path for the file to copy 
-    private Path filePath;
+    private final Path filePath;
     private Path copyPath;
     //Defining type for action
     private final String type;
@@ -27,16 +27,9 @@ public class CopyFileAction implements Action {
         return this.filePath;
     }
 
-    public void setFilePath(Path path) {
-        this.filePath = path;
-    }
 
     public Path getCopyPath() {
         return this.copyPath;
-    }
-
-    public void setCopyPath(Path path) {
-        this.copyPath = path;
     }
 
     //ToString for CopyFileAction
@@ -89,7 +82,7 @@ public class CopyFileAction implements Action {
             else {
                 Alert fileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
                 fileNotFoundAlert.setTitle("Error");
-                fileNotFoundAlert.setHeaderText("File not found");
+                fileNotFoundAlert.setHeaderText("File '" + this.filePath.getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
         });

@@ -3,7 +3,7 @@ package progettose.actionPackage;
 public class ShowMessageActionCreator extends ActionCreator{
 
     // The message to be displayed by the ShowMessageAction
-    private String message;
+    private final String message;
 
     // Constructor to initialize ShowMessageActionCreator with a specific message.
     public ShowMessageActionCreator(String message) {

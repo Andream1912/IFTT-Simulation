@@ -1,5 +1,8 @@
 package progettose;
 
+import progettose.rulePackage.FireOnceRule;
+import progettose.rulePackage.Rule;
+import progettose.rulePackage.SleepingTimeRule;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
@@ -17,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -46,6 +50,7 @@ import progettose.triggerPackage.CompositeTrigger;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
+import progettose.triggerPackage.ExecuteProgramTriggerCreator;
 import progettose.triggerPackage.FileSizeCheckerTriggerCreator;
 import progettose.triggerPackage.FileCheckTriggerCreator;
 import progettose.triggerPackage.TimeTriggerCreator;
@@ -164,7 +169,7 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private Spinner<Integer> minuteSleepingTimeSpinner;
     @FXML
-    private Spinner<Integer> hourSleepingTimeSpinner; 
+    private Spinner<Integer> hourSleepingTimeSpinner;
     @FXML
     private Spinner<Integer> daySleepingTimeSpinner;
     @FXML
@@ -179,24 +184,12 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label execProgramActionLabel;
     @FXML
     private AnchorPane anchorPane;
-    
-    private Path selectedFileForDimension;
-    private Path selectedFileForDimension1;
-    private Path selectedFileForDimension2;
-    private FXMLDocumentController controllerOne;
-    private Path selectedFilePath;
-    private Path selectedSourcePath;
-    private Path selectedDestinationPath;
-    private Path selectedDeleteSourcePath;
-    private Path selectedExFile;
-    private Path selectedExFile1;
-    private Path selectedExFile2;
-    private Path selectedAppendFile;
-    private ObservableList<String> triggerList;
-    private ObservableList<String> actionList;
-    private HashMap<String, Trigger> compositeTrigger;
-    
-    
+    @FXML
+    private TextField insertExitValueTextField;
+    @FXML
+    private Label insertExitValueLabel;
+    @FXML
+    private Label exitValueProgramLabel;
     @FXML
     private AnchorPane anchorPane1;
     @FXML
@@ -374,7 +367,277 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private Button backFromTriggerButton;
     
-
+    private Path selectedFileForDimension;
+    private Path selectedFileForDimension1;
+    private Path selectedFileForDimension2;
+    private FXMLDocumentController controllerOne;
+    private Path selectedFilePath;
+    private Path selectedSourcePath;
+    private Path selectedDestinationPath;
+    private Path selectedDeleteSourcePath;
+    private Path selectedExFile;
+    private Path selectedExFile1;
+    private Path selectedExFile2;
+    private Path selectedProgramTriggerFile;
+    private Path selectedProgramTriggerFile1;
+    private Path selectedProgramTriggerFile2;
+    private Path selectedAppendFile;
+    private ObservableList<String> triggerList;
+    private ObservableList<String> actionList;
+    private HashMap<String, Trigger> compositeTrigger;
+    @FXML
+    private ComboBox<?> actionComboBox2;
+    @FXML
+    private TextArea showMessageTextArea2;
+    @FXML
+    private TextArea appendToFileTextArea2;
+    @FXML
+    private Button sourceDirectoryButton2;
+    @FXML
+    private TextField moveCopyTextField2;
+    @FXML
+    private TextField execArgumentsTextField2;
+    @FXML
+    private Button deleteButton2;
+    @FXML
+    private TextField deleteTextField2;
+    @FXML
+    private Label playAudioLabel2;
+    @FXML
+    private Label appendToFileLabel12;
+    @FXML
+    private Label moveCopyLabel2;
+    @FXML
+    private Label destinationDirectoryLabel2;
+    @FXML
+    private Label showMessageLabel2;
+    @FXML
+    private Label appendToFileLabel22;
+    @FXML
+    private Label sourceDirectoryLabel2;
+    @FXML
+    private Label deleteLabel12;
+    @FXML
+    private Label deleteLabel22;
+    @FXML
+    private Label execProgLabel2;
+    @FXML
+    private Label execArgumentsLabel2;
+    @FXML
+    private Button appendToFileButton2;
+    @FXML
+    private Button playAudioButton2;
+    @FXML
+    private Button destinationDirectoryButton2;
+    @FXML
+    private Button execProgButton2;
+    @FXML
+    private Label fileAudioNameLabel2;
+    @FXML
+    private Label selectedDestinationDirectoryLabel2;
+    @FXML
+    private Label selectedSourceDirectoryLabel2;
+    @FXML
+    private Label deleteFileLabel2;
+    @FXML
+    private Label fileToAppendLabel2;
+    @FXML
+    private Label execProgramActionLabel2;
+    @FXML
+    private ComboBox<?> actionComboBox3;
+    @FXML
+    private TextArea showMessageTextArea3;
+    @FXML
+    private TextArea appendToFileTextArea3;
+    @FXML
+    private Button sourceDirectoryButton3;
+    @FXML
+    private TextField moveCopyTextField3;
+    @FXML
+    private TextField execArgumentsTextField3;
+    @FXML
+    private Button deleteButton3;
+    @FXML
+    private TextField deleteTextField3;
+    @FXML
+    private Label playAudioLabel3;
+    @FXML
+    private Label appendToFileLabel13;
+    @FXML
+    private Label moveCopyLabel3;
+    @FXML
+    private Label destinationDirectoryLabel3;
+    @FXML
+    private Label showMessageLabel3;
+    @FXML
+    private Label appendToFileLabel23;
+    @FXML
+    private Label sourceDirectoryLabel3;
+    @FXML
+    private Label deleteLabel13;
+    @FXML
+    private Label deleteLabel23;
+    @FXML
+    private Label execProgLabel3;
+    @FXML
+    private Label execArgumentsLabel3;
+    @FXML
+    private Button appendToFileButton3;
+    @FXML
+    private Button playAudioButton3;
+    @FXML
+    private Button destinationDirectoryButton3;
+    @FXML
+    private Button execProgButton3;
+    @FXML
+    private Label fileAudioNameLabel3;
+    @FXML
+    private Label selectedDestinationDirectoryLabel3;
+    @FXML
+    private Label selectedSourceDirectoryLabel3;
+    @FXML
+    private Label deleteFileLabel3;
+    @FXML
+    private Label fileToAppendLabel3;
+    @FXML
+    private Label execProgramActionLabel3;
+    @FXML
+    private ComboBox<?> actionComboBox4;
+    @FXML
+    private TextArea showMessageTextArea4;
+    @FXML
+    private TextArea appendToFileTextArea4;
+    @FXML
+    private Button sourceDirectoryButton4;
+    @FXML
+    private TextField moveCopyTextField4;
+    @FXML
+    private TextField execArgumentsTextField4;
+    @FXML
+    private Button deleteButton4;
+    @FXML
+    private TextField deleteTextField4;
+    @FXML
+    private Label playAudioLabel4;
+    @FXML
+    private Label appendToFileLabel14;
+    @FXML
+    private Label moveCopyLabel4;
+    @FXML
+    private Label destinationDirectoryLabel4;
+    @FXML
+    private Label showMessageLabel4;
+    @FXML
+    private Label appendToFileLabel24;
+    @FXML
+    private Label sourceDirectoryLabel4;
+    @FXML
+    private Label deleteLabel14;
+    @FXML
+    private Label deleteLabel24;
+    @FXML
+    private Label execProgLabel4;
+    @FXML
+    private Label execArgumentsLabel4;
+    @FXML
+    private Button appendToFileButton4;
+    @FXML
+    private Button playAudioButton4;
+    @FXML
+    private Button destinationDirectoryButton4;
+    @FXML
+    private Button execProgButton4;
+    @FXML
+    private Label fileAudioNameLabel4;
+    @FXML
+    private Label selectedDestinationDirectoryLabel4;
+    @FXML
+    private Label selectedSourceDirectoryLabel4;
+    @FXML
+    private Label deleteFileLabel4;
+    @FXML
+    private Label fileToAppendLabel4;
+    @FXML
+    private Label execProgramActionLabel4;
+    @FXML
+    private ComboBox<?> actionComboBox5;
+    @FXML
+    private TextArea showMessageTextArea5;
+    @FXML
+    private TextArea appendToFileTextArea5;
+    @FXML
+    private Button sourceDirectoryButton5;
+    @FXML
+    private TextField moveCopyTextField5;
+    @FXML
+    private TextField execArgumentsTextField5;
+    @FXML
+    private Button deleteButton5;
+    @FXML
+    private TextField deleteTextField5;
+    @FXML
+    private Label playAudioLabel5;
+    @FXML
+    private Label appendToFileLabel15;
+    @FXML
+    private Label moveCopyLabel5;
+    @FXML
+    private Label destinationDirectoryLabel5;
+    @FXML
+    private Label showMessageLabel5;
+    @FXML
+    private Label appendToFileLabel25;
+    @FXML
+    private Label sourceDirectoryLabel5;
+    @FXML
+    private Label deleteLabel15;
+    @FXML
+    private Label deleteLabel25;
+    @FXML
+    private Label execProgLabel5;
+    @FXML
+    private Label execArgumentsLabel5;
+    @FXML
+    private Button appendToFileButton5;
+    @FXML
+    private Button playAudioButton5;
+    @FXML
+    private Button destinationDirectoryButton5;
+    @FXML
+    private Button execProgButton5;
+    @FXML
+    private Label fileAudioNameLabel5;
+    @FXML
+    private Label selectedDestinationDirectoryLabel5;
+    @FXML
+    private Label selectedSourceDirectoryLabel5;
+    @FXML
+    private Label deleteFileLabel5;
+    @FXML
+    private Label fileToAppendLabel5;
+    @FXML
+    private Label execProgramActionLabel5;
+    @FXML
+    private Button createSequenceActionButton;
+    @FXML
+    private Pane pane2;
+    @FXML
+    private Button backFromActionButton;
+    @FXML
+    private Button doneActionButton;
+    @FXML
+    private TextField insertExitValueTextField1;
+    @FXML
+    private Label insertExitValueLabel1;
+    @FXML
+    private Label insertExitValueLabel2;
+    @FXML
+    private TextField insertExitValueTextField2;
+    @FXML
+    private Label exitValueProgramLabel1;
+    @FXML
+    private Label exitValueProgramLabel2;
+    
 
     /**
      * Initializes the controller class.
@@ -387,8 +650,8 @@ public class FXMLDocumentTwoController implements Initializable {
         triggerComboBox.setItems(triggerList);
         triggerList.addAll("Time", "Day of Week", "Day of Month",
                 "Date",
-                "File Existance Verification", "File Dimension Verification" /*,
-                "Program Exit Status Verification"*/);     
+                "File Existance Verification", "File Dimension Verification",
+                "Program Exit Status Verification");
 
         actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
@@ -396,7 +659,6 @@ public class FXMLDocumentTwoController implements Initializable {
                 "Append String to Textfile", "Move File",
                 "Copy File", "Delete File",
                 "Execute Program");
-
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
         dayOfWeekComboBox.setItems(dayOfWeekList);
@@ -433,7 +695,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(datePicker.valueProperty().isNull())
                 .and((exFileTextField.textProperty().isEmpty()).or(exFileDirectoryLabel.visibleProperty().not()))
                 .and((fileDimensionTextField.textProperty().isEmpty()).or(labelDimensionFile.visibleProperty().not()))
-                //.and((execProgramTextField.textProperty().isEmpty()).or())
+                .and((execProgramTextField.textProperty().isEmpty()).or(exitValueProgramLabel.visibleProperty().not()).or(insertExitValueTextField.textProperty().isEmpty()))
                 .and(compositeTriggerLabel.visibleProperty().not())
                 .or(triggerComboBox.valueProperty().isNull()))
                 .or(
@@ -443,6 +705,7 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and((moveCopyTextField.textProperty().isEmpty()).or(selectedSourceDirectoryLabel.visibleProperty().not()).or(selectedDestinationDirectoryLabel.visibleProperty().not()))
                                 .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
                                 .and((execArgumentsTextField.textProperty().isEmpty()).or(execProgramActionLabel.visibleProperty().not()))
+                                .and((insertExitValueTextField.textProperty().isEmpty()))
                                 .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty())
                 //.or(fireSleepingTimeCheckBox.selectedProperty().not()
@@ -454,17 +717,17 @@ public class FXMLDocumentTwoController implements Initializable {
         labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
         labelDimensionFile1.visibleProperty().setValue(Boolean.FALSE);
         exFileDirectoryLabel1.visibleProperty().setValue(Boolean.FALSE);
-        
+        insertExitValueLabel.visibleProperty().setValue(Boolean.FALSE);
+
         fireSleepingTimeCheckBox.disableProperty().bind(fireOnceCheckBox.selectedProperty());
         fireOnceCheckBox.disableProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
-        
+
         minuteSleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         hourSleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         daySleepingTimeSpinner.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         minuteSleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         hourSleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
         daySleepingTimeLabel.visibleProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
-        
 
         // Set initial visibility properties for UI elements based on trigger and action selection
         // ... (set visibility properties based on triggerComboBox and actionComboBox values)
@@ -487,6 +750,8 @@ public class FXMLDocumentTwoController implements Initializable {
         fileDimensionLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
         execProgramLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
         typeDimensionComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
+        insertExitValueLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
+        insertExitValueTextField.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
 
         showMessageTextArea.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Show Message"));
         playAudioButton.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Play Audio"));
@@ -523,7 +788,7 @@ public class FXMLDocumentTwoController implements Initializable {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
 
-                // Disabilita le date precedenti a oggi
+                // Disable dates that have already passed
                 setDisable(date.isBefore(LocalDate.now()));
             }
         });
@@ -602,7 +867,8 @@ public class FXMLDocumentTwoController implements Initializable {
         fileDimensionLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
         execProgramLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
         typeDimensionComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
-
+        insertExitValueTextField1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
+        insertExitValueLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
         
         
         hourComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Time"));
@@ -624,7 +890,9 @@ public class FXMLDocumentTwoController implements Initializable {
         fileDimensionLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
         execProgramLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
         typeDimensionComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
-        
+        insertExitValueTextField2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
+        insertExitValueLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
+                
         logicalOperandLabel.visibleProperty().bind(((hourComboBox1.valueProperty().isNull().or(minuteComboBox1.valueProperty().isNull()))
                 .and(dayOfWeekComboBox1.valueProperty().isNull())
                 .and(dayOfMonthComboBox1.valueProperty().isNull())
@@ -729,6 +997,13 @@ public class FXMLDocumentTwoController implements Initializable {
                 else
                     fileExTC = new FileCheckTriggerCreator(selectedExFile2.toString(), exFileTextField2.getText());
                 return fileExTC.createTrigger();
+            case "Program Exit Status Verification":
+                
+                List<String> execProgList = new ArrayList<>();
+                execProgList.add(selectedProgramTriggerFile.toString());
+                execProgList.addAll(Arrays.asList(execProgramTextField.getText().split(" ")));
+                TriggerCreator execProgTC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(insertExitValueTextField.getText()));
+                return execProgTC.createTrigger();
             default:
                 for(Trigger t : compositeTrigger.values()){
                     if(s.substring(12).equals(t.getType().substring(12)))
@@ -741,7 +1016,7 @@ public class FXMLDocumentTwoController implements Initializable {
 
     private Action checkAction(String s) {
         switch (s) {
-            case "Play Audio": //* Da cambiare con il rispettivo nome
+            case "Play Audio":
                 ActionCreator playAudioAC = new PlayAudioActionCreator(selectedFilePath);
                 return playAudioAC.createAction();
 
@@ -782,20 +1057,28 @@ public class FXMLDocumentTwoController implements Initializable {
         Rule r;
         //When copyFileAction is selected, onSave the action is created from the different input fields
         // Create a Rule using the created Trigger and Action
-        if(fireSleepingTimeCheckBox.selectedProperty().getValue())
-            r = new SleepingTimeRule(ruleNameTextField.textProperty().getValue(), action, trigger, daySleepingTimeSpinner.valueProperty().getValue(), hourSleepingTimeSpinner.valueProperty().getValue(), minuteSleepingTimeSpinner.valueProperty().getValue());
-        else
-            r = new FireOnceRule(ruleNameTextField.textProperty().getValue(), action, trigger);
-        //else
+        if (controllerOne.checkNameRule(ruleNameTextField.textProperty().getValue())) {
+            if (fireSleepingTimeCheckBox.selectedProperty().getValue()) {
+                r = new SleepingTimeRule(ruleNameTextField.textProperty().getValue(), action, trigger, daySleepingTimeSpinner.valueProperty().getValue(), hourSleepingTimeSpinner.valueProperty().getValue(), minuteSleepingTimeSpinner.valueProperty().getValue());
+            } else {
+                r = new FireOnceRule(ruleNameTextField.textProperty().getValue(), action, trigger);
+            }
+            //else
             //rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
 
-        // Add the created rule to the ObservableList in the first controller
-        controllerOne.addRuleToObsList(r);
+            // Add the created rule to the ObservableList in the first controller
+            controllerOne.addRuleToObsList(r);
 
-        // Close the current stage (window)
-        Stage currentStage = (Stage) saveButton.getScene().getWindow();
+            // Close the current stage (window)
+            Stage currentStage = (Stage) saveButton.getScene().getWindow();
 
-        currentStage.close();
+            currentStage.close();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("OK");
+            alert.setContentText("The name exists already!");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -872,12 +1155,13 @@ public class FXMLDocumentTwoController implements Initializable {
         execProgramTextField.textProperty().setValue(null);
         labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
         fileDimensionTextField.textProperty().setValue(null);
+        insertExitValueTextField.textProperty().setValue(null);
+        exitValueProgramLabel.visibleProperty().setValue(Boolean.FALSE);
         if(triggerComboBox.valueProperty().getValue().startsWith("Composite")){
             compositeTriggerLabel.textProperty().setValue(compositeTrigger.get(triggerComboBox.valueProperty().getValue()).toString());
             compositeTriggerLabel.visibleProperty().setValue(Boolean.TRUE);
         } else
             compositeTriggerLabel.visibleProperty().setValue(Boolean.FALSE);
-
     }
 
     @FXML
@@ -902,8 +1186,12 @@ public class FXMLDocumentTwoController implements Initializable {
         // Reset UI elements based on action selection
         // ... (reset UI elements based on actionComboBox selection)
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
+        execProgramActionLabel.visibleProperty().setValue(Boolean.FALSE);
+        labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
         fileToAppendLabel.visibleProperty().setValue(Boolean.FALSE);
-
+        deleteFileLabel.visibleProperty().setValue(Boolean.FALSE);
+        selectedDestinationDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
+        selectedSourceDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
     }
 
     public void setControllerOne(FXMLDocumentController controllerOne) {
@@ -975,20 +1263,18 @@ public class FXMLDocumentTwoController implements Initializable {
     @FXML
     private void onExecProgButton(ActionEvent event) {
         Stage primaryStage = (Stage) execProgButton.getScene().getWindow();
-        
+
         //Setting the FileChooser
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select the program to execute:");
-        
+
         //Setting the filter for exe files
-        FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*");
+        FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*", "*.jar");
         fileChooser.getExtensionFilters().add(exeFilter);
-        
         //Showing FileChooser and getting file path
         File selectedProgram = fileChooser.showOpenDialog(primaryStage);
         if (selectedProgram != null) {
             selectedFilePath = selectedProgram.toPath();
-            //Add execProgLabel here
             execProgramActionLabel.textProperty().setValue(selectedFilePath.getFileName().toString());
             execProgramActionLabel.visibleProperty().setValue(Boolean.TRUE);
         }
@@ -1021,10 +1307,9 @@ public class FXMLDocumentTwoController implements Initializable {
         }
     }
 
-
     @FXML
     private void onFileDimensionCheck(KeyEvent event) {
-        if (!(event.getCharacter()).matches("^\\d*")){
+        if (!(event.getCharacter()).matches("^\\d*")) {
             event.consume();
         }
     }
@@ -1033,8 +1318,6 @@ public class FXMLDocumentTwoController implements Initializable {
     private void onCreateCompositeTrigger(ActionEvent event) {
         anchorPane1.visibleProperty().setValue(Boolean.FALSE);
         pane1.visibleProperty().setValue(Boolean.TRUE);
-        anchorPane.setMaxHeight(500);
-        anchorPane.setMinHeight(500);
         triggerTextField.textProperty().setValue("");
         triggerComboBox1.valueProperty().setValue("");
         notOperandComboBox1.valueProperty().setValue("");
@@ -1133,4 +1416,56 @@ public class FXMLDocumentTwoController implements Initializable {
         pane1.visibleProperty().setValue(Boolean.FALSE);
         anchorPane1.visibleProperty().setValue(Boolean.TRUE);
     }
+
+    @FXML    
+    private void onExecProgramButton(ActionEvent event) {
+        Stage primaryStage = (Stage) execProgramButton.getScene().getWindow();
+
+        //Setting the FileChooser
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select the program to execute:");
+
+        //Setting the filter for exe files
+        FileChooser.ExtensionFilter exeFilter = new FileChooser.ExtensionFilter("Executable Files", "*.exe", "*.bat", "*.cmd", "*", "*.jar");
+        fileChooser.getExtensionFilters().add(exeFilter);
+        //Showing FileChooser and getting file path
+        File selectedProgram = fileChooser.showOpenDialog(primaryStage);
+        if (selectedProgram != null) {
+            if (event.getSource() instanceof Button) {
+                Button clickedButton = (Button) event.getSource();
+                String buttonId = clickedButton.getId();
+                if (buttonId.charAt(buttonId.length()-1) == '1'){
+                    selectedProgramTriggerFile1 = selectedProgram.toPath();
+                    exitValueProgramLabel1.textProperty().setValue(selectedProgramTriggerFile1.getFileName().toString());
+                    exitValueProgramLabel1.visibleProperty().setValue(Boolean.TRUE);
+                } else if (buttonId.charAt(buttonId.length()-1) == '2'){
+                    selectedProgramTriggerFile2 = selectedProgram.toPath();
+                    exitValueProgramLabel2.textProperty().setValue(selectedProgramTriggerFile2.getFileName().toString());
+                    exitValueProgramLabel2.visibleProperty().setValue(Boolean.TRUE);
+                } else {
+                    selectedProgramTriggerFile = selectedProgram.toPath();
+                    exitValueProgramLabel.textProperty().setValue(selectedProgramTriggerFile.getFileName().toString());
+                    exitValueProgramLabel.visibleProperty().setValue(Boolean.TRUE);
+                }
+            }
+        }
+    }
+
+    @FXML
+    private void onCreateSequenceActionButton(ActionEvent event) {
+        anchorPane1.visibleProperty().setValue(Boolean.FALSE);
+        pane2.visibleProperty().setValue(Boolean.TRUE);
+    }
+
+    @FXML
+    private void onDoneAction(ActionEvent event) {
+    }
+    
+    @FXML
+    private void onBackAction(ActionEvent event) {
+        anchorPane1.visibleProperty().setValue(Boolean.TRUE);
+        pane2.visibleProperty().setValue(Boolean.FALSE);
+    }
+
+    
 }

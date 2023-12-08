@@ -5,7 +5,7 @@ import java.nio.file.Path;
 public class PlayAudioActionCreator extends ActionCreator {
 
     // The path to the audio file for the PlayAudioAction
-    private Path path;
+    private final  Path path;
 
     // Constructor to initialize PlayAudioActionCreator with the specified audio file path
     public PlayAudioActionCreator(Path path) {

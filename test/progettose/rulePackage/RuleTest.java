@@ -4,16 +4,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import progettose.FireOnceRule;
-import progettose.Rule;
-
-import progettose.RuleStateActive;
-import progettose.RuleStateInactive;
-import progettose.SleepingTimeRule;
 import progettose.actionPackage.Action;
-import progettose.actionPackage.ShowMessageAction;
 import progettose.actionPackage.ShowMessageActionCreator;
-import progettose.triggerPackage.TimeTrigger;
 import progettose.triggerPackage.TimeTriggerCreator;
 import progettose.triggerPackage.Trigger;
 
@@ -52,22 +44,21 @@ public class RuleTest {
         rule.setTrigger(newTrigger);
         assertEquals(newTrigger, rule.getTrigger());
     }
-    
+
     @Test
     public void ruleStateActiveCheckTrigger() {
         Rule rule1 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now()).createTrigger());
         assertTrue(rule1.getState() instanceof RuleStateActive);
         assertTrue(rule1.evaluateTrigger());
-        
+
         Rule rule2 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now().minusSeconds(2)).createTrigger());
         assertTrue(rule2.getState() instanceof RuleStateActive);
         assertFalse(rule2.evaluateTrigger());
-        
+
         Rule rule3 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now().plusMinutes(5)).createTrigger());
         assertTrue(rule3.getState() instanceof RuleStateActive);
         assertFalse(rule3.evaluateTrigger());
-        
-        
+
     }
 
     @Test
@@ -75,19 +66,19 @@ public class RuleTest {
         Rule rule1 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now()).createTrigger());
         rule1.setState(false);
         assertTrue(rule1.getState() instanceof RuleStateInactive);
-        assertFalse(rule1.evaluateTrigger()); 
-        
+        assertFalse(rule1.evaluateTrigger());
+
         Rule rule2 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now().minusSeconds(2)).createTrigger());
         rule2.setState(false);
         assertTrue(rule2.getState() instanceof RuleStateInactive);
-        assertFalse(rule2.evaluateTrigger()); 
-        
+        assertFalse(rule2.evaluateTrigger());
+
         Rule rule3 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now().plusMinutes(5)).createTrigger());
         rule3.setState(false);
         assertTrue(rule3.getState() instanceof RuleStateInactive);
-        assertFalse(rule3.evaluateTrigger()); 
+        assertFalse(rule3.evaluateTrigger());
     }
-    
+
     @Test
     public void testFireOnceRule() {
         Action action = new ShowMessageActionCreator("Ciao").createAction();
@@ -100,7 +91,7 @@ public class RuleTest {
         assertTrue(fireOnceRule.evaluateTrigger());
         assertFalse(fireOnceRule.evaluateTrigger());
     }
-    
+
     @Test
     public void testSleepingTimeRule() {
         Action action = new ShowMessageActionCreator("Ciao").createAction();
@@ -119,10 +110,9 @@ public class RuleTest {
         // Trigger should return false because the sleeping time is not passed
         assertFalse(sleepingTimeRule.evaluateTrigger());
         // Manually set lastTimeFired to test if the evaluateTrigger() works after the sleeping time
-        sleepingTimeRule.setLastTimeFired(LocalDateTime.now().minusDays(numDays).minusHours(numHours).minusMinutes(numMinutes+1));
+        sleepingTimeRule.setLastTimeFired(LocalDateTime.now().minusDays(numDays).minusHours(numHours).minusMinutes(numMinutes + 1));
         assertTrue(sleepingTimeRule.evaluateTrigger());
         assertFalse(sleepingTimeRule.isAfterSleepingTime());
 
-  
     }
 }
