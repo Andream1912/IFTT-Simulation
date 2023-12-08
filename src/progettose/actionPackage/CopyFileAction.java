@@ -41,8 +41,6 @@ public class CopyFileAction implements Action {
     //Implementing execute method from action
     @Override
     public void execute() {
-
-        Platform.runLater(() -> {
             //Setting the file name in the destination directory
             this.copyPath = Paths.get(this.copyPath.toString() + "/" + this.filePath.getFileName().toString());
             //Check if file exits
@@ -85,7 +83,7 @@ public class CopyFileAction implements Action {
                 fileNotFoundAlert.setHeaderText("File '" + this.filePath.getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
-        });
+        
     }
 
     @Override

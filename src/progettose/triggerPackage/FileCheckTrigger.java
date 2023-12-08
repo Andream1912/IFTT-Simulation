@@ -24,6 +24,7 @@ public class FileCheckTrigger implements Trigger {
 
     @Override
     public boolean evaluate() {
+        //crate a file type and verufy if it exists in the specified directory
         File file = new File(this.directoryPath, this.fileName);
         return file.exists() && file.isFile();
     }

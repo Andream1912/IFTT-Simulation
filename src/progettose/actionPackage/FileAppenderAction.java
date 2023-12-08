@@ -37,9 +37,6 @@ public class FileAppenderAction implements Action {
     @Override
     public void execute() {
         final String[] dialogMessage = {""};
-
-        // Run on JavaFX application thread
-        Platform.runLater(() -> {
             try {
                 // Check if the file exists
                 File file = new File(this.filePath.toString());
@@ -55,6 +52,7 @@ public class FileAppenderAction implements Action {
                     // File exists, update dialog message
                     dialogMessage[0] = "Message correctly added to file";
                 }
+
                 // Write message to the file
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
                     writer.write(this.message);
@@ -74,7 +72,6 @@ public class FileAppenderAction implements Action {
                 // Handle file creation or other IO error
                 e.printStackTrace(); // or handle the exception appropriately for your application
             }
-        });
     }
 
     // Getter for action type

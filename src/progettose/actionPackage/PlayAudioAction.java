@@ -33,7 +33,6 @@ public class PlayAudioAction implements Action {
     //Executes the action, playing the audio file
     @Override
     public void execute() {
-        Platform.runLater(() -> {
             File file = new File(this.path.toString());
             if (file.exists()) {
 
@@ -68,7 +67,6 @@ public class PlayAudioAction implements Action {
                 alert.setHeaderText("File not found!");
                 alert.showAndWait();
             }
-        });
     }
 
     @Override

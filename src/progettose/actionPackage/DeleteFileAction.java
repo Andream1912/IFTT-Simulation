@@ -32,7 +32,6 @@ public class DeleteFileAction implements Action {
     //Implementing execute method from action
     @Override
     public void execute() {
-        Platform.runLater(() -> {
             //Check if file exists
             if (Files.exists(this.filePath)) {
                 try {
@@ -52,7 +51,6 @@ public class DeleteFileAction implements Action {
                 fileNotFoundAlert.setHeaderText("File '" + this.filePath.getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
-        });
     }
 
     @Override

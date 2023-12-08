@@ -50,7 +50,6 @@ public class ExecuteProgramAction implements Action {
 
     @Override
     public void execute() {
-        Platform.runLater(() -> {
             if (Files.exists(Paths.get(this.commandList.get(0)))) {
                 ProcessBuilder executeFile = new ProcessBuilder(this.commandList);
                 try {
@@ -70,7 +69,6 @@ public class ExecuteProgramAction implements Action {
                         Paths.get(this.commandList.get(0)).getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
-        });
     }
 
     @Override

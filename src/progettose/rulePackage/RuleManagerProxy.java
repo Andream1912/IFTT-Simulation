@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import progettose.actionPackage.Action;
@@ -121,7 +122,7 @@ public class RuleManagerProxy implements RuleManager {
     private void storeToFile() throws IOException {
 
         // Writes rules from the ConcreteRuleManager to a CSV file.
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(directoryProject, false))) {
+        try ( BufferedWriter writer = new BufferedWriter(new FileWriter(directoryProject, false))) {
             for (Rule r : this.getRules()) {
                 writer.write(r.getClass().getSimpleName() + ";" + r.getName() + ";" + r.getTrigger().getType() + ";" + r.getTrigger().getToCSV() + ";" + r.getAction().getType() + ";" + r.getAction().getToCSV());
                 if (r instanceof SleepingTimeRule) {
@@ -217,7 +218,7 @@ public class RuleManagerProxy implements RuleManager {
 
     private void loadFromFile() throws IOException {
         // Reads rules from a CSV file and adds them to the ConcreteRuleManager.
-        try (BufferedReader reader = new BufferedReader(new FileReader(directoryProject))) {
+        try ( BufferedReader reader = new BufferedReader(new FileReader(directoryProject))) {
             String s;
             Rule r;
             String[] column;
@@ -252,12 +253,17 @@ public class RuleManagerProxy implements RuleManager {
     public void periodicCheck(TableView tb) {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
-            for (Rule r : this.concrRM.getRules()) {
-                if (r.evaluateTrigger()) {
-                    this.fireRule(r);
+                for (Rule r : this.concrRM.getRules()) {
+                    Platform.runLater(() -> {
+                    if (r.evaluateTrigger()) {
+                        
+                            this.fireRule(r);
+                    
+                    }
+                                            });
+
                 }
-            }
-            tb.refresh();
+                tb.refresh();
         }, 0, 3, TimeUnit.SECONDS);
     }
 

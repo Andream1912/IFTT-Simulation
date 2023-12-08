@@ -42,8 +42,6 @@ public class MoveFileAction implements Action {
     //Implementig execute method from action
     @Override
     public void execute() {
-
-        Platform.runLater(() -> {
             //Setting the fileName in the destination path
             this.movePath = Paths.get(this.movePath.toString() + "/" + this.filePath.getFileName().toString());
             //Check if file exits
@@ -130,7 +128,6 @@ public class MoveFileAction implements Action {
                 fileNotFoundAlert.setHeaderText("File '" + this.filePath.getFileName().toString() + "' not found");
                 fileNotFoundAlert.showAndWait();
             }
-        });
     }
 
     //Implementig getType and getToCSV for MoveFileAction
