@@ -31,7 +31,6 @@ public class ShowMessageAction implements Action {
     @Override
     public void execute() {
         // Create an Alert with a single "Close" button
-        Platform.runLater(() -> {
             Alert messageBox = new Alert(AlertType.NONE);
             ButtonType confButton = new ButtonType("Ok");
             messageBox.getButtonTypes().setAll(confButton);
@@ -40,7 +39,6 @@ public class ShowMessageAction implements Action {
 
             // Display the Alert and wait for user interaction
             messageBox.showAndWait();
-        });
     }
 
     @Override

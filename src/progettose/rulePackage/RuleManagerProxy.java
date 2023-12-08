@@ -242,14 +242,17 @@ public class RuleManagerProxy implements RuleManager {
     public void periodicCheck(TableView tb) {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
-            Platform.runLater(() -> {
                 for (Rule r : this.concrRM.getRules()) {
+                    Platform.runLater(() -> {
                     if (r.evaluateTrigger()) {
-                        this.fireRule(r);
+                        
+                            this.fireRule(r);
+                    
                     }
+                                            });
+
                 }
                 tb.refresh();
-            });
         }, 0, 3, TimeUnit.SECONDS);
     }
 
