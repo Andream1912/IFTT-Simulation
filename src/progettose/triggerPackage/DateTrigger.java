@@ -1,6 +1,7 @@
 package progettose.triggerPackage;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DateTrigger implements Trigger {
 
@@ -16,6 +17,10 @@ public class DateTrigger implements Trigger {
         return this.date;
     }
 
+    public void setDate(LocalDate date) {
+        this.date = date;
+    } 
+    
     @Override
     public String getType() {
         return this.type;
@@ -28,7 +33,7 @@ public class DateTrigger implements Trigger {
 
     @Override
     public String toString() {
-        return "On " + this.date;
+        return "On " + this.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
     }
 
     @Override

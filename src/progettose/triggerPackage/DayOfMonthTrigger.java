@@ -35,7 +35,16 @@ public class DayOfMonthTrigger implements Trigger{
     
     @Override
     public String toString() {
-        return "On " + day;
+        switch (day) {
+            case 1:
+                 return "On " + day + "st of Month";
+            case 2:
+                 return "On " + day + "nd of Month";
+            case 3:
+                 return "On " + day + "rd of Month";
+            default:
+                 return "On " + day + "th of Month";
+         }
     }
 
     @Override

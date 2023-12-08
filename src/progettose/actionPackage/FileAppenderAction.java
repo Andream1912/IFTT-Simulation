@@ -4,17 +4,15 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
 public class FileAppenderAction implements Action {
 
-    private final Path filePath;
-    private final String message;
+    private Path filePath;
+    private String message;
     private final String type = "Append String to Textfile";
 
     public FileAppenderAction(Path filePath, String message) {
@@ -28,6 +26,14 @@ public class FileAppenderAction implements Action {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setFilePath(Path filePath) {
+        this.filePath = filePath;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
@@ -50,7 +56,6 @@ public class FileAppenderAction implements Action {
     }
 
     @Override
-
     public String getType() {
         return this.type;
     }
@@ -62,6 +67,6 @@ public class FileAppenderAction implements Action {
 
     @Override
     public String toString() {
-        return filePath.getFileName().toString() + " \nmessage=" + message;
+        return "Append message: "+message+"\nto: "+filePath.getFileName().toString();
     }
 }

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -33,12 +34,15 @@ import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.ExecuteProgramActionCreator;
 import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
+import progettose.triggerPackage.CompositeTrigger;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
@@ -173,15 +177,203 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label fileToAppendLabel;
     @FXML
     private Label execProgramActionLabel;
+    @FXML
+    private AnchorPane anchorPane;
     
     private Path selectedFileForDimension;
+    private Path selectedFileForDimension1;
+    private Path selectedFileForDimension2;
     private FXMLDocumentController controllerOne;
     private Path selectedFilePath;
     private Path selectedSourcePath;
     private Path selectedDestinationPath;
     private Path selectedDeleteSourcePath;
     private Path selectedExFile;
+    private Path selectedExFile1;
+    private Path selectedExFile2;
     private Path selectedAppendFile;
+    private ObservableList<String> triggerList;
+    private ObservableList<String> actionList;
+    private HashMap<String, Trigger> compositeTrigger;
+    
+    
+    @FXML
+    private AnchorPane anchorPane1;
+    @FXML
+    private Pane pane1;
+    @FXML
+    private DatePicker datePicker1;
+    @FXML
+    private TextField exFileTextField1;
+    @FXML
+    private Button exFileButton1;
+    @FXML
+    private TextField fileDimensionTextField1;
+    @FXML
+    private Button fileDimensionButton1;
+    @FXML
+    private Button execProgramButton1;
+    @FXML
+    private TextField execProgramTextField1;
+    @FXML
+    private ComboBox<Integer> dayOfMonthComboBox1;
+    @FXML
+    private ComboBox<String> dayOfWeekComboBox1;
+    @FXML
+    private ComboBox<String> hourComboBox1;
+    @FXML
+    private ComboBox<String> minuteComboBox1;
+    @FXML
+    private Label dateLabel1;
+    @FXML
+    private Label timeLabel1;
+    @FXML
+    private Label dayOfWeekLabel1;
+    @FXML
+    private Label dayOfMonthLabel1;
+    @FXML
+    private Label exFileLabel1;
+    @FXML
+    private Label fileDimensionLabel1;
+    @FXML
+    private Label execProgramLabel1;
+    @FXML
+    private ComboBox<String> triggerComboBox1;
+    @FXML
+    private Label labelDimensionFile1;
+    @FXML
+    private ComboBox<String> typeDimensionComboBox1;
+    @FXML
+    private Label exFileDirectoryLabel1;
+    @FXML
+    private DatePicker datePicker2;
+    @FXML
+    private TextField exFileTextField2;
+    @FXML
+    private Button exFileButton2;
+    @FXML
+    private TextField fileDimensionTextField2;
+    @FXML
+    private Button fileDimensionButton2;
+    @FXML
+    private Button execProgramButton2;
+    @FXML
+    private TextField execProgramTextField2;
+    @FXML
+    private ComboBox<Integer> dayOfMonthComboBox2;
+    @FXML
+    private ComboBox<String> dayOfWeekComboBox2;
+    @FXML
+    private ComboBox<String> hourComboBox2;
+    @FXML
+    private ComboBox<String> minuteComboBox2;
+    @FXML
+    private Label dateLabel2;
+    @FXML
+    private Label timeLabel2;
+    @FXML
+    private Label dayOfWeekLabel2;
+    @FXML
+    private Label dayOfMonthLabel2;
+    @FXML
+    private Label exFileLabel2;
+    @FXML
+    private Label fileDimensionLabel2;
+    @FXML
+    private Label execProgramLabel2;
+    @FXML
+    private ComboBox<String> triggerComboBox2;
+    @FXML
+    private Label secondTriggerLabel;
+    @FXML
+    private Label labelDimensionFile2;
+    @FXML
+    private ComboBox<String> typeDimensionComboBox2;
+    @FXML
+    private Label exFileDirectoryLabel2;
+    @FXML
+    private ComboBox<String> notOperandComboBox1;
+    @FXML
+    private Button createCompositeTriggerButton;
+    @FXML
+    private Button doneTriggerButton;
+    @FXML
+    private ComboBox<String> notOperandComboBox2;
+    @FXML
+    private ComboBox<String> logicalOperandComboBox;
+    @FXML
+    private Label logicalOperandLabel;
+    @FXML
+    private TextField triggerTextField;
+    @FXML
+    private Label compositeTriggerLabel1;
+    @FXML
+    private Label compositeTriggerLabel2;
+    @FXML
+    private TextField actionsTextField;
+    @FXML
+    private ComboBox<?> actionComboBox1;
+    @FXML
+    private TextArea showMessageTextArea1;
+    @FXML
+    private TextArea appendToFileTextArea1;
+    @FXML
+    private Button sourceDirectoryButton1;
+    @FXML
+    private TextField moveCopyTextField1;
+    @FXML
+    private TextField execArgumentsTextField1;
+    @FXML
+    private Button deleteButton1;
+    @FXML
+    private TextField deleteTextField1;
+    @FXML
+    private Label playAudioLabel1;
+    @FXML
+    private Label appendToFileLabel11;
+    @FXML
+    private Label moveCopyLabel1;
+    @FXML
+    private Label destinationDirectoryLabel1;
+    @FXML
+    private Label showMessageLabel1;
+    @FXML
+    private Label appendToFileLabel21;
+    @FXML
+    private Label sourceDirectoryLabel1;
+    @FXML
+    private Label deleteLabel11;
+    @FXML
+    private Label deleteLabel21;
+    @FXML
+    private Label execProgLabel1;
+    @FXML
+    private Label execArgumentsLabel1;
+    @FXML
+    private Button appendToFileButton1;
+    @FXML
+    private Button playAudioButton1;
+    @FXML
+    private Button destinationDirectoryButton1;
+    @FXML
+    private Button execProgButton1;
+    @FXML
+    private Label fileAudioNameLabel1;
+    @FXML
+    private Label selectedDestinationDirectoryLabel1;
+    @FXML
+    private Label selectedSourceDirectoryLabel1;
+    @FXML
+    private Label deleteFileLabel1;
+    @FXML
+    private Label fileToAppendLabel1;
+    @FXML
+    private Label execProgramActionLabel1;
+    @FXML
+    private Label compositeTriggerLabel;
+    @FXML
+    private Button backFromTriggerButton;
+    
 
 
     /**
@@ -191,19 +383,18 @@ public class FXMLDocumentTwoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // Initialize ComboBox options
         // ... (initialize triggerList, actionList, dayOfWeekList, dayOfMonthList, hourList, minuteList)
-        ObservableList<String> triggerList = FXCollections.observableArrayList();
+        triggerList = FXCollections.observableArrayList();
         triggerComboBox.setItems(triggerList);
         triggerList.addAll("Time", "Day of Week", "Day of Month",
                 "Date",
                 "File Existance Verification", "File Dimension Verification" /*,
-                "Program Exit Status Verification"*/);
+                "Program Exit Status Verification"*/);     
 
-        ObservableList<String> actionList = FXCollections.observableArrayList();
+        actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
-
-        actionList.addAll("Show Message", "Play Audio"/*,
-                "Append String to Textfile"*/, "Move File"/*,
-                 */, "Copy File", "Delete File",
+        actionList.addAll("Show Message", "Play Audio",
+                "Append String to Textfile", "Move File",
+                "Copy File", "Delete File",
                 "Execute Program");
 
 
@@ -243,6 +434,7 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and((exFileTextField.textProperty().isEmpty()).or(exFileDirectoryLabel.visibleProperty().not()))
                 .and((fileDimensionTextField.textProperty().isEmpty()).or(labelDimensionFile.visibleProperty().not()))
                 //.and((execProgramTextField.textProperty().isEmpty()).or())
+                .and(compositeTriggerLabel.visibleProperty().not())
                 .or(triggerComboBox.valueProperty().isNull()))
                 .or(
                         (showMessageTextArea.textProperty().isEmpty())
@@ -253,13 +445,15 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and((execArgumentsTextField.textProperty().isEmpty()).or(execProgramActionLabel.visibleProperty().not()))
                                 .or(actionComboBox.valueProperty().isNull()))
                 .or(ruleNameTextField.textProperty().isEmpty())
-                .or(fireSleepingTimeCheckBox.selectedProperty().not()
-                        .and(fireOnceCheckBox.selectedProperty().not()))
+                //.or(fireSleepingTimeCheckBox.selectedProperty().not()
+                        // .and(fireOnceCheckBox.selectedProperty().not()))
         );
 
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
         exFileDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
         labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
+        labelDimensionFile1.visibleProperty().setValue(Boolean.FALSE);
+        exFileDirectoryLabel1.visibleProperty().setValue(Boolean.FALSE);
         
         fireSleepingTimeCheckBox.disableProperty().bind(fireOnceCheckBox.selectedProperty());
         fireOnceCheckBox.disableProperty().bind(fireSleepingTimeCheckBox.selectedProperty());
@@ -333,29 +527,213 @@ public class FXMLDocumentTwoController implements Initializable {
                 setDisable(date.isBefore(LocalDate.now()));
             }
         });
+        
+        datePicker1.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                // Disabilita le date precedenti a oggi
+                setDisable(date.isBefore(LocalDate.now()));
+            }
+        });
+        
+        datePicker2.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                // Disabilita le date precedenti a oggi
+                setDisable(date.isBefore(LocalDate.now()));
+            }
+        });
+        
+        triggerComboBox1.setItems(triggerList);
+        dayOfWeekComboBox1.setItems(dayOfWeekList);
+        dayOfMonthComboBox1.setItems(dayOfMonthList);
+        hourComboBox1.setItems(hourList);
+        minuteComboBox1.setItems(minuteList);
+        typeDimensionComboBox1.setValue("Byte");
+        typeDimensionComboBox1.setItems(typeDimensionList);
+        
+        triggerComboBox2.setItems(triggerList);
+        dayOfWeekComboBox2.setItems(dayOfWeekList);
+        dayOfMonthComboBox2.setItems(dayOfMonthList);
+        hourComboBox2.setItems(hourList);
+        minuteComboBox2.setItems(minuteList);
+        typeDimensionComboBox2.setValue("Byte");
+        typeDimensionComboBox2.setItems(typeDimensionList);
+        
+        
+        ObservableList<String> notNothingList = FXCollections.observableArrayList();
+        notOperandComboBox1.setItems(notNothingList);
+        notOperandComboBox2.setItems(notNothingList);
+        notNothingList.addAll("","NOT");
+        notOperandComboBox1.valueProperty().setValue("");
+        notOperandComboBox2.valueProperty().setValue("");
+        
+        ObservableList<String> andOrList = FXCollections.observableArrayList();
+        logicalOperandComboBox.setItems(andOrList);
+        andOrList.addAll("", "AND", "OR");
+        
+        logicalOperandComboBox.getSelectionModel().selectFirst();
+        
+        secondTriggerLabel.visibleProperty().bind(logicalOperandComboBox.valueProperty().isEqualTo("").not());
+        notOperandComboBox2.visibleProperty().bind(logicalOperandComboBox.valueProperty().isEqualTo("").not());
+        triggerComboBox2.visibleProperty().bind(logicalOperandComboBox.valueProperty().isEqualTo("").not());
+        
+        
+        hourComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Time"));
+        minuteComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Time"));
+        dayOfWeekComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Day of Week"));
+        dayOfMonthComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Day of Month"));
+        datePicker1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Date"));
+        exFileTextField1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Existance Verification"));
+        exFileButton1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Existance Verification"));
+        fileDimensionTextField1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
+        fileDimensionButton1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
+        execProgramTextField1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
+        execProgramButton1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
+        timeLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Time"));
+        dayOfWeekLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Day of Week"));
+        dayOfMonthLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Day of Month"));
+        dateLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Date"));
+        exFileLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Existance Verification"));
+        fileDimensionLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
+        execProgramLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
+        typeDimensionComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
+
+        
+        
+        hourComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Time"));
+        minuteComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Time"));
+        dayOfWeekComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Day of Week"));
+        dayOfMonthComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Day of Month"));
+        datePicker2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Date"));
+        exFileTextField2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Existance Verification"));
+        exFileButton2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Existance Verification"));
+        fileDimensionTextField2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
+        fileDimensionButton2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
+        execProgramTextField2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
+        execProgramButton2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
+        timeLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Time"));
+        dayOfWeekLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Day of Week"));
+        dayOfMonthLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Day of Month"));
+        dateLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Date"));
+        exFileLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Existance Verification"));
+        fileDimensionLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
+        execProgramLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
+        typeDimensionComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
+        
+        logicalOperandLabel.visibleProperty().bind(((hourComboBox1.valueProperty().isNull().or(minuteComboBox1.valueProperty().isNull()))
+                .and(dayOfWeekComboBox1.valueProperty().isNull())
+                .and(dayOfMonthComboBox1.valueProperty().isNull())
+                .and(datePicker1.valueProperty().isNull())
+                .and((exFileTextField1.textProperty().isEmpty()).or(exFileDirectoryLabel1.visibleProperty().not()))
+                .and((fileDimensionTextField1.textProperty().isEmpty()).or(labelDimensionFile1.visibleProperty().not()))
+                //.and((execProgramTextField1.textProperty().isEmpty()).or())
+                .and(compositeTriggerLabel1.visibleProperty().not())
+                .or(triggerComboBox1.valueProperty().isNull())).not());
+        
+        logicalOperandComboBox.visibleProperty().bind(((hourComboBox1.valueProperty().isNull().or(minuteComboBox1.valueProperty().isNull()))
+                .and(dayOfWeekComboBox1.valueProperty().isNull())
+                .and(dayOfMonthComboBox1.valueProperty().isNull())
+                .and(datePicker1.valueProperty().isNull())
+                .and((exFileTextField1.textProperty().isEmpty()).or(exFileDirectoryLabel1.visibleProperty().not()))
+                .and((fileDimensionTextField1.textProperty().isEmpty()).or(labelDimensionFile1.visibleProperty().not()))
+                //.and((execProgramTextField1.textProperty().isEmpty()).or())
+                .and(compositeTriggerLabel1.visibleProperty().not())
+                .or(triggerComboBox1.valueProperty().isNull())).not());
+        
+        doneTriggerButton.disableProperty().bind((((hourComboBox1.valueProperty().isNull().or(minuteComboBox1.valueProperty().isNull()))
+                .and(dayOfWeekComboBox1.valueProperty().isNull())
+                .and(dayOfMonthComboBox1.valueProperty().isNull())
+                .and(datePicker1.valueProperty().isNull())
+                .and((exFileTextField1.textProperty().isEmpty()).or(exFileDirectoryLabel1.visibleProperty().not()))
+                .and((fileDimensionTextField1.textProperty().isEmpty()).or(labelDimensionFile1.visibleProperty().not()))
+                //.and((execProgramTextField.textProperty().isEmpty()).or())
+                .and(compositeTriggerLabel1.visibleProperty().not())
+                .or(triggerComboBox1.valueProperty().isNull()))
+                .or(notOperandComboBox1.valueProperty().isEqualTo("")
+                    .and(logicalOperandComboBox.valueProperty().isEqualTo("")))
+                
+                .or(triggerTextField.textProperty().isEmpty()))
+                .or(((hourComboBox2.valueProperty().isNull().or(minuteComboBox2.valueProperty().isNull()))
+                .and(dayOfWeekComboBox2.valueProperty().isNull())
+                .and(dayOfMonthComboBox2.valueProperty().isNull())
+                .and(datePicker2.valueProperty().isNull())
+                .and((exFileTextField2.textProperty().isEmpty()).or(exFileDirectoryLabel2.visibleProperty().not()))
+                .and((fileDimensionTextField2.textProperty().isEmpty()).or(labelDimensionFile2.visibleProperty().not()))
+                //.and((execProgramTextField.textProperty().isEmpty()).or())
+                .and(compositeTriggerLabel2.visibleProperty().not())
+                .or(triggerComboBox2.valueProperty().isNull()))
+                .and(logicalOperandComboBox.valueProperty().isNotEqualTo(""))
+                ));
+        
+        compositeTrigger = new HashMap();
     }
 
-    private Trigger checkTrigger(String s) {
+    private Trigger checkTrigger(String s, int n) {
         switch (s) {
             case "Time":
-                TriggerCreator timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()), 0));
+                TriggerCreator timeTC;
+                if(n == 0)
+                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()), 0));
+                else if(n == 1)
+                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox1.getValue()), Integer.parseInt(minuteComboBox1.getValue()), 0));
+                else
+                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox2.getValue()), Integer.parseInt(minuteComboBox2.getValue()), 0));
                 return timeTC.createTrigger();
             case "Day of Week":
-                TriggerCreator dayOfWeekTC = new DayOfWeekTriggerCreator(dayOfWeekComboBox.getValue());
+                TriggerCreator dayOfWeekTC;
+                if(n == 0)
+                    dayOfWeekTC = new DayOfWeekTriggerCreator(dayOfWeekComboBox.getValue());
+                else if(n == 1)
+                    dayOfWeekTC = new DayOfWeekTriggerCreator(dayOfWeekComboBox1.getValue());
+                else
+                    dayOfWeekTC = new DayOfWeekTriggerCreator(dayOfWeekComboBox2.getValue());
                 return dayOfWeekTC.createTrigger();
             case "Day of Month":
-                TriggerCreator dayOfMonthTC = new DayOfMonthTriggerCreator(dayOfMonthComboBox.getValue());
+                TriggerCreator dayOfMonthTC;
+                if(n == 0)
+                    dayOfMonthTC = new DayOfMonthTriggerCreator(dayOfMonthComboBox.getValue());
+                else if(n == 1)
+                    dayOfMonthTC = new DayOfMonthTriggerCreator(dayOfMonthComboBox1.getValue());
+                else
+                    dayOfMonthTC = new DayOfMonthTriggerCreator(dayOfMonthComboBox2.getValue());
                 return dayOfMonthTC.createTrigger();
             case "Date":
-                TriggerCreator dateTC = new DateTriggerCreator(datePicker.getValue());
+                TriggerCreator dateTC;
+                if(n == 0)
+                    dateTC = new DateTriggerCreator(datePicker.getValue());
+                else if(n == 1)
+                    dateTC = new DateTriggerCreator(datePicker1.getValue());
+                else 
+                    dateTC = new DateTriggerCreator(datePicker2.getValue());
                 return dateTC.createTrigger();
             case "File Dimension Verification":
-                TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(selectedFileForDimension, Long.parseLong(fileDimensionTextField.textProperty().getValue()), typeDimensionComboBox.getValue());
+                TriggerCreator fileDimensionTC;
+                if(n == 0)
+                    fileDimensionTC = new FileSizeCheckerTriggerCreator(selectedFileForDimension, Long.parseLong(fileDimensionTextField.textProperty().getValue()), typeDimensionComboBox.getValue());
+                else if(n == 1)
+                    fileDimensionTC = new FileSizeCheckerTriggerCreator(selectedFileForDimension1, Long.parseLong(fileDimensionTextField1.textProperty().getValue()), typeDimensionComboBox1.getValue());
+                else
+                    fileDimensionTC = new FileSizeCheckerTriggerCreator(selectedFileForDimension2, Long.parseLong(fileDimensionTextField2.textProperty().getValue()), typeDimensionComboBox2.getValue());
                 return fileDimensionTC.createTrigger();
             case "File Existance Verification":
-                TriggerCreator fileExTC = new FileCheckTriggerCreator(selectedExFile.toString(), exFileTextField.getText());
+                TriggerCreator fileExTC;
+                if(n == 0)
+                    fileExTC = new FileCheckTriggerCreator(selectedExFile.toString(), exFileTextField.getText());
+                else if(n == 1)
+                    fileExTC = new FileCheckTriggerCreator(selectedExFile1.toString(), exFileTextField1.getText());
+                else
+                    fileExTC = new FileCheckTriggerCreator(selectedExFile2.toString(), exFileTextField2.getText());
                 return fileExTC.createTrigger();
             default:
+                for(Trigger t : compositeTrigger.values()){
+                    if(s.substring(12).equals(t.getType().substring(12)))
+                           return t; 
+                }
                 System.out.println("Not valid Trigger");
                 return null;
         }
@@ -399,7 +777,7 @@ public class FXMLDocumentTwoController implements Initializable {
     private void onSave(ActionEvent event) {
         // Create Trigger and Action based on selected options
         // ... (create Trigger and Action based on triggerComboBox and actionComboBox values)
-        Trigger trigger = checkTrigger(triggerComboBox.getValue());
+        Trigger trigger = checkTrigger(triggerComboBox.getValue(), 0);
         Action action = checkAction(actionComboBox.getValue());
         Rule r;
         //When copyFileAction is selected, onSave the action is created from the different input fields
@@ -439,7 +817,6 @@ public class FXMLDocumentTwoController implements Initializable {
             fileAudioNameLabel.textProperty().setValue(selectedFile.getName());
             fileAudioNameLabel.visibleProperty().setValue(Boolean.TRUE);
         }
-
     }
 
     @FXML
@@ -495,6 +872,11 @@ public class FXMLDocumentTwoController implements Initializable {
         execProgramTextField.textProperty().setValue(null);
         labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
         fileDimensionTextField.textProperty().setValue(null);
+        if(triggerComboBox.valueProperty().getValue().startsWith("Composite")){
+            compositeTriggerLabel.textProperty().setValue(compositeTrigger.get(triggerComboBox.valueProperty().getValue()).toString());
+            compositeTriggerLabel.visibleProperty().setValue(Boolean.TRUE);
+        } else
+            compositeTriggerLabel.visibleProperty().setValue(Boolean.FALSE);
 
     }
 
@@ -531,7 +913,7 @@ public class FXMLDocumentTwoController implements Initializable {
 
     @FXML
     private void onFileDimensionButton(ActionEvent event) {
-        Stage primaryStage = (Stage) playAudioButton.getScene().getWindow();
+        Stage primaryStage = (Stage) fileDimensionButton.getScene().getWindow();
 
         // Create a FileChooser
         FileChooser fileChooser = new FileChooser();
@@ -539,10 +921,23 @@ public class FXMLDocumentTwoController implements Initializable {
         // Show the FileChooser and get the selected file
         File selectedFile = fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
-            selectedFileForDimension = selectedFile.toPath();
-            labelDimensionFile.textProperty().setValue(selectedFileForDimension.getFileName().toString());
-            labelDimensionFile.setVisible(true);
-
+            if (event.getSource() instanceof Button) {
+                Button clickedButton = (Button) event.getSource();
+                String buttonId = clickedButton.getId();
+                if (buttonId.charAt(buttonId.length()-1) == '1'){
+                    selectedFileForDimension1 = selectedFile.toPath();
+                    labelDimensionFile1.textProperty().setValue(selectedFileForDimension1.getFileName().toString());
+                    labelDimensionFile1.setVisible(true);
+                } else if (buttonId.charAt(buttonId.length()-1) == '2'){
+                    selectedFileForDimension2 = selectedFile.toPath();
+                    labelDimensionFile2.textProperty().setValue(selectedFileForDimension2.getFileName().toString());
+                    labelDimensionFile2.setVisible(true);
+                } else {
+                    selectedFileForDimension = selectedFile.toPath();
+                    labelDimensionFile.textProperty().setValue(selectedFileForDimension.getFileName().toString());
+                    labelDimensionFile.setVisible(true);
+                }
+            }
         }
     }
 
@@ -557,11 +952,24 @@ public class FXMLDocumentTwoController implements Initializable {
         //Get source directory if it's not null
         File checkFile = directoryChooser.showDialog(primaryStage);
         if (checkFile != null) {
-            selectedExFile = checkFile.toPath();
-            exFileDirectoryLabel.textProperty().setValue(selectedExFile.getFileName().toString());
-            exFileDirectoryLabel.visibleProperty().setValue(Boolean.TRUE);
+            if (event.getSource() instanceof Button) {
+                Button clickedButton = (Button) event.getSource();
+                String buttonId = clickedButton.getId();
+                if (buttonId.charAt(buttonId.length()-1) == '1'){
+                    selectedExFile1 = checkFile.toPath();
+                    exFileDirectoryLabel1.textProperty().setValue(selectedExFile1.getFileName().toString());
+                    exFileDirectoryLabel1.visibleProperty().setValue(Boolean.TRUE);
+                } else if (buttonId.charAt(buttonId.length()-1) == '2'){
+                    selectedExFile2 = checkFile.toPath();
+                    exFileDirectoryLabel2.textProperty().setValue(selectedExFile2.getFileName().toString());
+                    exFileDirectoryLabel2.visibleProperty().setValue(Boolean.TRUE);
+                } else {
+                    selectedExFile = checkFile.toPath();
+                    exFileDirectoryLabel.textProperty().setValue(selectedExFile.getFileName().toString());
+                    exFileDirectoryLabel.visibleProperty().setValue(Boolean.TRUE);
+                }
+            }
         }
-
     }
 
     @FXML
@@ -598,10 +1006,6 @@ public class FXMLDocumentTwoController implements Initializable {
         FileChooser.ExtensionFilter defaultFilter = new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(defaultFilter);
 
-        // Add an additional filter for all files
-        FileChooser.ExtensionFilter allFilter = new FileChooser.ExtensionFilter("All files", "*.*");
-        fileChooser.getExtensionFilters().add(allFilter);
-
         // Show the FileChooser and get the selected file
         File selectedFile = fileChooser.showOpenDialog(primaryStage);
         if (selectedFile != null) {
@@ -623,5 +1027,110 @@ public class FXMLDocumentTwoController implements Initializable {
         if (!(event.getCharacter()).matches("^\\d*")){
             event.consume();
         }
+    }
+
+    @FXML
+    private void onCreateCompositeTrigger(ActionEvent event) {
+        anchorPane1.visibleProperty().setValue(Boolean.FALSE);
+        pane1.visibleProperty().setValue(Boolean.TRUE);
+        anchorPane.setMaxHeight(500);
+        anchorPane.setMinHeight(500);
+        triggerTextField.textProperty().setValue("");
+        triggerComboBox1.valueProperty().setValue("");
+        notOperandComboBox1.valueProperty().setValue("");
+    }
+
+    @FXML
+    private void onDoneTrigger(ActionEvent event) {
+        pane1.visibleProperty().setValue(Boolean.FALSE);
+        anchorPane1.visibleProperty().setValue(Boolean.TRUE);
+        Trigger composite;
+        Trigger composite1;
+        Trigger composite2 = null;
+        String logicOp = logicalOperandComboBox.valueProperty().getValue();
+        Trigger trigger1 = checkTrigger(triggerComboBox1.getValue(), 1);
+        if(notOperandComboBox1.valueProperty().get().contains("NOT"))
+            composite1 = new CompositeTrigger(triggerTextField.getText(),trigger1, null, "NOT");
+        else 
+            composite1 = trigger1;
+        composite = composite1;
+        if(logicOp.equals("AND") || logicOp.equals("OR")){
+            Trigger trigger2 = checkTrigger(triggerComboBox2.getValue(), 2);
+            if(notOperandComboBox2.valueProperty().get().contains("NOT"))
+                composite2 = new CompositeTrigger(triggerTextField.getText(),trigger2, null, "NOT");
+            else
+                composite2 = trigger2;
+            composite = new CompositeTrigger(triggerTextField.getText(),composite1, composite2, logicOp);
+        }
+        
+        triggerList.add(composite.getType());
+        compositeTrigger.put(composite.getType(), composite);
+        
+    }
+
+    @FXML
+    private void onChangeTrigger1(ActionEvent event) {
+        // Reset UI elements based on trigger selection
+        // ... (reset UI elements based on triggerComboBox selection)
+        hourComboBox1.valueProperty().setValue(null);
+        minuteComboBox1.valueProperty().setValue(null);
+        dayOfWeekComboBox1.valueProperty().setValue(null);
+        dayOfMonthComboBox1.valueProperty().setValue(null);
+        datePicker1.valueProperty().setValue(null);
+        exFileTextField1.textProperty().setValue(null);
+        exFileButton1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Existance Verification"));
+        fileDimensionTextField1.textProperty().setValue(null);
+        fileDimensionButton1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
+        execProgramTextField1.textProperty().setValue(null);
+        execProgramButton1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
+        exFileDirectoryLabel1.visibleProperty().setValue(Boolean.FALSE);
+        execProgramTextField1.textProperty().setValue(null);
+        labelDimensionFile1.visibleProperty().setValue(Boolean.FALSE);
+        fileDimensionTextField1.textProperty().setValue(null);
+        logicalOperandComboBox.valueProperty().setValue("");
+        if(triggerComboBox1.valueProperty().getValue().startsWith("Composite")){
+            compositeTriggerLabel1.textProperty().setValue(compositeTrigger.get(triggerComboBox1.valueProperty().getValue()).toString());
+            compositeTriggerLabel1.visibleProperty().setValue(Boolean.TRUE);
+        } else
+            compositeTriggerLabel1.visibleProperty().setValue(Boolean.FALSE);
+    }
+
+    @FXML
+    private void onChangeTrigger2(ActionEvent event) {
+        // Reset UI elements based on trigger selection
+        // ... (reset UI elements based on triggerComboBox selection)
+        hourComboBox2.valueProperty().setValue(null);
+        minuteComboBox2.valueProperty().setValue(null);
+        dayOfWeekComboBox2.valueProperty().setValue(null);
+        dayOfMonthComboBox2.valueProperty().setValue(null);
+        datePicker2.valueProperty().setValue(null);
+        exFileTextField2.textProperty().setValue(null);
+        exFileButton2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Existance Verification"));
+        fileDimensionTextField2.textProperty().setValue(null);
+        fileDimensionButton2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
+        execProgramTextField2.textProperty().setValue(null);
+        execProgramButton2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
+        exFileDirectoryLabel2.visibleProperty().setValue(Boolean.FALSE);
+        execProgramTextField2.textProperty().setValue(null);
+        labelDimensionFile2.visibleProperty().setValue(Boolean.FALSE);
+        fileDimensionTextField2.textProperty().setValue(null);
+        if(triggerComboBox2.valueProperty().getValue().startsWith("Composite")){
+            compositeTriggerLabel2.textProperty().setValue(compositeTrigger.get(triggerComboBox2.valueProperty().getValue()).toString());
+            compositeTriggerLabel2.visibleProperty().setValue(Boolean.TRUE);
+        } else
+            compositeTriggerLabel2.visibleProperty().setValue(Boolean.FALSE);
+    }
+
+    @FXML
+    private void onChangeOperator(ActionEvent event) {
+        triggerComboBox2.valueProperty().setValue("");
+        notOperandComboBox2.valueProperty().setValue("");
+
+    }
+
+    @FXML
+    private void onBackTrigger(ActionEvent event) {
+        pane1.visibleProperty().setValue(Boolean.FALSE);
+        anchorPane1.visibleProperty().setValue(Boolean.TRUE);
     }
 }

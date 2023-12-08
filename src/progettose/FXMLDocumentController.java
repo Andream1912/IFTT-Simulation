@@ -12,13 +12,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import progettose.actionPackage.Action;
 import progettose.triggerPackage.Trigger;
 
@@ -45,8 +53,14 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<Rule, RuleState> statusColumn;
     @FXML
     private TableColumn<Rule, String> typeColumn;
-    private RuleManagerProxy rmp;
+    @FXML
+    private ContextMenu contextMenu;
+    @FXML
+    private MenuItem removeContextItem;
+    @FXML
+    private MenuItem deactivateContextItem;
     
+    private RuleManagerProxy rmp;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -57,9 +71,10 @@ public class FXMLDocumentController implements Initializable {
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
         actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory("state"));
         typeColumn.setCellValueFactory(new PropertyValueFactory("ruleTypeDescription"));
 
+        
+        
         // Making columns non-resizable
         nameColumn.resizableProperty().setValue(Boolean.FALSE);
         actionColumn.resizableProperty().setValue(Boolean.FALSE);
@@ -74,7 +89,28 @@ public class FXMLDocumentController implements Initializable {
         toggleStateButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
 
         rmp.periodicCheck(tableView);      
+        
+        statusColumn.setCellValueFactory(new PropertyValueFactory<Rule,RuleState>("state"));
+        
+        statusColumn.setCellFactory(new Callback<TableColumn<Rule, RuleState>, TableCell<Rule, RuleState>>() {
+        public TableCell call(TableColumn param) {
+            return new TableCell<Rule, RuleState>() {
 
+                @Override
+                public void updateItem(RuleState item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!isEmpty()) {
+                        this.setTextFill(Color.RED);
+                        if(item.toString().equals("Active")) 
+                            this.setTextFill(Color.GREEN);
+                        setText(item.toString());
+                    }
+                }
+            };
+        }
+        });
+        
+               
     }
 
     @FXML

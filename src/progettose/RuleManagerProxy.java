@@ -28,6 +28,7 @@ import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
+import progettose.triggerPackage.CompositeTrigger;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
 import progettose.triggerPackage.DayOfWeekTriggerCreator;
@@ -149,8 +150,18 @@ public class RuleManagerProxy implements RuleManager {
                 TriggerCreator fileDimensionTC = new FileSizeCheckerTriggerCreator(Paths.get(column[i++]), Long.parseLong(column[i++]), column[i++]);
                 return fileDimensionTC.createTrigger();
             default:
-                System.out.println("Not valid Trigger");
-                return null;
+                if(s.startsWith("Composite")){
+                    Trigger t1 = checkTrigger(column[i++], column);
+                    String op = column[i++];
+                    if(op.equals("NOT"))
+                        return new CompositeTrigger(s.substring(12), t1, null, op);
+                    Trigger t2 = checkTrigger(column[i++], column);
+                    return new CompositeTrigger(s.substring(12), t1, t2, op);
+                    
+                }else{
+                    System.out.println("Not valid Trigger");
+                    return null;
+                }
         }
     }
 
