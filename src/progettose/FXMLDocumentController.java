@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -73,7 +72,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Separator separatorCounter;
     @FXML
-    
+
     private Button arrowButton;
     private RuleManagerProxy rmp;
     private TableView<Map.Entry<String, Integer>> counterTableView;
@@ -91,7 +90,6 @@ public class FXMLDocumentController implements Initializable {
         rmp = RuleManagerProxy.getInstance();
 
         // Initializing TableView and its columns
-
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
         actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
@@ -137,18 +135,19 @@ public class FXMLDocumentController implements Initializable {
         public TableCell call(TableColumn param) {
             return new TableCell<Rule, RuleState>() {
 
-                @Override
-                public void updateItem(RuleState item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (!isEmpty()) {
-                        this.setTextFill(Color.RED);
-                        if(item.toString().equals("Active")) 
-                            this.setTextFill(Color.GREEN);
-                        setText(item.toString());
+                    @Override
+                    public void updateItem(RuleState item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!isEmpty()) {
+                            this.setTextFill(Color.RED);
+                            if (item.toString().equals("Active")) {
+                                this.setTextFill(Color.GREEN);
+                            }
+                            setText(item.toString());
+                        }
                     }
-                }
-            };
-        }
+                };
+            }
         });
     }
 
@@ -159,7 +158,7 @@ public class FXMLDocumentController implements Initializable {
 
         // Making columns non-resizable
         keyColumn.resizableProperty().setValue(Boolean.FALSE);
-        valueColumn.resizableProperty().setValue(Boolean.FALSE);      
+        valueColumn.resizableProperty().setValue(Boolean.FALSE);
 
         // Enabling table editing
         counterTableView.setEditable(true);
@@ -170,12 +169,10 @@ public class FXMLDocumentController implements Initializable {
 
         // Configuring the "Value" column cell to be editable
         valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        
+
         valueColumn.setOnEditCommit(event -> handleValueColumnEditCommit(event));
         keyColumn.setCellValueFactory(entry -> new SimpleStringProperty(entry.getValue().getKey()));
         valueColumn.setCellValueFactory(entry -> new SimpleIntegerProperty(entry.getValue().getValue()).asObject());
-
-       
 
         // Setting minimum and maximum width for columns
         keyColumn.setMinWidth(151);
@@ -195,8 +192,20 @@ public class FXMLDocumentController implements Initializable {
         // Verifies that the newKey is a string (not an integer).
         // Verifies that the newKey contains only characters.
         if (newKey.matches("[a-zA-Z]+")) {
+            Alert messageBox = new Alert(Alert.AlertType.NONE);
+            ButtonType confButton = new ButtonType("Yes");
+            ButtonType cancelButton = new ButtonType("No");
+            messageBox.getButtonTypes().setAll(confButton, cancelButton);
+            messageBox.setTitle("Warning");
+            messageBox.setContentText("Do you want to change the name of the counter?\n You will lose all rules that use that counter");
+            // Display the Alert and wait for the user to decide whether to remove the rule or not
+            messageBox.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == confButton) {
+                    counter.updateKeyName(entry.getKey(), newKey);
+                }
+            });
             // Calls the updateKeyName method in the CounterList class to update the key.
-            counter.updateKeyName(entry.getKey(), newKey);
+
             // Updates the TableView with the modified data.
             updateTWTableWithData();
         } else {
@@ -243,7 +252,7 @@ public class FXMLDocumentController implements Initializable {
         contextMenuTW.getItems().addAll(addMenuItemTW, deleteMenuItemTW);
         counterTableView.setContextMenu(contextMenuTW);
         deleteMenuItemTW.disableProperty().bind(counterTableView.getSelectionModel().selectedItemProperty().isNull());
-        
+
     }
 
     private void handleDeleteMenuItemTW() {
@@ -251,6 +260,30 @@ public class FXMLDocumentController implements Initializable {
         counterTableView.getItems().remove(selectedItem);
         counter.removeCounter(selectedItem.getKey());
         counterTableView.getSelectionModel().clearSelection();
+        for (Rule r : rmp.getRules()) {
+            switch (r.getTrigger().getType()) {
+                case "Compare Counter to Counter":
+                case "Compare Counter to Value":
+                    Alert messageBox = new Alert(Alert.AlertType.NONE);
+                    ButtonType confButton = new ButtonType("Yes");
+                    ButtonType cancelButton = new ButtonType("No");
+                    messageBox.getButtonTypes().setAll(confButton, cancelButton);
+                    messageBox.setTitle("Warning");
+                    messageBox.setContentText("Do you want to remove the counter?\n It will be remove also the rule:" + r.getName());
+                    // Display the Alert and wait for the user to decide whether to remove the rule or not
+                    messageBox.showAndWait().ifPresent(buttonType -> {
+                        if (buttonType == confButton) {
+                            counterTableView.getItems().remove(selectedItem);
+                            counter.removeCounter(selectedItem.getKey());
+                        }
+                    });
+                default:
+                    counterTableView.getItems().remove(selectedItem);
+                    counter.removeCounter(selectedItem.getKey());
+
+            }
+
+        }
     }
 
     private void handleAddMenuItemTW() {
@@ -449,7 +482,7 @@ public class FXMLDocumentController implements Initializable {
         ObservableList<Map.Entry<String, Integer>> items = FXCollections.observableArrayList(counter.getHashMap().entrySet());
         counterTableView.setItems(items);
     }
-    
+
     @FXML
     private void addCounterButton(ActionEvent event) {
         handleAddMenuItemTW();
