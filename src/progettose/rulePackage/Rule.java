@@ -16,7 +16,8 @@ public class Rule extends Observable{
         this.name = n;
         this.action = a;
         this.trigger = t;
-        this.state = new RuleStateActive(); 
+        this.state = new RuleStateActive();
+        this.ruleTypeDescription = "Simple Rule";
     }
 
     public Action getAction() {

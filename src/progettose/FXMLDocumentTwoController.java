@@ -46,6 +46,7 @@ import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.ExecuteProgramActionCreator;
 import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
+import progettose.counterPackage.CounterList;
 import progettose.triggerPackage.CompositeTrigger;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
@@ -384,6 +385,8 @@ public class FXMLDocumentTwoController implements Initializable {
     private Path selectedAppendFile;
     private ObservableList<String> triggerList;
     private ObservableList<String> actionList;
+    private ObservableList<String> counterList;
+    private ObservableList<String> opList;
     private HashMap<String, Trigger> compositeTrigger;
     @FXML
     private ComboBox<?> actionComboBox2;
@@ -637,6 +640,68 @@ public class FXMLDocumentTwoController implements Initializable {
     private Label exitValueProgramLabel1;
     @FXML
     private Label exitValueProgramLabel2;
+    @FXML
+    private ComboBox<String> triggerCountFirstComboBox;
+    @FXML
+    private Label triggerCountFirstLabel;
+    @FXML
+    private Label triggerCountIntLabel;
+    @FXML
+    private ComboBox<String> triggerCountOpComboBox;
+    @FXML
+    private ComboBox<String> triggerCountSecondComboBox;
+    @FXML
+    private TextField triggerCountTextField;
+    @FXML
+    private Label triggerCountSecondLabel;
+    @FXML
+    private ComboBox<String> triggerCountFirstComboBox1;
+    @FXML
+    private TextField triggerCountTextField1;
+    @FXML
+    private Label triggerCountFirstLabel1;
+    @FXML
+    private Label triggerCountIntLabel1;
+    @FXML
+    private ComboBox<String> triggerCountOpComboBox1;
+    @FXML
+    private ComboBox<String> triggerCountSecondComboBox1;
+    @FXML
+    private Label triggerCountSecondLabel1;
+    @FXML
+    private ComboBox<String> triggerCountFirstComboBox2;
+    @FXML
+    private TextField triggerCountTextField2;
+    @FXML
+    private Label triggerCountFirstLabel2;
+    @FXML
+    private Label triggerCountIntLabel2;
+    @FXML
+    private ComboBox<String> triggerCountOpComboBox2;
+    @FXML
+    private ComboBox<String> triggerCountSecondComboBox2;
+    @FXML
+    private Label triggerCountSecondLabel2;
+    @FXML
+    private ComboBox<String> actionCountFirstComboBox;
+    @FXML
+    private ComboBox<String> actionCountSecondComboBox;
+    @FXML
+    private TextField actionCountTextField;
+    @FXML
+    private Label actionCountFirstLabel;
+    @FXML
+    private Label actionCountSecondLabel;
+    @FXML
+    private Label actionCountAddLabel;
+    @FXML
+    private Label actionCountSetLabel;
+    @FXML
+    private Label execProgramTriggerLabel1;
+    @FXML
+    private Label execProgramTriggerLabel2;
+    @FXML
+    private Label execProgramTriggerLabel;
     
 
     /**
@@ -651,14 +716,36 @@ public class FXMLDocumentTwoController implements Initializable {
         triggerList.addAll("Time", "Day of Week", "Day of Month",
                 "Date",
                 "File Existance Verification", "File Dimension Verification",
-                "Program Exit Status Verification");
+                "Program Exit Status Verification", "Compare Counter to Value",
+                "Compare Counter to Counter");
 
         actionList = FXCollections.observableArrayList();
         actionComboBox.setItems(actionList);
         actionList.addAll("Show Message", "Play Audio",
                 "Append String to Textfile", "Move File",
                 "Copy File", "Delete File",
-                "Execute Program");
+                "Execute Program", "Set Value of Counter",
+                "Add Value to Counter", "Add Value of Counter to Counter");
+        
+        CounterList counters = new CounterList();
+        counterList = FXCollections.observableArrayList();
+        triggerCountFirstComboBox.setItems(counterList);
+        triggerCountSecondComboBox.setItems(counterList);
+        triggerCountFirstComboBox1.setItems(counterList);
+        triggerCountSecondComboBox1.setItems(counterList);
+        triggerCountFirstComboBox2.setItems(counterList);
+        triggerCountSecondComboBox2.setItems(counterList);
+        actionCountFirstComboBox.setItems(counterList);
+        actionCountSecondComboBox.setItems(counterList);
+        
+        counterList.addAll(counters.getHashMap().keySet());
+        
+        opList = FXCollections.observableArrayList();
+        triggerCountOpComboBox.setItems(opList);
+        triggerCountOpComboBox1.setItems(opList);
+        triggerCountOpComboBox2.setItems(opList);
+        opList.addAll("=", ">", ">=", "<", "<=");
+        
 
         ObservableList<String> dayOfWeekList = FXCollections.observableArrayList();
         dayOfWeekComboBox.setItems(dayOfWeekList);
@@ -697,6 +784,8 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and((fileDimensionTextField.textProperty().isEmpty()).or(labelDimensionFile.visibleProperty().not()))
                 .and((execProgramTextField.textProperty().isEmpty()).or(exitValueProgramLabel.visibleProperty().not()).or(insertExitValueTextField.textProperty().isEmpty()))
                 .and(compositeTriggerLabel.visibleProperty().not())
+                .and(triggerCountFirstComboBox.valueProperty().isNull().or(triggerCountOpComboBox.valueProperty().isNull()).or(triggerCountTextField.textProperty().isEmpty()))
+                .and(triggerCountFirstComboBox.valueProperty().isNull().or(triggerCountOpComboBox.valueProperty().isNull()).or(triggerCountSecondComboBox.valueProperty().isNull()))
                 .or(triggerComboBox.valueProperty().isNull()))
                 .or(
                         (showMessageTextArea.textProperty().isEmpty())
@@ -752,7 +841,16 @@ public class FXMLDocumentTwoController implements Initializable {
         typeDimensionComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("File Dimension Verification"));
         insertExitValueLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
         insertExitValueTextField.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
-
+        execProgramTriggerLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Program Exit Status Verification"));
+        triggerCountFirstComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountOpComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountTextField.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Value"));
+        triggerCountFirstLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountIntLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Value"));
+        triggerCountSecondComboBox.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Counter"));
+        triggerCountSecondLabel.visibleProperty().bind(triggerComboBox.valueProperty().isEqualTo("Compare Counter to Counter"));
+        
+        
         showMessageTextArea.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Show Message"));
         playAudioButton.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Play Audio"));
         appendToFileButton.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Append String to Textfile"));
@@ -775,7 +873,16 @@ public class FXMLDocumentTwoController implements Initializable {
         deleteLabel2.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Delete File"));
         execProgLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
         execArgumentsLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Execute Program"));
-
+        actionCountFirstComboBox.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Set Value of Counter").or(actionComboBox.valueProperty().isEqualTo("Add Value to Counter").or(actionComboBox.valueProperty().isEqualTo("Add Value of Counter to Counter"))));
+        actionCountFirstLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Set Value of Counter").or(actionComboBox.valueProperty().isEqualTo("Add Value to Counter").or(actionComboBox.valueProperty().isEqualTo("Add Value of Counter to Counter"))));
+        actionCountSecondComboBox.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Add Value of Counter to Counter"));
+        actionCountSecondLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Add Value of Counter to Counter"));
+        actionCountTextField.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Set Value of Counter").or(actionComboBox.valueProperty().isEqualTo("Add Value to Counter")));
+        actionCountAddLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Add Value to Counter"));
+        actionCountSetLabel.visibleProperty().bind(actionComboBox.valueProperty().isEqualTo("Set Value of Counter"));
+        
+        
+        
         //Limit the number of characters in showMessageTextArea to 1000
         showMessageTextArea.setTextFormatter(new TextFormatter<String>(change
                 -> change.getControlNewText().length() <= 1000 ? change : null));
@@ -869,7 +976,14 @@ public class FXMLDocumentTwoController implements Initializable {
         typeDimensionComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("File Dimension Verification"));
         insertExitValueTextField1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
         insertExitValueLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
-        
+        execProgramTriggerLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Program Exit Status Verification"));
+        triggerCountFirstComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountOpComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountTextField1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Value"));
+        triggerCountFirstLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountIntLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Value"));
+        triggerCountSecondComboBox1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Counter"));
+        triggerCountSecondLabel1.visibleProperty().bind(triggerComboBox1.valueProperty().isEqualTo("Compare Counter to Counter"));
         
         hourComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Time"));
         minuteComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Time"));
@@ -892,15 +1006,26 @@ public class FXMLDocumentTwoController implements Initializable {
         typeDimensionComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("File Dimension Verification"));
         insertExitValueTextField2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
         insertExitValueLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
-                
+        execProgramTriggerLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Program Exit Status Verification"));
+        triggerCountFirstComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountOpComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountTextField2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Value"));
+        triggerCountFirstLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Value").or(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Counter")));
+        triggerCountIntLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Value"));
+        triggerCountSecondComboBox2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Counter"));
+        triggerCountSecondLabel2.visibleProperty().bind(triggerComboBox2.valueProperty().isEqualTo("Compare Counter to Counter"));   
+        
+        
         logicalOperandLabel.visibleProperty().bind(((hourComboBox1.valueProperty().isNull().or(minuteComboBox1.valueProperty().isNull()))
                 .and(dayOfWeekComboBox1.valueProperty().isNull())
                 .and(dayOfMonthComboBox1.valueProperty().isNull())
                 .and(datePicker1.valueProperty().isNull())
                 .and((exFileTextField1.textProperty().isEmpty()).or(exFileDirectoryLabel1.visibleProperty().not()))
                 .and((fileDimensionTextField1.textProperty().isEmpty()).or(labelDimensionFile1.visibleProperty().not()))
-                //.and((execProgramTextField1.textProperty().isEmpty()).or())
+                .and((execProgramTextField1.textProperty().isEmpty()).or(exitValueProgramLabel1.visibleProperty().not()).or(insertExitValueTextField1.textProperty().isEmpty()))
                 .and(compositeTriggerLabel1.visibleProperty().not())
+                .and(triggerCountFirstComboBox1.valueProperty().isNull().or(triggerCountOpComboBox1.valueProperty().isNull()).or(triggerCountTextField1.textProperty().isEmpty()))
+                .and(triggerCountFirstComboBox1.valueProperty().isNull().or(triggerCountOpComboBox1.valueProperty().isNull()).or(triggerCountSecondComboBox1.valueProperty().isNull()))
                 .or(triggerComboBox1.valueProperty().isNull())).not());
         
         logicalOperandComboBox.visibleProperty().bind(((hourComboBox1.valueProperty().isNull().or(minuteComboBox1.valueProperty().isNull()))
@@ -909,8 +1034,10 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(datePicker1.valueProperty().isNull())
                 .and((exFileTextField1.textProperty().isEmpty()).or(exFileDirectoryLabel1.visibleProperty().not()))
                 .and((fileDimensionTextField1.textProperty().isEmpty()).or(labelDimensionFile1.visibleProperty().not()))
-                //.and((execProgramTextField1.textProperty().isEmpty()).or())
+                .and((execProgramTextField1.textProperty().isEmpty()).or(exitValueProgramLabel1.visibleProperty().not()).or(insertExitValueTextField1.textProperty().isEmpty()))
                 .and(compositeTriggerLabel1.visibleProperty().not())
+                .and(triggerCountFirstComboBox1.valueProperty().isNull().or(triggerCountOpComboBox1.valueProperty().isNull()).or(triggerCountTextField1.textProperty().isEmpty()))
+                .and(triggerCountFirstComboBox1.valueProperty().isNull().or(triggerCountOpComboBox1.valueProperty().isNull()).or(triggerCountSecondComboBox1.valueProperty().isNull()))
                 .or(triggerComboBox1.valueProperty().isNull())).not());
         
         doneTriggerButton.disableProperty().bind((((hourComboBox1.valueProperty().isNull().or(minuteComboBox1.valueProperty().isNull()))
@@ -919,8 +1046,10 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(datePicker1.valueProperty().isNull())
                 .and((exFileTextField1.textProperty().isEmpty()).or(exFileDirectoryLabel1.visibleProperty().not()))
                 .and((fileDimensionTextField1.textProperty().isEmpty()).or(labelDimensionFile1.visibleProperty().not()))
-                //.and((execProgramTextField.textProperty().isEmpty()).or())
+                .and((execProgramTextField1.textProperty().isEmpty()).or(exitValueProgramLabel1.visibleProperty().not()).or(insertExitValueTextField1.textProperty().isEmpty()))
                 .and(compositeTriggerLabel1.visibleProperty().not())
+                .and(triggerCountFirstComboBox1.valueProperty().isNull().or(triggerCountOpComboBox1.valueProperty().isNull()).or(triggerCountTextField1.textProperty().isEmpty()))
+                .and(triggerCountFirstComboBox1.valueProperty().isNull().or(triggerCountOpComboBox1.valueProperty().isNull()).or(triggerCountSecondComboBox1.valueProperty().isNull()))
                 .or(triggerComboBox1.valueProperty().isNull()))
                 .or(notOperandComboBox1.valueProperty().isEqualTo("")
                     .and(logicalOperandComboBox.valueProperty().isEqualTo("")))
@@ -932,8 +1061,10 @@ public class FXMLDocumentTwoController implements Initializable {
                 .and(datePicker2.valueProperty().isNull())
                 .and((exFileTextField2.textProperty().isEmpty()).or(exFileDirectoryLabel2.visibleProperty().not()))
                 .and((fileDimensionTextField2.textProperty().isEmpty()).or(labelDimensionFile2.visibleProperty().not()))
-                //.and((execProgramTextField.textProperty().isEmpty()).or())
+                .and((execProgramTextField2.textProperty().isEmpty()).or(exitValueProgramLabel2.visibleProperty().not()).or(insertExitValueTextField2.textProperty().isEmpty()))
                 .and(compositeTriggerLabel2.visibleProperty().not())
+                .and(triggerCountFirstComboBox2.valueProperty().isNull().or(triggerCountOpComboBox2.valueProperty().isNull()).or(triggerCountTextField2.textProperty().isEmpty()))
+                .and(triggerCountFirstComboBox2.valueProperty().isNull().or(triggerCountOpComboBox2.valueProperty().isNull()).or(triggerCountSecondComboBox2.valueProperty().isNull()))
                 .or(triggerComboBox2.valueProperty().isNull()))
                 .and(logicalOperandComboBox.valueProperty().isNotEqualTo(""))
                 ));
@@ -946,11 +1077,11 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Time":
                 TriggerCreator timeTC;
                 if(n == 0)
-                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue()), 0));
+                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox.getValue()), Integer.parseInt(minuteComboBox.getValue())));
                 else if(n == 1)
-                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox1.getValue()), Integer.parseInt(minuteComboBox1.getValue()), 0));
+                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox1.getValue()), Integer.parseInt(minuteComboBox1.getValue())));
                 else
-                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox2.getValue()), Integer.parseInt(minuteComboBox2.getValue()), 0));
+                    timeTC = new TimeTriggerCreator(LocalTime.of(Integer.parseInt(hourComboBox2.getValue()), Integer.parseInt(minuteComboBox2.getValue())));
                 return timeTC.createTrigger();
             case "Day of Week":
                 TriggerCreator dayOfWeekTC;
@@ -998,11 +1129,21 @@ public class FXMLDocumentTwoController implements Initializable {
                     fileExTC = new FileCheckTriggerCreator(selectedExFile2.toString(), exFileTextField2.getText());
                 return fileExTC.createTrigger();
             case "Program Exit Status Verification":
-                
                 List<String> execProgList = new ArrayList<>();
-                execProgList.add(selectedProgramTriggerFile.toString());
-                execProgList.addAll(Arrays.asList(execProgramTextField.getText().split(" ")));
-                TriggerCreator execProgTC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(insertExitValueTextField.getText()));
+                TriggerCreator execProgTC;
+                if(n == 0){
+                    execProgList.add(selectedProgramTriggerFile.toString());
+                    execProgList.addAll(Arrays.asList(execProgramTextField.getText().split(" ")));
+                    execProgTC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(insertExitValueTextField.getText()));
+                }else if(n == 1){
+                    execProgList.add(selectedProgramTriggerFile1.toString());
+                    execProgList.addAll(Arrays.asList(execProgramTextField1.getText().split(" ")));
+                    execProgTC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(insertExitValueTextField1.getText()));
+                }else{
+                    execProgList.add(selectedProgramTriggerFile2.toString());
+                    execProgList.addAll(Arrays.asList(execProgramTextField2.getText().split(" ")));
+                    execProgTC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(insertExitValueTextField2.getText()));
+                }
                 return execProgTC.createTrigger();
             default:
                 for(Trigger t : compositeTrigger.values()){
@@ -1060,11 +1201,10 @@ public class FXMLDocumentTwoController implements Initializable {
         if (controllerOne.checkNameRule(ruleNameTextField.textProperty().getValue())) {
             if (fireSleepingTimeCheckBox.selectedProperty().getValue()) {
                 r = new SleepingTimeRule(ruleNameTextField.textProperty().getValue(), action, trigger, daySleepingTimeSpinner.valueProperty().getValue(), hourSleepingTimeSpinner.valueProperty().getValue(), minuteSleepingTimeSpinner.valueProperty().getValue());
-            } else {
+            } else if(fireOnceCheckBox.selectedProperty().getValue()){
                 r = new FireOnceRule(ruleNameTextField.textProperty().getValue(), action, trigger);
-            }
-            //else
-            //rule = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
+            } else
+                r = new Rule(ruleNameTextField.textProperty().getValue(), action, trigger);
 
             // Add the created rule to the ObservableList in the first controller
             controllerOne.addRuleToObsList(r);
@@ -1074,9 +1214,9 @@ public class FXMLDocumentTwoController implements Initializable {
 
             currentStage.close();
         } else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("OK");
-            alert.setContentText("The name exists already!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Name error");
+            alert.setContentText("A rule with this name already exists!");
             alert.showAndWait();
         }
     }
@@ -1157,6 +1297,10 @@ public class FXMLDocumentTwoController implements Initializable {
         fileDimensionTextField.textProperty().setValue(null);
         insertExitValueTextField.textProperty().setValue(null);
         exitValueProgramLabel.visibleProperty().setValue(Boolean.FALSE);
+        triggerCountFirstComboBox.valueProperty().setValue(null);
+        triggerCountSecondComboBox.valueProperty().setValue(null);
+        triggerCountOpComboBox.valueProperty().setValue(null);
+        triggerCountTextField.textProperty().setValue(null);
         if(triggerComboBox.valueProperty().getValue().startsWith("Composite")){
             compositeTriggerLabel.textProperty().setValue(compositeTrigger.get(triggerComboBox.valueProperty().getValue()).toString());
             compositeTriggerLabel.visibleProperty().setValue(Boolean.TRUE);
@@ -1192,6 +1336,14 @@ public class FXMLDocumentTwoController implements Initializable {
         deleteFileLabel.visibleProperty().setValue(Boolean.FALSE);
         selectedDestinationDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
         selectedSourceDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);
+        actionCountFirstComboBox.valueProperty().setValue(null);
+        actionCountSecondComboBox.valueProperty().setValue(null);
+        actionCountTextField.textProperty().setValue(null);
+        showMessageTextArea.textProperty().setValue(null);
+        appendToFileTextArea.textProperty().setValue(null);
+        moveCopyTextField.textProperty().setValue(null);
+        deleteTextField.textProperty().setValue(null);
+        execArgumentsTextField.textProperty().setValue(null);
     }
 
     public void setControllerOne(FXMLDocumentController controllerOne) {
@@ -1371,6 +1523,10 @@ public class FXMLDocumentTwoController implements Initializable {
         labelDimensionFile1.visibleProperty().setValue(Boolean.FALSE);
         fileDimensionTextField1.textProperty().setValue(null);
         logicalOperandComboBox.valueProperty().setValue("");
+        triggerCountFirstComboBox1.valueProperty().setValue(null);
+        triggerCountSecondComboBox1.valueProperty().setValue(null);
+        triggerCountOpComboBox1.valueProperty().setValue(null);
+        triggerCountTextField1.textProperty().setValue(null);
         if(triggerComboBox1.valueProperty().getValue().startsWith("Composite")){
             compositeTriggerLabel1.textProperty().setValue(compositeTrigger.get(triggerComboBox1.valueProperty().getValue()).toString());
             compositeTriggerLabel1.visibleProperty().setValue(Boolean.TRUE);
@@ -1397,6 +1553,10 @@ public class FXMLDocumentTwoController implements Initializable {
         execProgramTextField2.textProperty().setValue(null);
         labelDimensionFile2.visibleProperty().setValue(Boolean.FALSE);
         fileDimensionTextField2.textProperty().setValue(null);
+        triggerCountFirstComboBox2.valueProperty().setValue(null);
+        triggerCountSecondComboBox2.valueProperty().setValue(null);
+        triggerCountOpComboBox2.valueProperty().setValue(null);
+        triggerCountTextField2.textProperty().setValue(null);
         if(triggerComboBox2.valueProperty().getValue().startsWith("Composite")){
             compositeTriggerLabel2.textProperty().setValue(compositeTrigger.get(triggerComboBox2.valueProperty().getValue()).toString());
             compositeTriggerLabel2.visibleProperty().setValue(Boolean.TRUE);

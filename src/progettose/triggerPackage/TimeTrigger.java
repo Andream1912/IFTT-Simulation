@@ -3,6 +3,7 @@ package progettose.triggerPackage;
 import static java.lang.Math.abs;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class TimeTrigger implements Trigger {
 
@@ -33,10 +34,7 @@ public class TimeTrigger implements Trigger {
     // This trigger activates if the current time equals the specified time.
     @Override
     public boolean evaluate() {
-        LocalTime now = LocalTime.now();
-        long deltaSeconds = abs(Duration.between(now, time).getSeconds());
-        return deltaSeconds <= 1;
-
+        return time.format(DateTimeFormatter.ofPattern("HH::mm")).equals(LocalTime.now().format(DateTimeFormatter.ofPattern("HH::mm")));
     }
 
     @Override

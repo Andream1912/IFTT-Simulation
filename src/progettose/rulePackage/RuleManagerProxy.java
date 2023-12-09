@@ -235,10 +235,12 @@ public class RuleManagerProxy implements RuleManager {
                     Action action = checkAction(nameAction, column);
                     if (ruleType.equals("FireOnceRule")) {
                         r = new FireOnceRule(ruleName, action, trigger);
-                    } else {
+                    } else if(ruleType.equals("SleepingTimeRule")){
                         r = new SleepingTimeRule(ruleName, action, trigger, Integer.parseInt(column[i++]), Integer.parseInt(column[i++]), Integer.parseInt(column[i++]));
                         ((SleepingTimeRule) r).setLastTimeFired(LocalDateTime.parse(column[i++]));
-                    }
+                    } else {
+                        r = new Rule(ruleName, action, trigger);
+                    } 
                     r.setState(Boolean.parseBoolean(column[i++]));
                     this.concrRM.addRule(r);
 
@@ -253,15 +255,13 @@ public class RuleManagerProxy implements RuleManager {
     public void periodicCheck(TableView tb) {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
-                for (Rule r : this.concrRM.getRules()) {
-                    Platform.runLater(() -> {
+                for (Rule r : this.concrRM.getRules()) {   
                     if (r.evaluateTrigger()) {
-                        
+                        Platform.runLater(() -> {
                             this.fireRule(r);
-                    
+                        });
                     }
-                                            });
-
+                   
                 }
                 tb.refresh();
         }, 0, 3, TimeUnit.SECONDS);

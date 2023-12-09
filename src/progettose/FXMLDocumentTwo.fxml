@@ -20,7 +20,7 @@
    <children>
       <StackPane layoutX="150.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="863.0" prefWidth="1109.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane fx:id="pane1" prefHeight="863.0" prefWidth="1062.0">
+            <Pane fx:id="pane1" prefHeight="863.0" prefWidth="1062.0" visible="false">
                <children>
                   <DatePicker fx:id="datePicker1" layoutX="489.0" layoutY="206.0" />
                   <TextField fx:id="exFileTextField1" layoutX="406.0" layoutY="206.0" />
@@ -69,7 +69,7 @@
                   <Label fx:id="exFileDirectoryLabel2" alignment="CENTER" layoutX="560.0" layoutY="454.0" prefHeight="17.0" prefWidth="254.0" text="Label" visible="false" />
                   <ComboBox fx:id="notOperandComboBox1" layoutX="55.0" layoutY="206.0" prefHeight="25.0" prefWidth="75.0" />
                   <ComboBox fx:id="notOperandComboBox2" layoutX="55.0" layoutY="422.0" prefHeight="25.0" prefWidth="75.0" />
-                  <Button fx:id="doneTriggerButton" layoutX="792.0" layoutY="502.0" mnemonicParsing="false" onAction="#onDoneTrigger" text="Done" />
+                  <Button fx:id="doneTriggerButton" layoutX="792.0" layoutY="588.0" mnemonicParsing="false" onAction="#onDoneTrigger" text="Done" />
                   <Label layoutX="29.0" layoutY="25.0" text="Create new Composite Trigger">
                      <font>
                         <Font name="System Bold" size="24.0" />
@@ -99,19 +99,35 @@
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <Button fx:id="backFromTriggerButton" layoutX="82.0" layoutY="502.0" mnemonicParsing="false" onAction="#onBackTrigger" text="Back" />
+                  <Button fx:id="backFromTriggerButton" layoutX="58.0" layoutY="588.0" mnemonicParsing="false" onAction="#onBackTrigger" text="Back" />
                   <TextField fx:id="insertExitValueTextField1" layoutX="760.0" layoutY="206.0" prefHeight="26.0" prefWidth="91.0" />
                   <Label fx:id="insertExitValueLabel1" alignment="CENTER" layoutX="755.0" layoutY="186.0" prefHeight="17.0" prefWidth="100.0" text="Insert exit value:" />
                   <Label fx:id="insertExitValueLabel2" alignment="CENTER" layoutX="755.0" layoutY="402.0" prefHeight="17.0" prefWidth="100.0" text="Insert exit value:" />
                   <TextField fx:id="insertExitValueTextField2" layoutX="760.0" layoutY="422.0" prefHeight="26.0" prefWidth="91.0" />
                   <Label fx:id="execProgramLabel1" layoutX="579.0" layoutY="186.0" text="Insert inline arguments" />
                   <TextField fx:id="execProgramTextField2" layoutX="566.0" layoutY="422.0" />
-                  <Button fx:id="execProgramButton1" layoutX="443.0" layoutY="206.0" mnemonicParsing="false" onAction="#onExecProgramButton" text="Choose file" />
                   <TextField fx:id="execProgramTextField1" layoutX="566.0" layoutY="206.0" />
-                  <Button fx:id="execProgramButton2" layoutX="443.0" layoutY="422.0" mnemonicParsing="false" onAction="#onExecProgramButton" text="Choose file" />
                   <Label fx:id="execProgramLabel2" layoutX="579.0" layoutY="402.0" text="Insert inline arguments" />
-                  <Label fx:id="exitValueProgramLabel1" alignment="CENTER" contentDisplay="CENTER" layoutX="430.0" layoutY="238.0" prefHeight="17.0" prefWidth="100.0" textAlignment="CENTER" />
-                  <Label fx:id="exitValueProgramLabel2" alignment="CENTER" contentDisplay="CENTER" layoutX="430.0" layoutY="454.0" prefHeight="17.0" prefWidth="100.0" textAlignment="CENTER" visible="false" />
+                  <Label fx:id="exitValueProgramLabel1" alignment="CENTER" contentDisplay="CENTER" layoutX="430.0" layoutY="238.0" prefHeight="17.0" prefWidth="100.0" text="label" textAlignment="CENTER" visible="false" />
+                  <Label fx:id="exitValueProgramLabel2" alignment="CENTER" contentDisplay="CENTER" layoutX="430.0" layoutY="454.0" prefHeight="17.0" prefWidth="100.0" text="label" textAlignment="CENTER" visible="false" />
+                  <ComboBox fx:id="triggerCountFirstComboBox1" layoutX="395.0" layoutY="206.0" prefWidth="150.0" />
+                  <TextField fx:id="triggerCountTextField1" layoutX="715.0" layoutY="207.0" onKeyTyped="#onFileDimensionCheck" />
+                  <Label fx:id="triggerCountIntLabel1" layoutX="738.0" layoutY="186.0" text="Insert integer value" />
+                  <ComboBox fx:id="triggerCountOpComboBox1" layoutX="590.0" layoutY="206.0" prefHeight="25.0" prefWidth="83.0" />
+                  <ComboBox fx:id="triggerCountSecondComboBox1" layoutX="714.0" layoutY="206.0" prefWidth="150.0" />
+                  <ComboBox fx:id="triggerCountFirstComboBox2" layoutX="396.0" layoutY="422.0" prefWidth="150.0" />
+                  <TextField fx:id="triggerCountTextField2" layoutX="716.0" layoutY="422.0" onKeyTyped="#onFileDimensionCheck" />
+                  <Label fx:id="triggerCountIntLabel2" layoutX="739.0" layoutY="402.0" text="Insert integer value" />
+                  <ComboBox fx:id="triggerCountOpComboBox2" layoutX="591.0" layoutY="422.0" prefHeight="25.0" prefWidth="83.0" />
+                  <ComboBox fx:id="triggerCountSecondComboBox2" layoutX="715.0" layoutY="422.0" prefWidth="150.0" />
+                  <Label fx:id="triggerCountFirstLabel2" layoutX="396.0" layoutY="402.0" text="Select a Counter to compare" />
+                  <Label fx:id="triggerCountSecondLabel2" layoutX="746.0" layoutY="402.0" text="Select a Counter" />
+                  <Label fx:id="triggerCountFirstLabel1" layoutX="395.0" layoutY="186.0" text="Select a Counter to compare" />
+                  <Label fx:id="triggerCountSecondLabel1" layoutX="745.0" layoutY="186.0" text="Select a Counter" />
+                  <Label fx:id="execProgramTriggerLabel2" layoutX="430.0" layoutY="402.0" text="Choose a file (.exe)" />
+                  <Label fx:id="execProgramTriggerLabel1" layoutX="430.0" layoutY="186.0" text="Choose a file (.exe)" />
+                  <Button fx:id="execProgramButton2" layoutX="443.0" layoutY="422.0" mnemonicParsing="false" onAction="#onExecProgramButton" text="Choose file" />
+                  <Button fx:id="execProgramButton1" layoutX="443.0" layoutY="206.0" mnemonicParsing="false" onAction="#onExecProgramButton" text="Choose file" />
                </children>
             </Pane>
             <Pane fx:id="pane2" prefHeight="863.0" prefWidth="1102.0" visible="false">
@@ -302,7 +318,7 @@
                   <Button fx:id="doneActionButton" layoutX="773.0" layoutY="620.0" mnemonicParsing="false" onAction="#onDoneAction" text="Done" />
                </children>
             </Pane>
-            <AnchorPane fx:id="anchorPane1" minHeight="0.0" minWidth="0.0" prefHeight="820.0" prefWidth="1109.0" visible="false">
+            <AnchorPane fx:id="anchorPane1" minHeight="0.0" minWidth="0.0" prefHeight="820.0" prefWidth="1109.0">
                <children>
                   <Label layoutX="31.0" layoutY="20.0" text="Create new rule">
                      <font>
@@ -343,10 +359,8 @@
                   <Button fx:id="sourceDirectoryButton" layoutX="559.0" layoutY="397.0" mnemonicParsing="false" onAction="#onSourceDirectoryButton" text="Choose" />
                   <TextField fx:id="moveCopyTextField" layoutX="334.0" layoutY="397.0" />
                   <TextField fx:id="execArgumentsTextField" layoutX="612.0" layoutY="397.0" />
-                  <Button fx:id="deleteButton" layoutX="657.0" layoutY="397.0" mnemonicParsing="false" onAction="#onDeleteButton" text="Choose" />
                   <TextField fx:id="deleteTextField" layoutX="413.0" layoutY="397.0" />
                   <Label fx:id="playAudioLabel" layoutX="535.0" layoutY="377.0" text="Choose a file audio" />
-                  <Label fx:id="appendToFileLabel1" layoutX="445.0" layoutY="377.0" text="Select a text file" />
                   <Label fx:id="moveCopyLabel" layoutX="370.0" layoutY="377.0" text="Write a filename" />
                   <Label fx:id="destinationDirectoryLabel" layoutX="692.0" layoutY="377.0" text="Destination directory" />
                   <Label fx:id="showMessageLabel" layoutX="542.0" layoutY="377.0" text="Write a message" />
@@ -354,12 +368,10 @@
                   <Label fx:id="sourceDirectoryLabel" layoutX="543.0" layoutY="377.0" text="Source directory" />
                   <Label fx:id="deleteLabel1" layoutX="444.0" layoutY="377.0" text="Write a filename" />
                   <Label fx:id="deleteLabel2" layoutX="637.0" layoutY="377.0" text="Choose a directory" />
-                  <Label fx:id="execProgLabel" layoutX="438.0" layoutY="377.0" text="Choose a file (.exe)" />
                   <Label fx:id="execArgumentsLabel" layoutX="601.0" layoutY="377.0" text="Write command-line arguments" />
                   <Button fx:id="appendToFileButton" layoutX="458.0" layoutY="397.0" mnemonicParsing="false" onAction="#onAppendToFileButton" text="Choose" />
                   <Button fx:id="playAudioButton" layoutX="559.0" layoutY="397.0" mnemonicParsing="false" onAction="#onPlayAudioButton" text="Choose" />
                   <Button fx:id="destinationDirectoryButton" layoutX="720.0" layoutY="397.0" mnemonicParsing="false" onAction="#onDestinationDirectoryButton" text="Choose" />
-                  <Button fx:id="execProgButton" layoutX="458.0" layoutY="397.0" mnemonicParsing="false" onAction="#onExecProgButton" text="Choose" />
                   <Label fx:id="fileAudioNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="367.0" layoutY="429.0" prefHeight="20.0" prefWidth="440.0" text="Label" textAlignment="CENTER" visible="false">
                      <font>
                         <Font size="14.0" />
@@ -367,9 +379,7 @@
                   </Label>
                   <Label fx:id="selectedDestinationDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="606.0" layoutY="431.0" prefHeight="17.0" prefWidth="288.0" text="Label" textAlignment="CENTER" visible="false" />
                   <Label fx:id="selectedSourceDirectoryLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="449.0" layoutY="431.0" prefHeight="17.0" prefWidth="279.0" text="Label" textAlignment="CENTER" visible="false" />
-                  <Label fx:id="deleteFileLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="575.0" layoutY="431.0" prefHeight="17.0" prefWidth="228.0" text="Label" visible="false" />
-                  <Label fx:id="fileToAppendLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="455.0" layoutY="423.0" prefHeight="20.0" prefWidth="59.0" text="Label" textAlignment="CENTER" visible="false" />
-                  <Label fx:id="execProgramActionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="421.0" layoutY="431.0" prefHeight="17.0" prefWidth="138.0" text="Label" textAlignment="CENTER" visible="false" />
+                  <Label fx:id="execProgramActionLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="379.0" layoutY="426.0" prefHeight="17.0" prefWidth="216.0" text="Label" textAlignment="CENTER" visible="false" />
                   <Separator layoutX="270.0" orientation="VERTICAL" prefHeight="863.0" prefWidth="29.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="0.0" />
                   <VBox layoutX="42.0" layoutY="134.0" prefHeight="408.0" prefWidth="216.0">
                      <children>
@@ -383,7 +393,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </TextField>
-                        <Label text="Select the Trigger">
+                        <Label text="Select a Trigger">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -396,7 +406,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </ComboBox>
-                        <Label text="Select Action">
+                        <Label text="Select an Action">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
@@ -434,7 +444,28 @@
                   <Label fx:id="exitValueProgramLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="384.0" layoutY="324.0" prefHeight="17.0" prefWidth="100.0" textAlignment="CENTER" visible="false" />
                   <TextField fx:id="execProgramTextField" layoutX="512.0" layoutY="292.0" />
                   <Label fx:id="execProgramLabel" layoutX="525.0" layoutY="272.0" text="Insert inline arguments" />
+                  <ComboBox fx:id="triggerCountFirstComboBox" layoutX="355.0" layoutY="292.0" prefWidth="150.0" />
+                  <TextField fx:id="triggerCountTextField" layoutX="668.0" layoutY="292.0" onKeyTyped="#onFileDimensionCheck" />
+                  <Label fx:id="triggerCountFirstLabel" layoutX="355.0" layoutY="272.0" text="Select a Counter to compare" />
+                  <Label fx:id="triggerCountIntLabel" layoutX="685.0" layoutY="272.0" text="Insert an integer value" />
+                  <ComboBox fx:id="triggerCountOpComboBox" layoutX="546.0" layoutY="292.0" prefHeight="25.0" prefWidth="83.0" />
+                  <ComboBox fx:id="triggerCountSecondComboBox" layoutX="668.0" layoutY="292.0" prefWidth="150.0" />
+                  <Label fx:id="triggerCountSecondLabel" layoutX="700.0" layoutY="272.0" text="Select a Counter" />
+                  <ComboBox fx:id="actionCountFirstComboBox" layoutX="388.0" layoutY="397.0" prefWidth="150.0" />
+                  <ComboBox fx:id="actionCountSecondComboBox" layoutX="631.0" layoutY="397.0" prefWidth="150.0" />
+                  <TextField fx:id="actionCountTextField" layoutX="632.0" layoutY="397.0" />
+                  <Label fx:id="actionCountFirstLabel" layoutX="419.0" layoutY="377.0" text="Select a Counter" />
+                  <Label fx:id="actionCountAddLabel" layoutX="629.0" layoutY="377.0" text="Insert an integer value to add" />
+                  <Label fx:id="actionCountSetLabel" layoutX="648.0" layoutY="377.0" text="Insert an integer value" />
+                  <Label fx:id="actionCountSecondLabel" layoutX="644.0" layoutY="377.0" text="Select a Counter to add" />
+                  <Label fx:id="execProgLabel" layoutX="438.0" layoutY="377.0" text="Choose a file (.exe)" />
+                  <Label fx:id="appendToFileLabel1" layoutX="445.0" layoutY="377.0" text="Select a text file" />
+                  <Label fx:id="fileToAppendLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="390.0" layoutY="424.0" prefHeight="20.0" prefWidth="196.0" text="Label" textAlignment="CENTER" visible="false" />
+                  <Label fx:id="deleteFileLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="571.0" layoutY="426.0" prefHeight="17.0" prefWidth="228.0" text="Label" visible="false" />
+                  <Button fx:id="deleteButton" layoutX="657.0" layoutY="397.0" mnemonicParsing="false" onAction="#onDeleteButton" text="Choose" />
+                  <Button fx:id="execProgButton" layoutX="458.0" layoutY="397.0" mnemonicParsing="false" onAction="#onExecProgButton" text="Choose" />
                   <Button fx:id="execProgramButton" layoutX="396.0" layoutY="292.0" mnemonicParsing="false" onAction="#onExecProgramButton" text="Choose file" />
+                  <Label fx:id="execProgramTriggerLabel" layoutX="384.0" layoutY="272.0" text="Choose a file (.exe)" />
                </children>
             </AnchorPane>
          </children>

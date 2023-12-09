@@ -36,5 +36,7 @@ public class DateTrigger implements Trigger {
     public boolean evaluate() {
         return LocalDate.now().equals(this.date);
     }
+    
+    
 
 }

@@ -129,9 +129,7 @@ public class FXMLDocumentController implements Initializable {
         actionColumn.resizableProperty().setValue(Boolean.FALSE);
         triggerColumn.resizableProperty().setValue(Boolean.FALSE);
         statusColumn.resizableProperty().setValue(Boolean.FALSE);
-        typeColumn.resizableProperty().setValue(Boolean.FALSE);
-        
-        rmp.periodicCheck(tableView);      
+        typeColumn.resizableProperty().setValue(Boolean.FALSE); 
         
         statusColumn.setCellValueFactory(new PropertyValueFactory<Rule,RuleState>("state"));
         
@@ -252,6 +250,7 @@ public class FXMLDocumentController implements Initializable {
         Map.Entry<String, Integer> selectedItem = counterTableView.getSelectionModel().getSelectedItem();
         counterTableView.getItems().remove(selectedItem);
         counter.removeCounter(selectedItem.getKey());
+        counterTableView.getSelectionModel().clearSelection();
     }
 
     private void handleAddMenuItemTW() {
@@ -367,6 +366,7 @@ public class FXMLDocumentController implements Initializable {
 // Method to add a rule to the ObservableList
     public void addRuleToObsList(Rule r) {
         rmp.addRule(r);
+        tableView.refresh();
     }
 
 // Method to end the scheduler thread
@@ -436,10 +436,10 @@ public class FXMLDocumentController implements Initializable {
         AnchorPane.setLeftAnchor(counterTableView, 905.0);
         AnchorPane.setRightAnchor(counterTableView, 48.0);
         AnchorPane.setBottomAnchor(counterTableView, 330.5);
+        addCounter.setMaxHeight(25);
         AnchorPane.setTopAnchor(addCounter, 390.0);
-        AnchorPane.setLeftAnchor(addCounter, 905.0);
-        AnchorPane.setRightAnchor(addCounter, 48.0);
-        AnchorPane.setBottomAnchor(addCounter, 280.0);
+        AnchorPane.setLeftAnchor(addCounter, 955.0);
+        AnchorPane.setRightAnchor(addCounter, 98.0);
         AnchorPane.setTopAnchor(counterLabel, 200.5);
         AnchorPane.setLeftAnchor(counterLabel, 969.0);
         AnchorPane.setRightAnchor(counterLabel, 48.0);
