@@ -41,12 +41,17 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
+import progettose.actionPackage.AddCounterToCounterActionCreator;
+import progettose.actionPackage.AddValueToCounterActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.ExecuteProgramActionCreator;
 import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
+import progettose.actionPackage.SetCounterActionCreator;
 import progettose.counterPackage.CounterList;
+import progettose.triggerPackage.CheckCounterToCounterTriggerCreator;
+import progettose.triggerPackage.CheckValueToCounterTriggerCreator;
 import progettose.triggerPackage.CompositeTrigger;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
@@ -795,8 +800,10 @@ public class FXMLDocumentTwoController implements Initializable {
                                 .and((deleteTextField.textProperty().isEmpty()).or(deleteFileLabel.visibleProperty().not()))
                                 .and((execArgumentsTextField.textProperty().isEmpty()).or(execProgramActionLabel.visibleProperty().not()))
                                 .and((insertExitValueTextField.textProperty().isEmpty()))
+                                .and(actionCountFirstComboBox.valueProperty().isNull().or(actionCountTextField.textProperty().isEmpty()))
+                                .and(actionCountFirstComboBox.valueProperty().isNull().or(actionCountSecondComboBox.valueProperty().isNull()))
                                 .or(actionComboBox.valueProperty().isNull()))
-                .or(ruleNameTextField.textProperty().isEmpty())
+                .or(ruleNameTextField.textProperty().isEmpty())   
                 //.or(fireSleepingTimeCheckBox.selectedProperty().not()
                         // .and(fireOnceCheckBox.selectedProperty().not()))
         );
@@ -1145,6 +1152,26 @@ public class FXMLDocumentTwoController implements Initializable {
                     execProgTC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(insertExitValueTextField2.getText()));
                 }
                 return execProgTC.createTrigger();
+            case "Compare Counter to Value":
+                TriggerCreator checkValueCountTC;
+                if(n == 0){
+                    checkValueCountTC = new CheckValueToCounterTriggerCreator(triggerCountFirstComboBox.getValue(), triggerCountOpComboBox.getValue(), Integer.parseInt(triggerCountTextField.getText()));
+                } else if(n == 1){
+                    checkValueCountTC = new CheckValueToCounterTriggerCreator(triggerCountFirstComboBox1.getValue(), triggerCountOpComboBox1.getValue(), Integer.parseInt(triggerCountTextField1.getText()));
+                } else{
+                    checkValueCountTC = new CheckValueToCounterTriggerCreator(triggerCountFirstComboBox2.getValue(), triggerCountOpComboBox2.getValue(), Integer.parseInt(triggerCountTextField2.getText()));
+                }
+                return checkValueCountTC.createTrigger();
+            case "Compare Counter to Counter":
+                TriggerCreator checkCountToCountTC;
+                if(n == 0){
+                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox.getValue(), triggerCountSecondComboBox.getValue(), triggerCountOpComboBox.getValue());
+                } else if(n == 1){
+                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox1.getValue(), triggerCountSecondComboBox1.getValue(), triggerCountOpComboBox1.getValue());
+                } else{
+                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox2.getValue(), triggerCountSecondComboBox2.getValue(), triggerCountOpComboBox2.getValue());
+                }
+                return checkCountToCountTC.createTrigger();
             default:
                 for(Trigger t : compositeTrigger.values()){
                     if(s.substring(12).equals(t.getType().substring(12)))
@@ -1183,6 +1210,15 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Append String to Textfile":
                 ActionCreator appendFileAC = new FileAppenderActionCreator(selectedAppendFile, appendToFileTextArea.getText());
                 return appendFileAC.createAction();
+            case "Set Value of Counter":
+                ActionCreator setCountAC = new SetCounterActionCreator(actionCountFirstComboBox.getValue(), Integer.parseInt(actionCountTextField.getText()));
+                return setCountAC.createAction();
+            case "Add Value to Counter":
+                ActionCreator addValueCountAC = new AddValueToCounterActionCreator(actionCountFirstComboBox.getValue(), Integer.parseInt(actionCountTextField.getText()));
+                return addValueCountAC.createAction();
+            case "Add Value of Counter to Counter":
+                ActionCreator addCountToCountAC = new AddCounterToCounterActionCreator(actionCountFirstComboBox.getValue(), actionCountSecondComboBox.getValue());
+                return addCountToCountAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;

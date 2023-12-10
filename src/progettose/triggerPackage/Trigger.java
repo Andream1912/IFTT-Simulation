@@ -1,5 +1,6 @@
 package progettose.triggerPackage;
 
+// Interface representing a trigger.
 public interface Trigger {
 
     public void evaluate();

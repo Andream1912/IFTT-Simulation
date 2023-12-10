@@ -6,15 +6,22 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// Represents a trigger that checks the size of a specified file against a given threshold.
 public class FileSizeCheckerTrigger implements Trigger {
 
-    private final Path filePath;
-    private final long value;
-    private final String typeDimension;
+
+    // Type of the trigger.
     private final String type;
+    // Path to the file whose size will be checked.
+    private final Path filePath;
+    // Size threshold for the file.
+    private final long value;
+    // Type of dimension for the threshold (e.g., bytes, kilobytes, megabytes, gigabytes).
+    private final String typeDimension;
     private boolean evaluation;
     private boolean changed;
 
+    // Constructor to create a FileSizeCheckerTrigger with a file path, value, and type of dimension.
     public FileSizeCheckerTrigger(Path file, long value, String typeDimension) {
         this.type = "File Dimension Verification";
         this.filePath = file;
@@ -24,52 +31,21 @@ public class FileSizeCheckerTrigger implements Trigger {
         this.changed = false;
     }
 
+    // Getter for obtaining the size threshold value.
     public long getValue() {
         return this.value;
     }
 
+    // Getter for obtaining the file path.
     public Path getFile() {
         return this.filePath;
     }
 
+    // Evaluates whether the size of the specified file meets the specified criteria.
     @Override
     public String getType() {
         return this.type;
     }
-
-    @Override
-    public String getToCSV() {
-        return filePath.toString() + ";" + Long.toString(this.value) + ";" + typeDimension;
-    }
-
-    @Override
-    public String toString() {
-        return this.filePath.getFileName().toString() + "\nValore:" + this.value + this.typeDimension;
-    }
-    
-    /*@Override
-    public boolean evaluate() {
-        try {
-            long fileSizeInByte = Files.size(this.filePath); //file dimension in byte
-            long fileSizeInKiloByte = fileSizeInByte / 1024; //file dimension in KiloByte
-            long fileSizeInMegabyte = fileSizeInKiloByte / 1024; //file dimension in MegaByte
-            long fileSizeInGigabyte = fileSizeInMegabyte / 1024; //file dimension in Gigabyte
-            switch (typeDimension) {
-                case "KB":
-                    return (fileSizeInKiloByte >= this.value);
-                case "MB":
-                    return (fileSizeInMegabyte >= this.value);
-                case "GB":
-                    return (fileSizeInGigabyte >= this.value);
-                default:
-                    return (fileSizeInByte >= this.value);
-
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(FileSizeCheckerTrigger.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }*/
     
     @Override
     public void evaluate(){
@@ -111,5 +87,17 @@ public class FileSizeCheckerTrigger implements Trigger {
     public void reset() {
         this.evaluation = false;
         this.changed = false;
+    }
+
+    // Returns the CSV representation of the FileSizeCheckerTrigger, including the file path, value, and type of dimension.
+    @Override
+    public String getToCSV() {
+        return filePath.toString() + ";" + Long.toString(this.value) + ";" + typeDimension;
+    }
+
+    // Returns a string representation of the FileSizeCheckerTrigger, providing details about the file and threshold.
+    @Override
+    public String toString() {
+        return this.filePath.getFileName().toString() + "\nValue: " + this.value + " " + this.typeDimension;
     }
 }
