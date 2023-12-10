@@ -1,6 +1,5 @@
 package progettose.triggerPackage;
 
-
 // Represents a composite trigger that combines two triggers using a logical operator.
 public class CompositeTrigger implements Trigger {
 
@@ -13,8 +12,6 @@ public class CompositeTrigger implements Trigger {
     private final String type;
     private boolean evaluation;
     private boolean changed;
-
-
 
     // Constructor to create a composite trigger with given name, left trigger, right trigger, and logical operator.
     public CompositeTrigger(String name, Trigger t1, Trigger t2, String s) {
@@ -36,7 +33,6 @@ public class CompositeTrigger implements Trigger {
         return rightTrigger;
     }
 
-
     // Evaluates the composite trigger based on the logical operator.
     @Override
     public String getType() {
@@ -48,23 +44,26 @@ public class CompositeTrigger implements Trigger {
         if (this.rightTrigger == null) {
             return "(" + this.logicalOperator + " " + this.leftTrigger.toString() + ")";
         } else {
-            return "(" + this.leftTrigger.toString() + "\n " + this.logicalOperator + "\n " + this.rightTrigger.toString() + ")";
+            return "(" + this.leftTrigger.toString() + " " + this.logicalOperator + " " + this.rightTrigger.toString() + ")";
         }
     }
-    
+
     @Override
     public void evaluate() {
         boolean newEvaluation = false;
         if (this.rightTrigger != null) {
+            this.leftTrigger.reset();
+            this.rightTrigger.reset();
             this.leftTrigger.evaluate();
             this.rightTrigger.evaluate();
             if (this.logicalOperator.equals("OR")) {
                 newEvaluation = this.leftTrigger.returnEvaluation() || this.rightTrigger.returnEvaluation();
-                
+
             } else {
                 newEvaluation = this.leftTrigger.returnEvaluation() && this.rightTrigger.returnEvaluation();
             }
         } else {
+            this.leftTrigger.reset();
             this.leftTrigger.evaluate();
             newEvaluation = !this.leftTrigger.returnEvaluation();
         }
@@ -76,7 +75,7 @@ public class CompositeTrigger implements Trigger {
     // Getter for the type of the trigger.
     @Override
     public boolean returnEvaluation() {
-        
+
         if (this.changed) {
             if (this.evaluation) {
                 return true;
@@ -98,6 +97,11 @@ public class CompositeTrigger implements Trigger {
     // Returns a string representation of the composite trigger.
     @Override
     public void reset() {
+        if (this.rightTrigger != null) {
+            this.rightTrigger.reset();
+        }
+        this.leftTrigger.reset();
+
         this.evaluation = false;
         this.changed = false;
     }

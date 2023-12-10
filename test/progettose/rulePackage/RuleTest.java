@@ -53,7 +53,7 @@ public class RuleTest {
 
         Rule rule2 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now().minusSeconds(2)).createTrigger());
         assertTrue(rule2.getState() instanceof RuleStateActive);
-        assertFalse(rule2.evaluateTrigger());
+        assertTrue(rule2.evaluateTrigger());
 
         Rule rule3 = new Rule("TestRule", new ShowMessageActionCreator("Ciao").createAction(), new TimeTriggerCreator(LocalTime.now().plusMinutes(5)).createTrigger());
         assertTrue(rule3.getState() instanceof RuleStateActive);

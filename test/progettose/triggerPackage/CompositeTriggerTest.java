@@ -23,7 +23,7 @@ public class CompositeTriggerTest {
         // Setting tomorrow as Date of the DateTrigger 
         trigger1.setDate(LocalDate.now().plusDays(1));
         // The result should be true because at least one trigger is true
-        trigger2.reset();
+
         compositeTrigger.reset();
         compositeTrigger.evaluate();
         assertTrue(compositeTrigger.returnEvaluation());
@@ -33,7 +33,7 @@ public class CompositeTriggerTest {
         // Setting Sunday in the DayOfWeekTrigger
         trigger2.setDay(LocalDate.now().minusDays(1).getDayOfWeek().toString());
         // The result should be true because at least one trigger is true
-        trigger1.reset();
+
         compositeTrigger.reset();
         compositeTrigger.evaluate();
         assertTrue(compositeTrigger.returnEvaluation());
@@ -43,8 +43,7 @@ public class CompositeTriggerTest {
         // Setting Sunday in the DayOfWeekTrigger
         trigger2.setDay(LocalDate.now().minusDays(1).getDayOfWeek().toString());
         // The result should be false because both triggers are false
-        trigger1.reset();
-        trigger2.reset();
+
         compositeTrigger.reset();
         compositeTrigger.evaluate();
         assertFalse(compositeTrigger.returnEvaluation());
@@ -66,7 +65,6 @@ public class CompositeTriggerTest {
         // Setting tomorrow as Date of the DateTrigger 
         trigger2.setDate(LocalDate.now().plusDays(1));
         // The result should be false because only one trigger is true
-        trigger1.reset();
         compositeTrigger.reset();
         compositeTrigger.evaluate();
         assertFalse(compositeTrigger.returnEvaluation());
@@ -76,7 +74,6 @@ public class CompositeTriggerTest {
         // Setting Sunday in the DayOfWeekTrigger
         trigger1.setDay(LocalDate.now().minusDays(1).getDayOfWeek().toString());
         // The result should be false because only one trigger is true
-        trigger2.reset();
         compositeTrigger.reset();
         compositeTrigger.evaluate();
         assertFalse(compositeTrigger.returnEvaluation());
@@ -86,8 +83,6 @@ public class CompositeTriggerTest {
         // Setting Sunday in the DayOfWeekTrigger
         trigger1.setDay(LocalDate.now().minusDays(1).getDayOfWeek().toString());
         // The result should be false because both triggers are false
-        trigger1.reset();
-        trigger2.reset();
         compositeTrigger.reset();
         compositeTrigger.evaluate();
         assertFalse(compositeTrigger.returnEvaluation());

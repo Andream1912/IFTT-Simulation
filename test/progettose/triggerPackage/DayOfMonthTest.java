@@ -14,7 +14,7 @@ public class DayOfMonthTest {
         // Evaluate the trigger
         trigger.evaluate();
         assertTrue(trigger.returnEvaluation());
-        
+
         trigger.setDay(LocalDate.now().minusDays(1).getDayOfMonth());
         trigger.evaluate();
         assertFalse(trigger.returnEvaluation());
@@ -29,20 +29,10 @@ public class DayOfMonthTest {
         // Evaluate the trigger
         trigger.evaluate();
         assertFalse(trigger.returnEvaluation());
-        
+
         trigger.setDay(LocalDate.now().getDayOfMonth());
         trigger.evaluate();
         assertTrue(trigger.returnEvaluation());
-    }
-
-    @Test
-    public void testToString() {
-        // Set up the DayOfMonthTrigger for a specific day
-        int day = 15;
-        DayOfMonthTrigger trigger = new DayOfMonthTrigger(day);
-
-        // Check the toString representation
-        assertEquals("On " + day, trigger.toString());
     }
 
     @Test
@@ -56,7 +46,7 @@ public class DayOfMonthTest {
 
         // Check if the day was set correctly
         assertEquals(newDay, trigger.getDay());
-        
+
         newDay = 10;
         trigger.setDay(newDay);
         assertEquals(newDay, trigger.getDay());

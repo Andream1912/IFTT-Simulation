@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Alert;
@@ -78,9 +77,19 @@ public class ExecuteProgramTrigger implements Trigger {
     // Returns the CSV representation of the ExecuteProgramTrigger, including the command list and user-specified exit value.
     @Override
     public String getToCSV() {
-        // Join the command list using ";" and add the user-specified exit value.
-        String commandCSV = String.join(";", this.commandList.subList(1, this.commandList.size()));
-        return this.commandList.size() - 1 + ";" + commandCSV + ";" + this.userValue;
+        //Add ";" at the end of every command for CSV adaptation
+        StringBuilder commandCSV = new StringBuilder();
+        for (String element : this.commandList) {
+            commandCSV.append(element).append(";");
+        }
+
+        //Remove last ";" because it's not needed
+        if (!this.commandList.isEmpty()) {
+            commandCSV.deleteCharAt(commandCSV.length() - 1);
+        }
+
+        //Return the full toString
+        return this.commandList.size() + ";" + commandCSV.toString() + ";" + this.userValue;
     }
 
     // Evaluates the ExecuteProgramTrigger by executing the program and checking the exit value.
@@ -127,11 +136,13 @@ public class ExecuteProgramTrigger implements Trigger {
         }
         return false;
     }
-    
+
     @Override
     public void reset() {
-        this.evaluation = false;
-        this.changed = false;
-        this.alreadyVerified = false;
+        if (this.alreadyVerified) {
+            this.evaluation = false;
+            this.changed = false;
+            this.alreadyVerified = false;
+        }
     }
 }
