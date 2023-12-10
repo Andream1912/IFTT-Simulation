@@ -1,14 +1,15 @@
 package progettose.triggerPackage;
 
-import static java.lang.Math.abs;
-import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+// Represents a trigger that activates at a specific time.
 public class TimeTrigger implements Trigger {
 
     // The specific time at which this trigger should activate
     private LocalTime time;
+
+    // Type of the trigger.
     private final String type;
 
     // Constructor to initialize a TimeTrigger with the specified LocalTime.
@@ -17,14 +18,17 @@ public class TimeTrigger implements Trigger {
         this.type = "Time";
     }
 
+    // Getter for obtaining the specific time.
     public LocalTime getTime() {
         return this.time;
     }
 
+    // Setter for updating the specific time.
     public void setTime(LocalTime time) {
         this.time = time;
     }
 
+    // Getter for obtaining the type of the trigger.
     @Override
     public String getType() {
         return this.type;
@@ -37,11 +41,13 @@ public class TimeTrigger implements Trigger {
         return time.format(DateTimeFormatter.ofPattern("HH::mm")).equals(LocalTime.now().format(DateTimeFormatter.ofPattern("HH::mm")));
     }
 
+    // Returns a string representation of the TimeTrigger, indicating the time it should activate.
     @Override
     public String toString() {
         return "At " + time;
     }
 
+    // Returns the CSV representation of the TimeTrigger, providing the specific time.
     @Override
     public String getToCSV() {
         return this.time.toString();

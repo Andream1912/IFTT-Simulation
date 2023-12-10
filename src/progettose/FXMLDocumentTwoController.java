@@ -1165,11 +1165,11 @@ public class FXMLDocumentTwoController implements Initializable {
             case "Compare Counter to Counter":
                 TriggerCreator checkCountToCountTC;
                 if(n == 0){
-                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox.getValue(), triggerCountOpComboBox.getValue(), triggerCountSecondComboBox.getValue());
+                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox.getValue(), triggerCountSecondComboBox.getValue(), triggerCountOpComboBox.getValue());
                 } else if(n == 1){
-                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox1.getValue(), triggerCountOpComboBox1.getValue(), triggerCountSecondComboBox1.getValue());
+                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox1.getValue(), triggerCountSecondComboBox1.getValue(), triggerCountOpComboBox1.getValue());
                 } else{
-                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox2.getValue(), triggerCountOpComboBox2.getValue(), triggerCountSecondComboBox2.getValue());
+                    checkCountToCountTC = new CheckCounterToCounterTriggerCreator(triggerCountFirstComboBox2.getValue(), triggerCountSecondComboBox2.getValue(), triggerCountOpComboBox2.getValue());
                 }
                 return checkCountToCountTC.createTrigger();
             default:

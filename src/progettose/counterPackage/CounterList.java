@@ -10,15 +10,18 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// Manages a counter list, which is a HashMap storing key-value pairs for counting occurrences.
 public class CounterList {
 
+    // File path for storing the counter data in a CSV file.
     private final String filePath = System.getProperty("user.dir") + "/counter.csv";
-    private HashMap<String, Integer> hashCount;
+    private HashMap<String, Integer> hashCount; // HashMap to store key-value pairs.
 
+    // Constructor initializes the HashMap and loads data from the file if available.
     public CounterList() {
-        // Constructor initializes the HashMap for storing key-value pairs.
         this.hashCount = new HashMap<>();
         try {
+            // Creates a new file if it doesn't exist and loads data from an existing file.
             File file = new File(filePath);
             if (!file.exists()) {
                 file.createNewFile();
@@ -29,42 +32,42 @@ public class CounterList {
         }
     }
 
+    // Increments the counter for the specified key and saves changes to the file.
     public void increment(String key) {
-        // Increments the counter for the specified key.
         hashCount.put(key, hashCount.getOrDefault(key, 0) + 1);
         saveToFile();
     }
 
+    // Returns the count for the specified key.
     public int getCounter(String key) {
-        // Returns the count for the specified key.
         return hashCount.getOrDefault(key, 0);
     }
 
+    // Returns the entire HashMap.
     public HashMap<String, Integer> getHashMap() {
-        // Returns the entire HashMap.
         return hashCount;
     }
 
+    // Adds a new key-value pair to the HashMap or updates the value if the key already exists.
     public void addCounter(String key, int value) {
-        // Adds a new key-value pair to the HashMap.
-        // If the key already exists, updates the value.
         hashCount.put(key, value);
         saveToFile();
     }
 
+    // Removes the specified key and its associated value from the HashMap.
     public void removeCounter(String key) {
         this.hashCount.remove(key);
         saveToFile();
     }
 
+    // Sets the specified value for the given key and saves changes to the file.
     public void setValue(String key, int value) {
-        // Sets the specified value for the given key.
         hashCount.put(key, value);
         saveToFile();
     }
 
+    // Updates the key of a key-value pair and saves changes to the file.
     public void updateKeyName(String oldKey, String newKey) {
-        // Updates the key of a key-value pair.
         if (hashCount.containsKey(oldKey)) {
             int value = hashCount.remove(oldKey);
             hashCount.put(newKey, value);
@@ -72,10 +75,12 @@ public class CounterList {
         }
     }
 
+    // Checks if a key exists in the HashMap.
     public boolean checkKey(String key) {
         return hashCount.containsKey(key);
     }
 
+    // Saves the current state of the HashMap to the CSV file.
     private void saveToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             for (HashMap.Entry<String, Integer> entry : hashCount.entrySet()) {
@@ -86,6 +91,7 @@ public class CounterList {
         }
     }
 
+    // Loads data from the CSV file into the HashMap.
     public void loadFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;

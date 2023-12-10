@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -194,8 +193,20 @@ public class FXMLDocumentController implements Initializable {
         // Verifies that the newKey is a string (not an integer).
         // Verifies that the newKey contains only characters.
         if (newKey.matches("[a-zA-Z]+")) {
+            Alert messageBox = new Alert(Alert.AlertType.NONE);
+            ButtonType confButton = new ButtonType("Yes");
+            ButtonType cancelButton = new ButtonType("No");
+            messageBox.getButtonTypes().setAll(confButton, cancelButton);
+            messageBox.setTitle("Warning");
+            messageBox.setContentText("Do you want to change the name of the counter?\n You will lose all rules that use that counter");
+            // Display the Alert and wait for the user to decide whether to remove the rule or not
+            messageBox.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == confButton) {
+                    counter.updateKeyName(entry.getKey(), newKey);
+                }
+            });
             // Calls the updateKeyName method in the CounterList class to update the key.
-            counter.updateKeyName(entry.getKey(), newKey);
+
             // Updates the TableView with the modified data.
             updateTWTableWithData();
         } else {
@@ -250,6 +261,30 @@ public class FXMLDocumentController implements Initializable {
         counterTableView.getItems().remove(selectedItem);
         counter.removeCounter(selectedItem.getKey());
         counterTableView.getSelectionModel().clearSelection();
+        for (Rule r : rmp.getRules()) {
+            switch (r.getTrigger().getType()) {
+                case "Compare Counter to Counter":
+                case "Compare Counter to Value":
+                    Alert messageBox = new Alert(Alert.AlertType.NONE);
+                    ButtonType confButton = new ButtonType("Yes");
+                    ButtonType cancelButton = new ButtonType("No");
+                    messageBox.getButtonTypes().setAll(confButton, cancelButton);
+                    messageBox.setTitle("Warning");
+                    messageBox.setContentText("Do you want to remove the counter?\n It will be remove also the rule:" + r.getName());
+                    // Display the Alert and wait for the user to decide whether to remove the rule or not
+                    messageBox.showAndWait().ifPresent(buttonType -> {
+                        if (buttonType == confButton) {
+                            counterTableView.getItems().remove(selectedItem);
+                            counter.removeCounter(selectedItem.getKey());
+                        }
+                    });
+                default:
+                    counterTableView.getItems().remove(selectedItem);
+                    counter.removeCounter(selectedItem.getKey());
+
+            }
+
+        }
     }
 
     private void handleAddMenuItemTW() {
