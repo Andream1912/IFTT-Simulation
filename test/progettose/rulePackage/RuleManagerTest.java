@@ -115,12 +115,22 @@ public class RuleManagerTest {
     private static class TriggerMock implements Trigger {
 
         private boolean evaluateResult = true;
-
+        
         @Override
-        public boolean evaluate() {
+        public void reset(){
+            
+        }
+        
+        @Override
+        public void evaluate(){
+            
+        }
+        
+        @Override
+        public boolean returnEvaluation(){
             return evaluateResult;
         }
-
+        
         public void setEvaluateResult(boolean result) {
             evaluateResult = result;
         }

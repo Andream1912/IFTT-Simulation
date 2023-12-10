@@ -1,4 +1,5 @@
 package progettose.triggerPackage;
+
 import org.junit.Test;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
@@ -11,7 +12,13 @@ public class DayOfMonthTest {
         DayOfMonthTrigger trigger = new DayOfMonthTrigger(LocalDate.now().getDayOfMonth());
 
         // Evaluate the trigger
-        assertTrue(trigger.evaluate());
+        trigger.evaluate();
+        assertTrue(trigger.returnEvaluation());
+        
+        trigger.setDay(LocalDate.now().minusDays(1).getDayOfMonth());
+        trigger.evaluate();
+        assertFalse(trigger.returnEvaluation());
+
     }
 
     @Test
@@ -20,7 +27,12 @@ public class DayOfMonthTest {
         DayOfMonthTrigger trigger = new DayOfMonthTrigger(1); // Assuming the current day is not the first day of the month
 
         // Evaluate the trigger
-        assertFalse(trigger.evaluate());
+        trigger.evaluate();
+        assertFalse(trigger.returnEvaluation());
+        
+        trigger.setDay(LocalDate.now().getDayOfMonth());
+        trigger.evaluate();
+        assertTrue(trigger.returnEvaluation());
     }
 
     @Test
@@ -44,6 +56,9 @@ public class DayOfMonthTest {
 
         // Check if the day was set correctly
         assertEquals(newDay, trigger.getDay());
+        
+        newDay = 10;
+        trigger.setDay(newDay);
+        assertEquals(newDay, trigger.getDay());
     }
 }
-

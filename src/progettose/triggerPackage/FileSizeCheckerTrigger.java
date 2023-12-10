@@ -9,13 +9,12 @@ import java.util.logging.Logger;
 // Represents a trigger that checks the size of a specified file against a given threshold.
 public class FileSizeCheckerTrigger implements Trigger {
 
-
     // Type of the trigger.
     private final String type;
     // Path to the file whose size will be checked.
     private final Path filePath;
     // Size threshold for the file.
-    private final long value;
+    private long value;
     // Type of dimension for the threshold (e.g., bytes, kilobytes, megabytes, gigabytes).
     private final String typeDimension;
     private boolean evaluation;
@@ -29,6 +28,10 @@ public class FileSizeCheckerTrigger implements Trigger {
         this.value = value;
         this.evaluation = false;
         this.changed = false;
+    }
+
+    public void setValue(long value) {
+        this.value = value;
     }
 
     // Getter for obtaining the size threshold value.
@@ -46,23 +49,29 @@ public class FileSizeCheckerTrigger implements Trigger {
     public String getType() {
         return this.type;
     }
-    
+
     @Override
-    public void evaluate(){
+    public void evaluate() {
         boolean newEvaluation = false;
         try {
             long fileSizeInByte = Files.size(this.filePath); //file dimension in byte
-            long fileSizeInKiloByte = fileSizeInByte / 1024; //file dimension in KiloByte
-            long fileSizeInMegabyte = fileSizeInKiloByte / 1024; //file dimension in MegaByte
-            long fileSizeInGigabyte = fileSizeInMegabyte / 1024; //file dimension in Gigabyte
+            long fileSizeInKiloByte; //file dimension in KiloByte
+            long fileSizeInMegabyte; //file dimension in MegaByte
+            long fileSizeInGigabyte; //file dimension in Gigabyte
             switch (typeDimension) {
                 case "KB":
+                    fileSizeInKiloByte = fileSizeInByte / 1024;
                     newEvaluation = (fileSizeInKiloByte >= this.value);
                     break;
                 case "MB":
+                    fileSizeInKiloByte = fileSizeInByte / 1024;
+                    fileSizeInMegabyte = fileSizeInKiloByte / 1024;
                     newEvaluation = (fileSizeInMegabyte >= this.value);
                     break;
                 case "GB":
+                    fileSizeInKiloByte = fileSizeInByte / 1024;
+                    fileSizeInMegabyte = fileSizeInKiloByte / 1024;
+                    fileSizeInGigabyte = fileSizeInMegabyte / 1024;
                     newEvaluation = (fileSizeInGigabyte >= this.value);
                     break;
                 default:
@@ -74,15 +83,17 @@ public class FileSizeCheckerTrigger implements Trigger {
             Logger.getLogger(FileSizeCheckerTrigger.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    @Override 
-    public boolean returnEvaluation(){
-        if(this.changed)
-            if(this.evaluation)
+
+    @Override
+    public boolean returnEvaluation() {
+        if (this.changed) {
+            if (this.evaluation) {
                 return true;
+            }
+        }
         return false;
     }
-    
+
     @Override
     public void reset() {
         this.evaluation = false;

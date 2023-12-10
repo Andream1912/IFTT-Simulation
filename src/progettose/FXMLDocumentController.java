@@ -40,6 +40,7 @@ import javafx.util.Callback;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
@@ -95,9 +96,58 @@ public class FXMLDocumentController implements Initializable {
         rmp = RuleManagerProxy.getInstance();
 
         // Initializing TableView and its columns
-        nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
-        actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
-        triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
+        nameColumn.setCellFactory(column -> {
+            return new TableCell<Rule, String>() {
+                @Override
+                protected void updateItem(String name, boolean empty) {
+                    super.updateItem(name, empty);
+
+                    if (empty || name == null) {
+                        setText(null);
+                    } else {
+                        Text text = new Text(name);
+                        text.setWrappingWidth(column.getWidth() - 10); // Imposta la larghezza del testo
+
+                        setGraphic(text);
+                    }
+                }
+            };
+        });
+        actionColumn.setCellFactory(column -> {
+            return new TableCell<Rule, Action>() {
+                @Override
+                protected void updateItem(Action action, boolean empty) {
+                    super.updateItem(action, empty);
+
+                    if (empty || action == null) {
+                        setText(null);
+                    } else {
+                        Text text = new Text(action.toString());
+                        text.setWrappingWidth(column.getWidth() - 10); // Imposta la larghezza del testo
+
+                        setGraphic(text);
+                    }
+                }
+            };
+        });
+        triggerColumn.setCellFactory(column -> {
+            return new TableCell<Rule, Trigger>() {
+                @Override
+                protected void updateItem(Trigger trigger, boolean empty) {
+                    super.updateItem(trigger, empty);
+
+                    if (empty || trigger == null) {
+                        setText(null);
+                    } else {
+                        Text text = new Text(trigger.toString());
+                        text.setWrappingWidth(column.getWidth() - 10); // Imposta la larghezza del testo
+
+                        setGraphic(text);
+                    }
+                }
+            };
+        });
+
         typeColumn.setCellValueFactory(new PropertyValueFactory("ruleTypeDescription"));
 
         initializeTableColumns();
