@@ -39,7 +39,8 @@ public class ExecuteProgramTriggerTest {
         commandList.add("Command1");
         commandList.add("Command2");
         ExecuteProgramTrigger execProg = new ExecuteProgramTrigger(commandList, userValue);
-        assertFalse(execProg.evaluate());
+        execProg.evaluate();
+        assertFalse(execProg.returnEvaluation());
     }
 
 }

@@ -1,4 +1,5 @@
 package progettose.triggerPackage;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import org.junit.Test;
@@ -12,16 +13,26 @@ public class DayOfWeekTest {
         DayOfWeekTrigger trigger = new DayOfWeekTrigger(LocalDate.now().getDayOfWeek().toString());
 
         // Evaluate the trigger
-        assertTrue(trigger.evaluate());
+        trigger.evaluate();
+        assertTrue(trigger.returnEvaluation());
+        
+        trigger.setDay(LocalDate.now().plusDays(1).getDayOfWeek().toString());
+        trigger.evaluate();
+        assertFalse(trigger.returnEvaluation());
     }
 
     @Test
     public void testEvaluateDifferentDay() {
         // Set up the DayOfWeekTrigger for a day different from the current day
-        DayOfWeekTrigger trigger = new DayOfWeekTrigger(DayOfWeek.MONDAY.toString());
+        DayOfWeekTrigger trigger = new DayOfWeekTrigger(LocalDate.now().plusDays(1).getDayOfWeek().toString());
 
         // Evaluate the trigger
-        assertFalse(trigger.evaluate());
+        trigger.evaluate();
+        assertFalse(trigger.returnEvaluation());
+        
+        trigger.setDay(LocalDate.now().getDayOfWeek().toString());
+        trigger.evaluate();
+        assertTrue(trigger.returnEvaluation());
     }
 
     @Test
@@ -44,6 +55,10 @@ public class DayOfWeekTest {
         trigger.setDay(newDay);
 
         // Check if the day was set correctly
+        assertEquals(newDay, trigger.getDay());
+        
+        newDay = DayOfWeek.MONDAY.toString();
+        trigger.setDay(newDay);
         assertEquals(newDay, trigger.getDay());
     }
 }

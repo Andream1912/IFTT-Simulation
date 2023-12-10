@@ -60,6 +60,7 @@ public class CompositeTrigger implements Trigger {
             this.rightTrigger.evaluate();
             if (this.logicalOperator.equals("OR")) {
                 newEvaluation = this.leftTrigger.returnEvaluation() || this.rightTrigger.returnEvaluation();
+                
             } else {
                 newEvaluation = this.leftTrigger.returnEvaluation() && this.rightTrigger.returnEvaluation();
             }
@@ -75,6 +76,7 @@ public class CompositeTrigger implements Trigger {
     // Getter for the type of the trigger.
     @Override
     public boolean returnEvaluation() {
+        
         if (this.changed) {
             if (this.evaluation) {
                 return true;
