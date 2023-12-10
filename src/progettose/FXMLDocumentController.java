@@ -6,6 +6,9 @@ import progettose.rulePackage.RuleState;
 import progettose.rulePackage.RuleManagerProxy;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -114,7 +117,7 @@ public class FXMLDocumentController implements Initializable {
         createTWContextMenu();
         addCounter = new Button("Add Counter");
         addCounter.setOnAction(this::addCounterButton);
-        rmp.periodicCheck(tableView,counterTableView,counter);
+        rmp.periodicCheck(tableView, counterTableView, counter);
     }
 
     private void initializeTableColumns() {
@@ -257,34 +260,66 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void handleDeleteMenuItemTW() {
+        // Get the selected item from the table view
         Map.Entry<String, Integer> selectedItem = counterTableView.getSelectionModel().getSelectedItem();
-        counterTableView.getItems().remove(selectedItem);
-        counter.removeCounter(selectedItem.getKey());
-        counterTableView.getSelectionModel().clearSelection();
-        for (Rule r : rmp.getRules()) {
+
+        // Create a copy of the rules collection to avoid ConcurrentModificationException
+        List<Rule> rulesCopy = new ArrayList<>(rmp.getRules());
+
+        // Iterate over the rules to find and handle matching rules
+        for (Rule r : rulesCopy) {
+            // Extract parameters from trigger and action
+            String[] paramTrigger = r.getTrigger().getToCSV().split(";");
+            String[] paramAction = r.getAction().getToCSV().split(";");
+
+            // Handle rules based on trigger type
             switch (r.getTrigger().getType()) {
                 case "Compare Counter to Counter":
                 case "Compare Counter to Value":
-                    Alert messageBox = new Alert(Alert.AlertType.NONE);
-                    ButtonType confButton = new ButtonType("Yes");
-                    ButtonType cancelButton = new ButtonType("No");
-                    messageBox.getButtonTypes().setAll(confButton, cancelButton);
-                    messageBox.setTitle("Warning");
-                    messageBox.setContentText("Do you want to remove the counter?\n It will be remove also the rule:" + r.getName());
-                    // Display the Alert and wait for the user to decide whether to remove the rule or not
-                    messageBox.showAndWait().ifPresent(buttonType -> {
-                        if (buttonType == confButton) {
-                            counterTableView.getItems().remove(selectedItem);
-                            counter.removeCounter(selectedItem.getKey());
-                        }
-                    });
-                default:
-                    counterTableView.getItems().remove(selectedItem);
-                    counter.removeCounter(selectedItem.getKey());
-
+                    if (paramTrigger[0].equals(selectedItem.getKey()) || paramTrigger[1].equals(selectedItem.getKey())) {
+                        showDeleteConfirmation(selectedItem, r);
+                        continue; // Continue to the next iteration
+                    }
+                    break;
             }
 
+            // Handle rules based on action type
+            switch (r.getAction().getType()) {
+                case "Add Value to Counter":
+                case "Add Value of Counter to Counter":
+                    if (paramAction[0].equals(selectedItem.getKey()) || paramAction[1].equals(selectedItem.getKey())) {
+                        showDeleteConfirmation(selectedItem, r);
+                    }
+                    break;
+            }
         }
+
+        // Remove selected item from the table view and associated data structures
+        counterTableView.getItems().remove(selectedItem);
+        counter.removeCounter(selectedItem.getKey());
+        counterTableView.getSelectionModel().clearSelection();
+    }
+
+    private void showDeleteConfirmation(Map.Entry<String, Integer> selectedItem, Rule r) {
+        // Create an alert for user confirmation
+        Alert messageBox = new Alert(Alert.AlertType.NONE);
+        ButtonType confButton = new ButtonType("Yes");
+        ButtonType cancelButton = new ButtonType("No");
+        messageBox.getButtonTypes().setAll(confButton, cancelButton);
+        messageBox.setTitle("Warning");
+        // Display a confirmation message with the rule name
+        messageBox.setContentText("Do you want to remove the counter?\n It will also remove the rule: " + r.getName());
+        messageBox.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == confButton) {
+                // Remove selected item from the table view and associated data structures
+                counterTableView.getItems().remove(selectedItem);
+                counter.removeCounter(selectedItem.getKey());
+                counterTableView.getSelectionModel().clearSelection();
+                // Remove the rule from the original collection and update the UI
+                rmp.removeRule(r);
+                tableView.refresh();
+            }
+        });
     }
 
     private void handleAddMenuItemTW() {
@@ -295,7 +330,9 @@ public class FXMLDocumentController implements Initializable {
         Optional<String> keyResult = keyDialog.showAndWait();
 
         keyResult.ifPresent(name -> {
-            if (!name.matches(".*\\d.*")) {
+            if (name.trim().isEmpty()) {
+                handleInvalidInput("Please enter a non-empty name.");
+            } else if (!name.matches(".*\\d.*")) {
                 if (counter.checkKey(name)) {
                     handleInvalidInput("The name already exists!");
                 } else {
