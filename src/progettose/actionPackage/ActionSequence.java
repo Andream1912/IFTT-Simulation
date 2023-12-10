@@ -4,12 +4,12 @@ import java.util.List;
 
 public class ActionSequence implements Action {
 
-    private List<Action> actions;
+    private List<Action> actions = new ArrayList<>();
     private final String type;
 
-    public ActionSequence() {
-        this.actions = new ArrayList<>();
-        this.type = "Action Sequence";
+    public ActionSequence(List<Action> actions, String name) {
+        this.actions = actions;
+        this.type = "Action Sequence - " + name;
     }
 
     public List<Action> getActionsList() {
@@ -35,11 +35,14 @@ public class ActionSequence implements Action {
 
     @Override
     public String getToCSV() {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (Action action : actions) {
-            s = s.concat(action.getType() + ":" + action.getToCSV() + ";");
+            s.append(action.getType()).append(";").append(action.getToCSV()).append(";");
         }
-        return s;
+        if(!actions.isEmpty()){
+            s.deleteCharAt(s.length() - 1);
+        }
+        return s.toString();
     }
 
 }
