@@ -1,10 +1,14 @@
 package progettose.triggerPackage;
 
+// Interface representing a trigger.
 public interface Trigger {
 
-    public boolean evaluate();
+    // Evaluates whether the trigger condition is met.
+    boolean evaluate();
 
-    public String getType();
+    // Returns the type of the trigger.
+    String getType();
 
-    public String getToCSV();
+    // Returns a CSV representation of the trigger.
+    String getToCSV();
 }

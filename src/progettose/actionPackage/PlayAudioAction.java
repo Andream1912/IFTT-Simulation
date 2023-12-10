@@ -2,7 +2,6 @@ package progettose.actionPackage;
 
 import java.io.File;
 import java.nio.file.Path;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;

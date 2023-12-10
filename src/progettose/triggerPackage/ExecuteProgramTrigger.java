@@ -7,63 +7,59 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+// Represents a trigger that executes a program and checks the exit value.
 public class ExecuteProgramTrigger implements Trigger {
 
-    //Attributes for ExecuteProgramTrigger
+    // Command list to execute the program.
     private List<String> commandList = new ArrayList<>();
+
+    // User-specified exit value to check.
     private int userValue;
+
+    // The type of the trigger.
     private final String type;
 
-    //Constructor for ExecuteProgramTrigger
+    // Constructor to create an ExecuteProgramTrigger with a command list and user-specified exit value.
     public ExecuteProgramTrigger(List<String> commandList, int userValue) {
         this.commandList = commandList;
         this.userValue = userValue;
         this.type = "Program Exit Status Verification";
     }
 
-    //Getter and setter for userValue
+    // Getter and setter for the user-specified exit value.
     public int getUserValue() {
         return this.userValue;
     }
 
-    public void setUserValue(int n) {
-        this.userValue = n;
+    public void setUserValue(int userValue) {
+        this.userValue = userValue;
     }
 
-    //Getter for commandList
+    // Getter for the command list.
     public List<String> getCommandList() {
         return this.commandList;
     }
 
-    //Add method for commandList
+    // Add method to append a command to the command list.
     public void addCommand(String command) {
         this.commandList.add(command);
     }
 
-    //Remove method for commandList
+    // Remove method to remove a command from the command list.
     public void removeCommand(String command) {
         this.commandList.remove(command);
     }
 
-    //toString for ExecuteProgramTrigger
+    // Returns a string representation of the ExecuteProgramTrigger, providing details about the executed program and exit value check.
     @Override
     public String toString() {
-
-        //Get file path from command list
         Path filePath = Paths.get(this.commandList.get(0));
-
-        //Get command list without file path
-        List<String> temp = new ArrayList<>();
-        for (String element : this.commandList) {
-            if (!element.contentEquals(this.commandList.get(0))) {
-                temp.add(element);
-            }
-        }
-
+        List<String> temp = new ArrayList<>(this.commandList.subList(1, this.commandList.size()));
         return "Execute the program '" + filePath.getFileName().toString() + "' with arguments '"
-                + temp.toString() + "'\nAnd check if exit value is equal to '" + this.userValue + "'";
+                + temp.toString() + "'\nAnd check if the exit value is equal to '" + this.userValue + "'";
     }
 
+    // Evaluates the ExecuteProgramTrigger by executing the program and checking the exit value.
     @Override
     public boolean evaluate() {
         if (Files.exists(Paths.get(this.commandList.get(0)))) {
@@ -79,25 +75,17 @@ public class ExecuteProgramTrigger implements Trigger {
         return false;
     }
 
+    // Getter for obtaining the type of the trigger.
     @Override
     public String getType() {
         return this.type;
     }
 
+    // Returns the CSV representation of the ExecuteProgramTrigger, including the command list and user-specified exit value.
     @Override
     public String getToCSV() {
-        //Add ";" at the end of every command for CSV adaptation
-        StringBuilder commandCSV = new StringBuilder();
-        for (String element : this.commandList) {
-            commandCSV.append(element).append(";");
-        }
-
-        //Remove last ";" because it's not needed
-        if (!this.commandList.isEmpty()) {
-            commandCSV.deleteCharAt(commandCSV.length() - 1);
-        }
-
-        //Return the full toString
-        return this.commandList.size() + ";" + commandCSV.toString() + ";" + this.userValue;
+        // Join the command list using ";" and add the user-specified exit value.
+        String commandCSV = String.join(";", this.commandList.subList(1, this.commandList.size()));
+        return this.commandList.size() - 1 + ";" + commandCSV + ";" + this.userValue;
     }
 }

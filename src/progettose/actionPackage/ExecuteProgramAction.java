@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 public class ExecuteProgramAction implements Action {
@@ -20,12 +19,12 @@ public class ExecuteProgramAction implements Action {
         this.commandList = commandList;
         this.type = "Execute Program";
     }
-    
+
     //Getter for commandList
-    public List<String> getCommandList(){
+    public List<String> getCommandList() {
         return this.commandList;
     }
-    
+
     //Add and remove for commands list
     public void addCommand(String command) {
         this.commandList.add(command);
@@ -49,26 +48,35 @@ public class ExecuteProgramAction implements Action {
     }
 
     @Override
+// Executes a command specified in the commandList, which represents a list of arguments for a process.
     public void execute() {
-            if (Files.exists(Paths.get(this.commandList.get(0)))) {
-                ProcessBuilder executeFile = new ProcessBuilder(this.commandList);
-                try {
-                    Process processFile = executeFile.start();
-                    int exitCode = processFile.waitFor();
-                    Alert execAlert = new Alert(Alert.AlertType.INFORMATION);
-                    execAlert.setTitle("Execution successful");
-                    execAlert.setHeaderText("The program '" + Paths.get(this.commandList.get(0)).getFileName().toString() + "' has been successfully executed\nreturn/exit code: " + exitCode);
-                    execAlert.showAndWait();
-                } catch (Exception e) {
-                    System.out.println("Error during file execution: " + e.getMessage());
-                }
-            } else {
-                Alert fileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
-                fileNotFoundAlert.setTitle("Error");
-                fileNotFoundAlert.setHeaderText("File '" + 
-                        Paths.get(this.commandList.get(0)).getFileName().toString() + "' not found");
-                fileNotFoundAlert.showAndWait();
+        // Checks if the specified file exists before attempting execution.
+        if (Files.exists(Paths.get(this.commandList.get(0)))) {
+            // Configures and starts a process using the specified commandList.
+            ProcessBuilder executeFile = new ProcessBuilder(this.commandList);
+            try {
+                // Starts the process and waits for its completion.
+                Process processFile = executeFile.start();
+                int exitCode = processFile.waitFor();
+
+                // Displays an information alert indicating successful execution, including the return/exit code.
+                Alert execAlert = new Alert(Alert.AlertType.INFORMATION);
+                execAlert.setTitle("Execution successful");
+                execAlert.setHeaderText("The program '" + Paths.get(this.commandList.get(0)).getFileName().toString()
+                        + "' has been successfully executed\nreturn/exit code: " + exitCode);
+                execAlert.showAndWait();
+            } catch (Exception e) {
+                // Handles exceptions that may occur during file execution, displaying an error message.
+                System.out.println("Error during file execution: " + e.getMessage());
             }
+        } else {
+            // Displays an error alert if the specified file is not found.
+            Alert fileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
+            fileNotFoundAlert.setTitle("Error");
+            fileNotFoundAlert.setHeaderText("File '"
+                    + Paths.get(this.commandList.get(0)).getFileName().toString() + "' not found");
+            fileNotFoundAlert.showAndWait();
+        }
     }
 
     @Override
