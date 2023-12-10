@@ -73,7 +73,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Separator separatorCounter;
     @FXML
-    
+
     private Button arrowButton;
     private RuleManagerProxy rmp;
     private TableView<Map.Entry<String, Integer>> counterTableView;
@@ -83,15 +83,16 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         // Creating RuleManagerProxy instance
         counterTableView = new TableView<>();
         counterTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        updateTWTableWithData();
         counterLabel = new Label("Counters");
         counterLabel.setFont(new Font(22));
         rmp = RuleManagerProxy.getInstance();
 
         // Initializing TableView and its columns
-
         nameColumn.setCellValueFactory(new PropertyValueFactory("name"));
         actionColumn.setCellValueFactory(new PropertyValueFactory("action"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory("trigger"));
@@ -107,8 +108,6 @@ public class FXMLDocumentController implements Initializable {
         toggleStateButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
 
         // Periodic check for rules
-        rmp.periodicCheck(tableView);
-
         // Creating and configuring the key and value columns for counterTableView table
         configureTWColumns();
 
@@ -116,6 +115,7 @@ public class FXMLDocumentController implements Initializable {
         createTWContextMenu();
         addCounter = new Button("Add Counter");
         addCounter.setOnAction(this::addCounterButton);
+        rmp.periodicCheck(tableView,counterTableView,counter);
     }
 
     private void initializeTableColumns() {
@@ -129,26 +129,27 @@ public class FXMLDocumentController implements Initializable {
         actionColumn.resizableProperty().setValue(Boolean.FALSE);
         triggerColumn.resizableProperty().setValue(Boolean.FALSE);
         statusColumn.resizableProperty().setValue(Boolean.FALSE);
-        typeColumn.resizableProperty().setValue(Boolean.FALSE); 
-        
-        statusColumn.setCellValueFactory(new PropertyValueFactory<Rule,RuleState>("state"));
-        
-        statusColumn.setCellFactory(new Callback<TableColumn<Rule, RuleState>, TableCell<Rule, RuleState>>() {
-        public TableCell call(TableColumn param) {
-            return new TableCell<Rule, RuleState>() {
+        typeColumn.resizableProperty().setValue(Boolean.FALSE);
 
-                @Override
-                public void updateItem(RuleState item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (!isEmpty()) {
-                        this.setTextFill(Color.RED);
-                        if(item.toString().equals("Active")) 
-                            this.setTextFill(Color.GREEN);
-                        setText(item.toString());
+        statusColumn.setCellValueFactory(new PropertyValueFactory<Rule, RuleState>("state"));
+
+        statusColumn.setCellFactory(new Callback<TableColumn<Rule, RuleState>, TableCell<Rule, RuleState>>() {
+            public TableCell call(TableColumn param) {
+                return new TableCell<Rule, RuleState>() {
+
+                    @Override
+                    public void updateItem(RuleState item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!isEmpty()) {
+                            this.setTextFill(Color.RED);
+                            if (item.toString().equals("Active")) {
+                                this.setTextFill(Color.GREEN);
+                            }
+                            setText(item.toString());
+                        }
                     }
-                }
-            };
-        }
+                };
+            }
         });
     }
 
@@ -159,7 +160,7 @@ public class FXMLDocumentController implements Initializable {
 
         // Making columns non-resizable
         keyColumn.resizableProperty().setValue(Boolean.FALSE);
-        valueColumn.resizableProperty().setValue(Boolean.FALSE);      
+        valueColumn.resizableProperty().setValue(Boolean.FALSE);
 
         // Enabling table editing
         counterTableView.setEditable(true);
@@ -170,12 +171,10 @@ public class FXMLDocumentController implements Initializable {
 
         // Configuring the "Value" column cell to be editable
         valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        
+
         valueColumn.setOnEditCommit(event -> handleValueColumnEditCommit(event));
         keyColumn.setCellValueFactory(entry -> new SimpleStringProperty(entry.getValue().getKey()));
         valueColumn.setCellValueFactory(entry -> new SimpleIntegerProperty(entry.getValue().getValue()).asObject());
-
-       
 
         // Setting minimum and maximum width for columns
         keyColumn.setMinWidth(151);
@@ -243,7 +242,7 @@ public class FXMLDocumentController implements Initializable {
         contextMenuTW.getItems().addAll(addMenuItemTW, deleteMenuItemTW);
         counterTableView.setContextMenu(contextMenuTW);
         deleteMenuItemTW.disableProperty().bind(counterTableView.getSelectionModel().selectedItemProperty().isNull());
-        
+
     }
 
     private void handleDeleteMenuItemTW() {
@@ -449,7 +448,7 @@ public class FXMLDocumentController implements Initializable {
         ObservableList<Map.Entry<String, Integer>> items = FXCollections.observableArrayList(counter.getHashMap().entrySet());
         counterTableView.setItems(items);
     }
-    
+
     @FXML
     private void addCounterButton(ActionEvent event) {
         handleAddMenuItemTW();

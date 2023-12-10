@@ -22,13 +22,19 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import progettose.actionPackage.Action;
 import progettose.actionPackage.ActionCreator;
+import progettose.actionPackage.AddCounterToCounterActionCreator;
+import progettose.actionPackage.AddValueToCounterActionCreator;
 import progettose.actionPackage.CopyFileActionCreator;
 import progettose.actionPackage.DeleteFileActionCreator;
 import progettose.actionPackage.ExecuteProgramActionCreator;
 import progettose.actionPackage.FileAppenderActionCreator;
 import progettose.actionPackage.MoveFileActionCreator;
 import progettose.actionPackage.PlayAudioActionCreator;
+import progettose.actionPackage.SetCounterActionCreator;
 import progettose.actionPackage.ShowMessageActionCreator;
+import progettose.counterPackage.CounterList;
+import progettose.triggerPackage.CheckCounterToCounterTriggerCreator;
+import progettose.triggerPackage.CheckValueToCounterTriggerCreator;
 import progettose.triggerPackage.CompositeTrigger;
 import progettose.triggerPackage.DateTriggerCreator;
 import progettose.triggerPackage.DayOfMonthTriggerCreator;
@@ -164,6 +170,12 @@ public class RuleManagerProxy implements RuleManager {
                 }
                 TriggerCreator executeProgramAC = new ExecuteProgramTriggerCreator(execProgList, Integer.parseInt(column[i++]));
                 return executeProgramAC.createTrigger();
+            case "Compare Counter to Value":
+                TriggerCreator checkValueCountTC = new CheckValueToCounterTriggerCreator(column[i++], column[i++], Integer.parseInt(column[i++]));
+                return checkValueCountTC.createTrigger();
+            case "Compare Counter to Counter":
+                TriggerCreator checkCountToCountTC = new CheckCounterToCounterTriggerCreator(column[i++], column[i++], column[i++]);
+                return checkCountToCountTC.createTrigger();
             default:
                 if(s.startsWith("Composite")){
                     Trigger t1 = checkTrigger(column[i++], column);
@@ -210,6 +222,15 @@ public class RuleManagerProxy implements RuleManager {
             case "Append String to Textfile":
                 ActionCreator appendFileAC = new FileAppenderActionCreator(Paths.get(column[i++]), column[i++]);
                 return appendFileAC.createAction();
+            case "Set Value of Counter":
+                ActionCreator setCountAC = new SetCounterActionCreator(column[i++], Integer.parseInt(column[i++]));
+                return setCountAC.createAction();
+            case "Add Value to Counter":
+                ActionCreator addValueCountAC = new AddValueToCounterActionCreator(column[i++], Integer.parseInt(column[i++]));
+                return addValueCountAC.createAction();
+            case "Add Value of Counter to Counter":
+                ActionCreator addCountToCountAC = new AddCounterToCounterActionCreator(column[i++], column[i++]);
+                return addCountToCountAC.createAction();
             default:
                 System.out.println("Not valid Action");
                 return null;
@@ -252,13 +273,15 @@ public class RuleManagerProxy implements RuleManager {
         }
     }
 
-    public void periodicCheck(TableView tb) {
+    public void periodicCheck(TableView tb,TableView cTB,CounterList counterTB) {
         //Scheduler check the rule firing
         scheduler.scheduleAtFixedRate(() -> {
                 for (Rule r : this.concrRM.getRules()) {   
                     if (r.evaluateTrigger()) {
                         Platform.runLater(() -> {
                             this.fireRule(r);
+                            counterTB.loadFromFile();
+                            cTB.refresh();
                         });
                     }
                    

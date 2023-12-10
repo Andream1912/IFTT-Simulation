@@ -86,7 +86,7 @@ public class CounterList {
         }
     }
 
-    private void loadFromFile() {
+    public void loadFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
