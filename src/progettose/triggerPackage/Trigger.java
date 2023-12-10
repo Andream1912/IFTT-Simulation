@@ -2,8 +2,12 @@ package progettose.triggerPackage;
 
 public interface Trigger {
 
-    public boolean evaluate();
-
+    public void evaluate();
+    
+    public boolean returnEvaluation();
+    
+    public void reset();
+    
     public String getType();
 
     public String getToCSV();

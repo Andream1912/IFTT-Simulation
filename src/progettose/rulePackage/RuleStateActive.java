@@ -6,7 +6,8 @@ public class RuleStateActive implements RuleState {
 
     @Override
     public boolean checkTrigger(Trigger t) {
-        return t.evaluate();
+        t.evaluate();
+        return t.returnEvaluation();
     }
 
     @Override

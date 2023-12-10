@@ -131,6 +131,8 @@ public class FXMLDocumentController implements Initializable {
         statusColumn.resizableProperty().setValue(Boolean.FALSE);
         typeColumn.resizableProperty().setValue(Boolean.FALSE); 
         
+        
+        
         statusColumn.setCellValueFactory(new PropertyValueFactory<Rule,RuleState>("state"));
         
         statusColumn.setCellFactory(new Callback<TableColumn<Rule, RuleState>, TableCell<Rule, RuleState>>() {

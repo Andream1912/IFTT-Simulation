@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 public class CopyFileAction implements Action {
@@ -12,7 +11,6 @@ public class CopyFileAction implements Action {
     //Path for the file to copy 
     private final Path filePath;
     private Path copyPath;
-    //Defining type for action
     private final String type;
     
     //Constructor of CopyFileAction

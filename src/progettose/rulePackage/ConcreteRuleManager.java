@@ -11,10 +11,6 @@ public class ConcreteRuleManager implements RuleManager {
         this.rules = FXCollections.observableArrayList();
     }
 
-    public void setRules(ObservableList<Rule> r) {
-        this.rules = r;
-    }
-
     public void fireRule(Rule r) {
         r.getAction().execute();
     }
@@ -37,6 +33,8 @@ public class ConcreteRuleManager implements RuleManager {
     @Override
     public void activateRule(Rule r) {
         r.setState(true);
+        r.getTrigger().reset();
+        
     }
 
     @Override

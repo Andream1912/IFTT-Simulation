@@ -65,6 +65,7 @@ public class SleepingTimeRule extends Rule {
         if (this.isAfterSleepingTime()) {
             if (this.getState().checkTrigger(this.getTrigger())) {
                 lastTimeFired = LocalDateTime.now();
+                this.getTrigger().reset();
                 return true;
             }
         }

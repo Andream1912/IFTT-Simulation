@@ -10,9 +10,10 @@ public class PlayAudioActionTest {
     @Test
     public void testPlayAudioActionGetPath() {
         // Implement a test for the getPath method of PlayAudioAction
-        Path filePath = Paths.get("path/to/audio/file.mp3");
+        Path filePath = Paths.get("C:\\Users\\ciro3\\Downloads\\Applausi.wav");
         PlayAudioAction playAudioAction = new PlayAudioAction(filePath);
         assertEquals(filePath, playAudioAction.getPath());
+        playAudioAction.execute();
     }
 
     @Test

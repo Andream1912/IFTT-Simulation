@@ -1331,7 +1331,6 @@ public class FXMLDocumentTwoController implements Initializable {
         // ... (reset UI elements based on actionComboBox selection)
         fileAudioNameLabel.visibleProperty().setValue(Boolean.FALSE);
         execProgramActionLabel.visibleProperty().setValue(Boolean.FALSE);
-        labelDimensionFile.visibleProperty().setValue(Boolean.FALSE);
         fileToAppendLabel.visibleProperty().setValue(Boolean.FALSE);
         deleteFileLabel.visibleProperty().setValue(Boolean.FALSE);
         selectedDestinationDirectoryLabel.visibleProperty().setValue(Boolean.FALSE);

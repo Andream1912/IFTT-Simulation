@@ -14,7 +14,7 @@ public class ShowMessageActionTest {
     public void testGetMessage() {
         String message = "Test message";
         action = new ShowMessageAction(message);
-
+        action.execute();
         assertEquals(message, action.getMessage());
     }
 

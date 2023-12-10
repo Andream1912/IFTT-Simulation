@@ -6,10 +6,14 @@ public class DayOfMonthTrigger implements Trigger {
 
     private int day;
     private String type;
+    private boolean evaluation;
+    private boolean changed;
 
     public DayOfMonthTrigger(int day) {
         this.day = day;
         this.type = "Day of Month";
+        this.evaluation = false;
+        this.changed = false;
     }
 
     public int getDay() {
@@ -18,12 +22,6 @@ public class DayOfMonthTrigger implements Trigger {
 
     public void setDay(int day) {
         this.day = day;
-    }
-
-    @Override
-    public boolean evaluate() {
-        int currentDay = LocalDate.now().getDayOfMonth();
-        return day == currentDay;
     }
 
     @Override
@@ -49,5 +47,32 @@ public class DayOfMonthTrigger implements Trigger {
     public String getToCSV() {
         return Integer.toString(this.day);
     }
+    
+    /*@Override
+    public boolean evaluate() {
+        int currentDay = LocalDate.now().getDayOfMonth();
+        return day == currentDay;
+    }*/
+    
+    @Override
+    public void evaluate(){
+        boolean newEvaluation = LocalDate.now().getDayOfMonth() == this.day;
+        this.changed = this.evaluation != newEvaluation;
+        this.evaluation = newEvaluation;
+        
+    }
+    
+    @Override 
+    public boolean returnEvaluation(){
+        if(this.changed)
+            if(this.evaluation)
+                return true;
+        return false;
+    }
 
+    @Override
+    public void reset() {
+        this.evaluation = false;
+        this.changed = false;
+    }
 }

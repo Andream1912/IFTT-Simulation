@@ -56,11 +56,9 @@ public class RuleManagerTest {
     @Test
     public void testSetAndGetRules() {
         ObservableList<Rule> rules = FXCollections.observableArrayList();
-        rules.add(new Rule("Rule1", actionMock, triggerMock));
-        rules.add(new Rule("Rule2", actionMock, triggerMock));
+        ruleManager.addRule(new Rule("Rule1", actionMock, triggerMock));
+        ruleManager.addRule(new Rule("Rule2", actionMock, triggerMock));
 
-        //testing setter
-        ruleManager.setRules(rules);
         //testing getter
         assertEquals(rules, ruleManager.getRules());
     }

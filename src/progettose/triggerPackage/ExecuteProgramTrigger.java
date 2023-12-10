@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Alert;
 
 public class ExecuteProgramTrigger implements Trigger {
 
@@ -13,12 +15,20 @@ public class ExecuteProgramTrigger implements Trigger {
     private List<String> commandList = new ArrayList<>();
     private int userValue;
     private final String type;
+    private boolean evaluation;
+    private boolean changed;
+    private boolean isThreadRunning;
+    private boolean alreadyVerified;
 
     //Constructor for ExecuteProgramTrigger
     public ExecuteProgramTrigger(List<String> commandList, int userValue) {
         this.commandList = commandList;
         this.userValue = userValue;
         this.type = "Program Exit Status Verification";
+        this.evaluation = false;
+        this.changed = false;
+        this.isThreadRunning = false;
+        this.alreadyVerified = false;
     }
 
     //Getter and setter for userValue
@@ -65,21 +75,6 @@ public class ExecuteProgramTrigger implements Trigger {
     }
 
     @Override
-    public boolean evaluate() {
-        if (Files.exists(Paths.get(this.commandList.get(0)))) {
-            ProcessBuilder executeFile = new ProcessBuilder(this.commandList);
-            try {
-                Process processFile = executeFile.start();
-                int exitCode = processFile.waitFor();
-                return exitCode == this.userValue;
-            } catch (IOException | InterruptedException e) {
-                System.out.println("Error during file execution: " + e.getMessage());
-            }
-        }
-        return false;
-    }
-
-    @Override
     public String getType() {
         return this.type;
     }
@@ -99,5 +94,70 @@ public class ExecuteProgramTrigger implements Trigger {
 
         //Return the full toString
         return this.commandList.size() + ";" + commandCSV.toString() + ";" + this.userValue;
+    }
+
+    /*@Override
+    public boolean evaluate() {
+        if (Files.exists(Paths.get(this.commandList.get(0)))) {
+            ProcessBuilder executeFile = new ProcessBuilder(this.commandList);
+            try {
+                Process processFile = executeFile.start();
+                int exitCode = processFile.waitFor();
+                return exitCode == this.userValue;
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Error during file execution: " + e.getMessage());
+            }
+        }
+        return false;
+    }*/
+    @Override
+    public void evaluate() {
+        synchronized (this) {
+            if (!isThreadRunning) {
+                Thread myThread = new Thread(() -> {
+                    if (Files.exists(Paths.get(this.commandList.get(0)))) {
+                        ProcessBuilder executeFile = new ProcessBuilder(this.commandList);
+                        try {
+                            boolean newEvaluation = false;
+                            Process processFile = executeFile.start();
+                            int exitCode = processFile.waitFor();
+                            newEvaluation = exitCode == this.userValue;
+                            this.changed = this.evaluation != newEvaluation;
+                            this.evaluation = newEvaluation;
+                            this.alreadyVerified = !this.changed;
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("Error during file execution: " + e.getMessage());
+                        }
+                        isThreadRunning = false;
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.setTitle("Execute Program Trigger ");
+                        alert.setHeaderText("File not found!");
+                        alert.showAndWait();
+                    }
+                });
+                isThreadRunning = true;
+                myThread.setDaemon(true);
+                myThread.start();
+            }
+        }
+    }
+
+    @Override
+    public boolean returnEvaluation() {
+        if (this.changed && !this.alreadyVerified) {
+            if (this.evaluation) {
+                this.alreadyVerified = true;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @Override
+    public void reset() {
+        this.evaluation = false;
+        this.changed = false;
+        this.alreadyVerified = false;
     }
 }
