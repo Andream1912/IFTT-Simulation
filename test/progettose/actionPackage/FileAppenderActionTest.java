@@ -17,45 +17,45 @@ import org.junit.Test;
 
 
 public class FileAppenderActionTest {
-
+    
+    //Testing for FileAppenderAction
+    
+    //Attribute for FileAppenderAction testing
     private File tempFile;
 
+    //Creating temporary file for testing
     @Before
     public void setUp() throws IOException {
-        // Creare un file temporaneo prima di ogni test
         tempFile = File.createTempFile("tempFile", ".txt");
-
-        // Inizializzare JavaFX Toolkit (richiesto quando si utilizza Platform.runLater())
         new JFXPanel();
     }
 
+    //Deleting temporary file after testing
     @After
     public void tearDown() {
-        // Eliminare il file temporaneo dopo ogni test
         if (tempFile != null && tempFile.exists()) {
             tempFile.delete();
         }
     }
 
+    //Testing for execute method of FileAppenderAction
     @Test
     public void execute_shouldAppendMessageToFile() {
         try {
-            // Creare un'istanza di FileAppenderAction
             FileAppenderAction fileAppenderAction = new FileAppenderAction(tempFile.toPath(), "Hello, World!");
 
-            // Creare un CompletableFuture per attendere la fine dell'esecuzione asincrona
+            //Wait for the execute method to end
             CompletableFuture<Void> future = new CompletableFuture<>();
 
-            // Eseguire l'azione asincrona
             Platform.runLater(() -> {
                 fileAppenderAction.execute();
                 future.complete(null);
             });
 
-            // Attendere che l'azione asincrona sia completata (con un timeout)
+            //Waits 5 seconds for execute to end then timeout
             future.get(5, TimeUnit.SECONDS);
 
-            // Verificare che il messaggio sia stato aggiunto correttamente al file
+            //Verify if message was added without problems
             BufferedReader reader = new BufferedReader(new FileReader(tempFile));
             String line = reader.readLine();
             System.out.println(line);
@@ -63,7 +63,7 @@ public class FileAppenderActionTest {
 
             assertEquals("Hello, World!", line);
         } catch (Exception e) {
-            fail("Eccezione durante il test: " + e.getMessage());
+            fail("Error during test : " + e.getMessage());
         }
     }
 }
